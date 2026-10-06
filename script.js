@@ -10,7 +10,7 @@ const SHOP = {
      * ตัวอย่าง:
      * https://lin.ee/xxxxxxxx
      */
-    line: "https://line.me/ti/p/WKvvdNDzqK",
+    line: "https://line.me/R/ti/p/@504hanbe",
 
 
     /*
