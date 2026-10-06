@@ -783,7 +783,7 @@ function sendOrderToLine() {
      * หรือระบบหลังบ้านเพิ่มเติม
      */
 
-    const lineURL =
+    const lineURL =https://line.me/R/ti/p/@504hanbe
         SHOP.line;
 
 
