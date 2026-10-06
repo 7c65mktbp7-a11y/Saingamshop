@@ -783,7 +783,7 @@ function sendOrderToLine() {
      * หรือระบบหลังบ้านเพิ่มเติม
      */
 
-    const lineURL =https://line.me/R/ti/p/@504hanbe
+    const lineURL =https://lin.ee/vf78tz0
         SHOP.line;
 
 
@@ -853,7 +853,7 @@ document.getElementById(
 
 function updateContactLinks() {
 
-    const lineLinks =https://line.me/R/ti/p/@504hanbe
+    const lineLinks =https://lin.ee/vf78tz0
         document.querySelectorAll(
             ".line-button"
         );
