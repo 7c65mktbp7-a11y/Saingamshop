@@ -895,7 +895,7 @@ function updateContactLinks() {
         function (link) {
 
             link.href =
-                "tel:" +
+                "tel:" +66843123861
                 SHOP.phone;
 
         }
