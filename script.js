@@ -853,7 +853,7 @@ document.getElementById(
 
 function updateContactLinks() {
 
-    const lineLinks =https:https://line.me/ti/p/WKvvdNDzqK
+    const lineLinks =https://line.me/R/ti/p/@504hanbe
         document.querySelectorAll(
             ".line-button"
         );
