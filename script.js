@@ -16,7 +16,7 @@ const SHOP = {
     /*
      * เปลี่ยนเป็น Facebook Page ของร้านคุณ
      */
-    facebook: "https://facebook.com/",
+    facebook: "https://www.facebook.com/share/19tG2aVwCx/?mibextid=wwXIfr",
 
 
     /*
@@ -876,7 +876,7 @@ function updateContactLinks() {
 
 
     facebookLinks.forEach(
-        function (link) {https://www.facebook.com/share/19tG2aVwCx/?mibextid=wwXIfr
+        function (link) {
 
             link.href =
                 SHOP.facebook;
