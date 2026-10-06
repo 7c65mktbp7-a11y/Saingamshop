@@ -10,13 +10,13 @@ const SHOP = {
      * ตัวอย่าง:
      * https://lin.ee/xxxxxxxx
      */
-    line: "https://line.me/",
+    line: "https://lin.ee/9q139qW",
 
 
     /*
      * เปลี่ยนเป็น Facebook Page ของร้านคุณ
      */
-    facebook: "https://facebook.com/",
+    facebook: "https://www.facebook.com/share/1MwmyTJfCb/?mibextid=wwXIfr",
 
 
     /*
@@ -25,7 +25,7 @@ const SHOP = {
      * ตัวอย่าง:
      * 0812345678
      */
-    phone: "0800000000"
+    phone: "0843123861"
 
 };
 
@@ -52,9 +52,18 @@ const games = [
         description: "Garena RoV",
 
         packages: [
-            ["60 คูปอง", 20],
-            ["110 คูปอง", 35],
-            ["310 คูปอง", 95]
+            ["11 คูปอง", 10],
+            ["24 คูปอง", 19],
+            ["35 คูปอง", 29],
+            ["48 คูปอง", 39],
+            ["60 คูปอง", 49],
+            ["71 คูปอง", 59],
+            ["84 คูปอง", 69],
+            ["95 คูปอง", 79],
+            ["110 คูปอง", 89],
+            ["121 คูปอง", 99],
+            ["134 คูปอง", 109],
+            ["145 คูปอง", 119],
         ]
     },
 
@@ -846,7 +855,6 @@ document.getElementById(
 ).textContent =
     new Date().getFullYear();
 
-
 /* =========================================================
    UPDATE CONTACT LINKS
 ========================================================= */
@@ -854,50 +862,31 @@ document.getElementById(
 function updateContactLinks() {
 
     const lineLinks =
-        document.querySelectorAll(
-            ".line-button"
-        );
-
+        document.querySelectorAll(".line-button");
 
     lineLinks.forEach(
         function (link) {
-
-            link.href =
-                SHOP.line;
-
+            link.href = SHOP.line;
         }
     );
 
 
     const facebookLinks =
-        document.querySelectorAll(
-            ".facebook-button"
-        );
-
+        document.querySelectorAll(".facebook-button");
 
     facebookLinks.forEach(
         function (link) {
-
-            link.href =
-                SHOP.facebook;
-
+            link.href = SHOP.facebook;
         }
     );
 
 
     const phoneLinks =
-        document.querySelectorAll(
-            ".phone-button"
-        );
-
+        document.querySelectorAll(".phone-button");
 
     phoneLinks.forEach(
         function (link) {
-
-            link.href =
-                "tel:" +
-                SHOP.phone;
-
+            link.href = "tel:" + SHOP.phone;
         }
     );
 
