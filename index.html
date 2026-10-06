@@ -1,12 +1,792 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-    <title>Saingamshop</title>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="เว็บไซต์รับเติมเกม เติมเงินมือถือ และโปรเสริม"
+    >
+
+    <meta name="theme-color" content="#6c4df6">
+
+    <title>TOPUP SHOP | เติมเกม เติมเงินมือถือ โปรเสริม</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <h1>Saingamshop</h1>
-    <p>บริการเติมเกมและบริการอื่นๆ</p>
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+    <div class="container nav-container">
+
+        <a href="#home" class="logo">
+            <span class="logo-icon">⚡</span>
+            TOPUP SHOP
+        </a>
+
+        <button
+            class="menu-button"
+            id="menuButton"
+            type="button"
+            aria-label="เปิดเมนู"
+        >
+            ☰
+        </button>
+
+        <nav class="navigation" id="navigation">
+
+            <a href="#home">
+                หน้าแรก
+            </a>
+
+            <a href="#games">
+                🎮 เติมเกมส์
+            </a>
+
+            <a href="#mobile">
+                📱 เติมเงินมือถือ
+            </a>
+
+            <a href="#packages">
+                📶 โปรเสริม
+            </a>
+
+            <a href="#contact">
+                ติดต่อเรา
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main>
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="hero" id="home">
+
+    <div class="container hero-container">
+
+        <div class="hero-content">
+
+            <span class="hero-label">
+                ⚡ ONLINE TOP-UP SERVICE
+            </span>
+
+            <h1>
+                เติมเกมง่าย
+                <br>
+                <span>ราคาชัดเจน</span>
+                ติดต่อเราได้ทันที
+            </h1>
+
+            <p>
+                รับเติมเกมออนไลน์ เติมเงินมือถือ
+                และซื้อโปรเสริม
+                พร้อมช่องทางติดต่อ LINE,
+                Facebook และโทรศัพท์
+            </p>
+
+            <div class="hero-buttons">
+
+                <a
+                    href="#games"
+                    class="button button-primary"
+                >
+                    🎮 เลือกเกม
+                </a>
+
+                <a
+                    href="#contact"
+                    class="button button-outline"
+                >
+                    💬 ติดต่อเรา
+                </a>
+
+            </div>
+
+            <div class="trust-list">
+
+                <span>
+                    ✓ ราคาแสดงชัดเจน
+                </span>
+
+                <span>
+                    ✓ รองรับมือถือ
+                </span>
+
+                <span>
+                    ✓ รองรับคอมพิวเตอร์
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-card">
+
+            <div class="hero-card-icon">
+                🎮
+            </div>
+
+            <h2>
+                ต้องการเติมเกม?
+            </h2>
+
+            <p>
+                เลือกเกมและแพ็กเกจ
+                จากนั้นกดปุ่มสั่งเติม
+                เพื่อกรอกข้อมูล
+            </p>
+
+            <button
+                class="button button-primary button-full"
+                type="button"
+                onclick="openOrder('เติมเกมทั่วไป')"
+            >
+                🛒 สั่งเติมเกม
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     GAME SECTION
+========================================================= -->
+
+<section
+    class="section"
+    id="games"
+>
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div>
+
+                <span class="section-label">
+                    GAME TOP-UP
+                </span>
+
+                <h2>
+                    เติมเกมส์
+                </h2>
+
+                <p>
+                    เลือกเกมเพื่อดูแพ็กเกจและราคา
+                </p>
+
+            </div>
+
+
+            <div class="search-container">
+
+                <span>
+                    🔎
+                </span>
+
+                <input
+                    type="search"
+                    id="gameSearch"
+                    placeholder="ค้นหาเกมส์ เช่น ROV, Free Fire"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="game-grid"
+            id="gameGrid"
+        >
+        </div>
+
+
+        <div
+            class="empty-message"
+            id="noGames"
+            hidden
+        >
+            ไม่พบเกมที่ค้นหา
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     MOBILE TOP UP
+========================================================= -->
+
+<section
+    class="section section-gray"
+    id="mobile"
+>
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div>
+
+                <span class="section-label">
+                    MOBILE TOP-UP
+                </span>
+
+                <h2>
+                    เติมเงินมือถือ
+                </h2>
+
+                <p>
+                    เลือกเครือข่ายและจำนวนเงิน
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="service-grid">
+
+
+            <!-- AIS -->
+
+            <article class="service-card">
+
+                <div class="service-icon">
+                    📱
+                </div>
+
+                <h3>
+                    เติมเงิน AIS
+                </h3>
+
+                <p>
+                    เติมเงินเข้าหมายเลขมือถือ
+                </p>
+
+                <div class="service-price">
+                    เริ่มต้น ฿20
+                </div>
+
+                <button
+                    class="button button-primary button-full"
+                    type="button"
+                    onclick="openOrder('เติมเงิน AIS')"
+                >
+                    สั่งเติม
+                </button>
+
+            </article>
+
+
+            <!-- TRUE -->
+
+            <article class="service-card">
+
+                <div class="service-icon">
+                    📱
+                </div>
+
+                <h3>
+                    เติมเงิน True
+                </h3>
+
+                <p>
+                    เติมเงินเข้าหมายเลขมือถือ
+                </p>
+
+                <div class="service-price">
+                    เริ่มต้น ฿20
+                </div>
+
+                <button
+                    class="button button-primary button-full"
+                    type="button"
+                    onclick="openOrder('เติมเงิน True')"
+                >
+                    สั่งเติม
+                </button>
+
+            </article>
+
+
+            <!-- DTAC -->
+
+            <article class="service-card">
+
+                <div class="service-icon">
+                    📱
+                </div>
+
+                <h3>
+                    เติมเงิน dtac
+                </h3>
+
+                <p>
+                    เติมเงินเข้าหมายเลขมือถือ
+                </p>
+
+                <div class="service-price">
+                    เริ่มต้น ฿20
+                </div>
+
+                <button
+                    class="button button-primary button-full"
+                    type="button"
+                    onclick="openOrder('เติมเงิน dtac')"
+                >
+                    สั่งเติม
+                </button>
+
+            </article>
+
+
+            <!-- MY -->
+
+            <article class="service-card">
+
+                <div class="service-icon">
+                    📱
+                </div>
+
+                <h3>
+                    เติมเงิน my
+                </h3>
+
+                <p>
+                    เติมเงินเข้าหมายเลขมือถือ
+                </p>
+
+                <div class="service-price">
+                    เริ่มต้น ฿20
+                </div>
+
+                <button
+                    class="button button-primary button-full"
+                    type="button"
+                    onclick="openOrder('เติมเงิน my')"
+                >
+                    สั่งเติม
+                </button>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     PACKAGE SECTION
+========================================================= -->
+
+<section
+    class="section"
+    id="packages"
+>
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div>
+
+                <span class="section-label">
+                    ADD-ON PACKAGES
+                </span>
+
+                <h2>
+                    โปรเสริม
+                </h2>
+
+                <p>
+                    โปรอินเทอร์เน็ตและบริการเสริม
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="package-grid">
+
+
+            <!-- AIS -->
+
+            <article class="package-card">
+
+                <span class="package-tag">
+                    AIS
+                </span>
+
+                <h3>
+                    เน็ตเสริม 7 วัน
+                </h3>
+
+                <p>
+                    แพ็กเกจอินเทอร์เน็ต
+                </p>
+
+                <strong>
+                    ฿99
+                </strong>
+
+                <button
+                    class="button button-primary button-full"
+                    type="button"
+                    onclick="openOrder('โปรเสริม AIS 7 วัน')"
+                >
+                    ซื้อโปร
+                </button>
+
+            </article>
+
+
+            <!-- TRUE -->
+
+            <article class="package-card">
+
+                <span class="package-tag">
+                    TRUE
+                </span>
+
+                <h3>
+                    เน็ตเสริม 7 วัน
+                </h3>
+
+                <p>
+                    แพ็กเกจอินเทอร์เน็ต
+                </p>
+
+                <strong>
+                    ฿99
+                </strong>
+
+                <button
+                    class="button button-primary button-full"
+                    type="button"
+                    onclick="openOrder('โปรเสริม TRUE 7 วัน')"
+                >
+                    ซื้อโปร
+                </button>
+
+            </article>
+
+
+            <!-- DTAC -->
+
+            <article class="package-card">
+
+                <span class="package-tag">
+                    DTAC
+                </span>
+
+                <h3>
+                    เน็ตเสริม 7 วัน
+                </h3>
+
+                <p>
+                    แพ็กเกจอินเทอร์เน็ต
+                </p>
+
+                <strong>
+                    ฿99
+                </strong>
+
+                <button
+                    class="button button-primary button-full"
+                    type="button"
+                    onclick="openOrder('โปรเสริม dtac 7 วัน')"
+                >
+                    ซื้อโปร
+                </button>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CONTACT
+========================================================= -->
+
+<section
+    class="contact-section"
+    id="contact"
+>
+
+    <div class="container">
+
+        <div class="contact-box">
+
+            <div>
+
+                <span class="section-label">
+                    CONTACT US
+                </span>
+
+                <h2>
+                    สั่งเติมหรือสอบถามราคา
+                </h2>
+
+                <p>
+                    ติดต่อเราได้ทันทีผ่านช่องทางที่คุณสะดวก
+                </p>
+
+            </div>
+
+
+            <div class="contact-buttons">
+
+                <a
+                    href="https://line.me/"
+                    target="_blank"
+                    class="contact-button line-button"
+                >
+                    💬 LINE
+                </a>
+
+
+                <a
+                    href="https://facebook.com/"
+                    target="_blank"
+                    class="contact-button facebook-button"
+                >
+                    f Facebook
+                </a>
+
+
+                <a
+                    href="tel:0800000000"
+                    class="contact-button phone-button"
+                >
+                    ☎ โทรหาเรา
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="footer">
+
+    <div class="container footer-container">
+
+        <div>
+
+            <strong>
+                ⚡ TOPUP SHOP
+            </strong>
+
+            <p>
+                บริการเติมเกมและบริการออนไลน์
+            </p>
+
+        </div>
+
+
+        <p>
+            ©
+            <span id="year"></span>
+            TOPUP SHOP
+        </p>
+
+    </div>
+
+</footer>
+
+
+<!-- =========================================================
+     ORDER MODAL
+========================================================= -->
+
+<div
+    class="modal"
+    id="orderModal"
+    aria-hidden="true"
+>
+
+    <div class="modal-card">
+
+        <button
+            class="close-button"
+            type="button"
+            onclick="closeOrder()"
+        >
+            ×
+        </button>
+
+
+        <h2>
+            สั่งบริการ
+        </h2>
+
+
+        <p
+            class="selected-service"
+            id="selectedService"
+        >
+        </p>
+
+
+        <form id="orderForm">
+
+
+            <input
+                type="hidden"
+                id="serviceInput"
+            >
+
+
+            <div class="form-group">
+
+                <label>
+                    ชื่อ / ชื่อเล่น
+                </label>
+
+                <input
+                    type="text"
+                    id="customerName"
+                    required
+                    placeholder="กรอกชื่อ"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    เบอร์โทรศัพท์
+                </label>
+
+                <input
+                    type="tel"
+                    id="customerPhone"
+                    required
+                    inputmode="tel"
+                    placeholder="08xxxxxxxx"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    UID / Player ID / เบอร์มือถือ
+                </label>
+
+                <input
+                    type="text"
+                    id="gameId"
+                    required
+                    placeholder="กรอกข้อมูลสำหรับเติม"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    แพ็กเกจ / จำนวนเงิน
+                </label>
+
+                <input
+                    type="text"
+                    id="packageInput"
+                    required
+                    placeholder="เช่น 100 Diamonds / 100 บาท"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    หมายเหตุ
+                </label>
+
+                <textarea
+                    id="note"
+                    rows="3"
+                    placeholder="รายละเอียดเพิ่มเติม"
+                ></textarea>
+
+            </div>
+
+
+            <button
+                class="button button-primary button-full"
+                type="submit"
+            >
+                สร้างข้อความสั่งซื้อ
+            </button>
+
+        </form>
+
+
+        <div
+            class="order-result"
+            id="orderResult"
+            hidden
+        >
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
 
 </body>
 </html>
