@@ -10,13 +10,13 @@ const SHOP = {
      * ตัวอย่าง:
      * https://lin.ee/xxxxxxxx
      */
-    line: "https://line.me/R/ti/p/@504hanbe",
+    line: "https://line.me/",
 
 
     /*
      * เปลี่ยนเป็น Facebook Page ของร้านคุณ
      */
-    facebook: "https://www.facebook.com/share/19tG2aVwCx/?mibextid=wwXIfr",
+    facebook: "https://facebook.com/",
 
 
     /*
@@ -25,7 +25,7 @@ const SHOP = {
      * ตัวอย่าง:
      * 0812345678
      */
-    phone: "0843123861"
+    phone: "0800000000"
 
 };
 
@@ -783,7 +783,7 @@ function sendOrderToLine() {
      * หรือระบบหลังบ้านเพิ่มเติม
      */
 
-    const lineURL =https://lin.ee/vf78tz0
+    const lineURL =
         SHOP.line;
 
 
@@ -853,7 +853,7 @@ document.getElementById(
 
 function updateContactLinks() {
 
-    const lineLinks =https://lin.ee/vf78tz0
+    const lineLinks =
         document.querySelectorAll(
             ".line-button"
         );
@@ -869,7 +869,7 @@ function updateContactLinks() {
     );
 
 
-    const facebookLinks =https://www.facebook.com/share/19gfEFKkBY/?mibextid=wwXIfr
+    const facebookLinks =
         document.querySelectorAll(
             ".facebook-button"
         );
@@ -885,7 +885,7 @@ function updateContactLinks() {
     );
 
 
-    const phoneLinks =0843123861
+    const phoneLinks =
         document.querySelectorAll(
             ".phone-button"
         );
@@ -895,7 +895,7 @@ function updateContactLinks() {
         function (link) {
 
             link.href =
-                "tel:" +66843123861
+                "tel:" +
                 SHOP.phone;
 
         }
