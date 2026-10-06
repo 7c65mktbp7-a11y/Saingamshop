@@ -869,7 +869,7 @@ function updateContactLinks() {
     );
 
 
-    const facebookLinks =
+    const facebookLinks =https://www.facebook.com/share/19tG2aVwCx/?mibextid=wwXIfr
         document.querySelectorAll(
             ".facebook-button"
         );
@@ -878,7 +878,7 @@ function updateContactLinks() {
     facebookLinks.forEach(
         function (link) {
 
-            link.href =
+            link.href =https://www.facebook.com/share/19tG2aVwCx/?mibextid=wwXIfr
                 SHOP.facebook;
 
         }
