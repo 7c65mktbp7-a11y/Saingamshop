@@ -869,16 +869,16 @@ function updateContactLinks() {
     );
 
 
-    const facebookLinks =https://www.facebook.com/share/19tG2aVwCx/?mibextid=wwXIfr
+    const facebookLinks =
         document.querySelectorAll(
             ".facebook-button"
         );
 
 
     facebookLinks.forEach(
-        function (link) {
+        function (link) {https://www.facebook.com/share/19tG2aVwCx/?mibextid=wwXIfr
 
-            link.href =https://www.facebook.com/share/19tG2aVwCx/?mibextid=wwXIfr
+            link.href =
                 SHOP.facebook;
 
         }
