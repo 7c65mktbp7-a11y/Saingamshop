@@ -9,11 +9,11 @@ const SUPABASE_URL = "https://wljlcelgfthzyyuxvegn.supabase.co";
   ให้ใส่ Supabase ANON/PUBLIC KEY ของคุณตรงนี้
   ห้ามใส่ service_role key
 */
-const SUPABASE_ANON_KEY = "ใส่_ANON_PUBLIC_KEY_ของคุณตรงนี้";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsamxjZWxnZnRoenl5dXh2ZWduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMDc0NzQsImV4cCI6MjEwNjg4MzQ3NH0.dymqAwYWp2YX54673-4R69fvLU9ujdmUXdi_LIvIKjM";
 
 let supabaseClient = null;
 
-if (window.supabase && SUPABASE_ANON_KEY !== "ใส่_ANON_PUBLIC_KEY_ของคุณตรงนี้") {
+if (window.supabase && SUPABASE_ANON_KEY !== "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsamxjZWxnZnRoenl5dXh2ZWduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMDc0NzQsImV4cCI6MjEwNjg4MzQ3NH0.dymqAwYWp2YX54673-4R69fvLU9ujdmUXdi_LIvIKjM") {
     supabaseClient = window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_ANON_KEY
