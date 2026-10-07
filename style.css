@@ -1063,3 +1063,146 @@ textarea {
     }
 
 }
+
+
+/* =========================================================
+   MEMBER
+========================================================= */
+
+.member-section {
+    background: #f8f7fb;
+}
+
+.member-box {
+    max-width: 650px;
+    margin: auto;
+    padding: 40px;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #eceaf2;
+    border-radius: 24px;
+    box-shadow: 0 15px 50px rgba(40, 33, 59, 0.06);
+}
+
+.member-icon {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto 18px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: #eee9ff;
+
+    font-size: 35px;
+}
+
+.member-box h3 {
+    margin: 0 0 8px;
+    font-size: 25px;
+}
+
+.member-box p {
+    color: #777;
+    line-height: 1.7;
+}
+
+.member-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+
+/* =========================================================
+   MEMBER MODAL
+========================================================= */
+
+.member-modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 2000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+
+    background: rgba(17, 24, 39, 0.65);
+}
+
+.member-modal.show {
+    display: flex;
+}
+
+.member-modal-card {
+    position: relative;
+
+    width: min(500px, 100%);
+
+    max-height: 92vh;
+
+    overflow-y: auto;
+
+    padding: 32px;
+
+    border-radius: 24px;
+
+    background: #ffffff;
+
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+}
+
+.member-modal-card h2 {
+    margin: 8px 0;
+}
+
+.member-modal-card > p {
+    color: #777;
+}
+
+.member-switch {
+    margin-top: 20px;
+    text-align: center;
+    color: #777;
+}
+
+.member-switch button {
+    border: 0;
+    background: transparent;
+    color: #6c4df6;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.member-modal .form-group {
+    margin: 16px 0;
+}
+
+
+/* =========================================================
+   MOBILE MEMBER
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .member-box {
+        padding: 28px 20px;
+    }
+
+    .member-buttons {
+        flex-direction: column;
+    }
+
+    .member-modal-card {
+        padding: 24px 20px;
+    }
+
+}
