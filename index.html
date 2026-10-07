@@ -1,635 +1,1057 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SAINGAM SHOP | เติมเกม เติมเงินมือถือ บริการดิจิทัล</title>
+
+<meta name="description"
+content="SAINGAM SHOP บริการเติมเกม เติมเงินมือถือ ซื้อแพ็กเกจเสริม บัตรเติมเงิน และบริการดิจิทัล">
+
+<style>
+/* =========================================================
+   SAINGAM SHOP
+   CUSTOMER FRONTEND
+   HTML + CSS + JS ในไฟล์เดียว
+   ========================================================= */
+
+:root {
+    --primary: #6c5ce7;
+    --primary-dark: #4834d4;
+    --secondary: #00cec9;
+    --success: #00b894;
+    --danger: #d63031;
+    --warning: #fdcb6e;
+
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+
+    --dark: #111827;
+    --radius: 18px;
+    --shadow: 0 8px 30px rgba(0,0,0,.07);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Noto Sans Thai",
+        Arial,
+        sans-serif;
+
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    background: rgba(255,255,255,.95);
+    backdrop-filter: blur(15px);
+
+    border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+    max-width: 1200px;
+    margin: auto;
+
+    min-height: 70px;
+    padding: 0 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
-    <title>GameTopup - เติมเกม เติมเงิน บริการดิจิทัล</title>
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--primary);
+}
 
-    <meta
-        name="description"
-        content="บริการเติมเกม เติมเงินมือถือ ซื้อโปรเสริม และบริการดิจิทัล"
-    >
+.logo-icon {
+    width: 42px;
+    height: 42px;
 
-    <style>
+    display: grid;
+    place-items: center;
 
-        /* ================================
-           RESET
-        ================================= */
+    border-radius: 13px;
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    color: white;
 
-        html {
-            scroll-behavior: smooth;
-        }
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--secondary)
+        );
 
-        body {
-            font-family:
-                system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                "Noto Sans Thai",
-                sans-serif;
+    box-shadow: 0 7px 20px rgba(108,92,231,.3);
+}
 
-            background: #f5f7fb;
-            color: #171a24;
-            line-height: 1.6;
-        }
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-        button,
-        input {
-            font: inherit;
-        }
+.icon-btn {
+    width: 42px;
+    height: 42px;
 
-        button {
-            cursor: pointer;
-        }
+    border: 1px solid var(--border);
+    background: white;
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+    border-radius: 12px;
 
+    display: grid;
+    place-items: center;
 
-        /* ================================
-           HEADER
-        ================================= */
+    transition: .2s;
+}
 
-        .header {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+.icon-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
 
-            background: #ffffff;
-            border-bottom: 1px solid #e9ebf0;
-        }
+.login-btn {
+    border: 0;
 
-        .header-inner {
-            width: 100%;
-            max-width: 1200px;
+    padding: 10px 15px;
 
-            margin: auto;
-            padding: 14px 16px;
+    border-radius: 12px;
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+    color: white;
 
-            gap: 15px;
-        }
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-dark)
+        );
 
+    font-weight: 700;
+}
 
-        /* LOGO */
+/* =========================================================
+   MAIN
+   ========================================================= */
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+.container {
+    width: min(1200px, calc(100% - 30px));
+    margin: auto;
+}
 
-            font-size: 20px;
-            font-weight: 800;
-        }
+/* =========================================================
+   HERO
+   ========================================================= */
 
-        .logo-icon {
-            width: 42px;
-            height: 42px;
+.hero {
+    padding: 25px 0 10px;
+}
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+.hero-box {
+    position: relative;
+    overflow: hidden;
 
-            border-radius: 12px;
+    min-height: 260px;
 
-            background: #6c4cff;
-            color: #ffffff;
+    padding: 35px 25px;
 
-            font-size: 20px;
-        }
+    border-radius: 25px;
 
+    color: white;
 
-        /* MENU */
+    background:
+        radial-gradient(
+            circle at 80% 20%,
+            rgba(0,206,201,.35),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #4834d4,
+            #6c5ce7 55%,
+            #0984e3
+        );
 
-        .desktop-menu {
-            display: none;
-        }
+    box-shadow: 0 15px 40px rgba(72,52,212,.25);
+}
 
+.hero-box::after {
+    content: "SAINGAM";
 
-        /* LOGIN */
+    position: absolute;
 
-        .login-button {
-            border: 0;
+    right: -30px;
+    bottom: -60px;
 
-            padding: 9px 14px;
+    font-size: 120px;
+    font-weight: 900;
 
-            border-radius: 10px;
+    opacity: .06;
+}
 
-            background: #6c4cff;
-            color: #ffffff;
+.hero-content {
+    position: relative;
+    z-index: 2;
 
-            font-weight: 700;
-        }
+    max-width: 650px;
+}
 
+.hero-badge {
+    display: inline-flex;
 
-        /* ================================
-           HERO
-        ================================= */
+    padding: 6px 12px;
 
-        .hero {
-            padding: 28px 16px;
-        }
+    margin-bottom: 12px;
 
-        .hero-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: auto;
-        }
+    border-radius: 50px;
 
-        .hero-card {
-            min-height: 300px;
+    background: rgba(255,255,255,.15);
 
-            padding: 28px 22px;
+    font-size: 13px;
+}
 
-            border-radius: 22px;
+.hero h1 {
+    font-size: clamp(30px, 7vw, 55px);
+    line-height: 1.15;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #24145f,
-                    #6c4cff
-                );
+    margin-bottom: 12px;
+}
 
-            color: #ffffff;
+.hero p {
+    opacity: .9;
 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+    max-width: 550px;
 
-            overflow: hidden;
+    margin-bottom: 22px;
+}
 
-            position: relative;
-        }
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
 
-        .hero-card::after {
-            content: "";
+.btn {
+    border: 0;
 
-            position: absolute;
+    padding: 12px 18px;
 
-            width: 220px;
-            height: 220px;
+    border-radius: 12px;
 
-            right: -70px;
-            top: -60px;
+    font-weight: 700;
 
-            border-radius: 50%;
+    transition: .2s;
+}
 
-            background: rgba(255,255,255,0.10);
-        }
+.btn-primary {
+    background: white;
+    color: var(--primary);
+}
 
-        .hero-tag {
-            display: inline-block;
+.btn-primary:hover {
+    transform: translateY(-2px);
+}
 
-            width: fit-content;
+.btn-outline {
+    color: white;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.3);
+}
 
-            margin-bottom: 12px;
+/* =========================================================
+   SEARCH
+   ========================================================= */
 
-            padding: 5px 10px;
+.search-area {
+    margin-top: 20px;
+}
 
-            border-radius: 20px;
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
-            background: rgba(255,255,255,0.15);
+    background: white;
 
-            font-size: 13px;
-        }
+    padding: 7px;
 
-        .hero-title {
-            font-size: 30px;
-            line-height: 1.25;
+    border: 1px solid var(--border);
+    border-radius: 15px;
 
-            margin-bottom: 10px;
+    box-shadow: var(--shadow);
+}
 
-            font-weight: 800;
-        }
+.search-icon {
+    width: 42px;
+    height: 42px;
 
-        .hero-description {
-            max-width: 600px;
+    display: grid;
+    place-items: center;
 
-            color: rgba(255,255,255,0.85);
+    color: var(--muted);
+}
 
-            margin-bottom: 20px;
-        }
+.search-box input {
+    width: 100%;
 
-        .hero-button {
-            width: fit-content;
+    border: 0;
+    outline: 0;
 
-            padding: 12px 18px;
+    font-size: 15px;
+}
 
-            border: 0;
-            border-radius: 12px;
+/* =========================================================
+   SECTION
+   ========================================================= */
 
-            background: #ffffff;
-            color: #5a3be0;
+.section {
+    padding: 32px 0;
+}
 
-            font-weight: 800;
-        }
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
+    gap: 10px;
 
-        /* ================================
-           SEARCH
-        ================================= */
+    margin-bottom: 16px;
+}
 
-        .search-section {
-            padding: 0 16px 24px;
-        }
+.section-title {
+    font-size: 22px;
+    font-weight: 900;
+}
 
-        .search-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: auto;
-        }
+.section-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+}
 
-        .search-box {
-            display: flex;
-            align-items: center;
+.view-all {
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 700;
+}
 
-            background: #ffffff;
+/* =========================================================
+   QUICK MENU
+   ========================================================= */
 
-            border: 1px solid #e4e7ee;
+.quick-grid {
+    display: grid;
 
-            border-radius: 14px;
+    grid-template-columns:
+        repeat(2, 1fr);
 
-            padding: 0 14px;
+    gap: 12px;
+}
 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.03);
-        }
+.quick-card {
+    background: white;
 
-        .search-icon {
-            font-size: 18px;
-            margin-right: 10px;
-        }
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
 
-        .search-input {
-            width: 100%;
+    padding: 17px;
 
-            border: 0;
-            outline: 0;
+    text-align: center;
 
-            padding: 14px 0;
+    box-shadow: var(--shadow);
 
-            background: transparent;
-        }
+    transition: .2s;
+}
 
+.quick-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary);
+}
 
-        /* ================================
-           QUICK MENU
-        ================================= */
+.quick-icon {
+    width: 52px;
+    height: 52px;
 
-        .section {
-            padding: 0 16px 30px;
-        }
+    margin: auto auto 9px;
 
-        .section-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: auto;
-        }
+    border-radius: 15px;
 
-        .section-header {
-            margin-bottom: 15px;
-        }
+    display: grid;
+    place-items: center;
 
-        .section-title {
-            font-size: 21px;
-            font-weight: 800;
-        }
+    font-size: 24px;
 
-        .section-description {
-            font-size: 14px;
-            color: #737987;
-        }
+    background: #f1efff;
+}
 
-        .quick-grid {
-            display: grid;
+.quick-card h3 {
+    font-size: 14px;
+}
 
-            grid-template-columns: repeat(2, 1fr);
+.quick-card p {
+    font-size: 11px;
+    color: var(--muted);
+}
 
-            gap: 12px;
-        }
+/* =========================================================
+   PRODUCT GRID
+   ========================================================= */
 
-        .quick-card {
-            background: #ffffff;
+.product-grid {
+    display: grid;
 
-            border: 1px solid #e8eaf0;
+    grid-template-columns:
+        repeat(2, 1fr);
 
-            border-radius: 16px;
+    gap: 12px;
+}
 
-            padding: 18px 14px;
+.product-card {
+    background: white;
 
-            transition: 0.2s;
-        }
+    border: 1px solid var(--border);
 
-        .quick-card:hover {
-            transform: translateY(-2px);
-        }
+    border-radius: 17px;
 
-        .quick-icon {
-            width: 45px;
-            height: 45px;
+    overflow: hidden;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    box-shadow: var(--shadow);
 
-            margin-bottom: 10px;
+    transition: .2s;
+}
 
-            border-radius: 13px;
+.product-card:hover {
+    transform: translateY(-3px);
+}
 
-            background: #f0edff;
+.product-image {
+    height: 125px;
 
-            font-size: 22px;
-        }
+    display: grid;
+    place-items: center;
 
-        .quick-title {
-            font-weight: 800;
-            margin-bottom: 3px;
-        }
+    font-size: 45px;
 
-        .quick-text {
-            font-size: 13px;
-            color: #777d8b;
-        }
+    background:
+        linear-gradient(
+            135deg,
+            #f1efff,
+            #e5fafa
+        );
+}
 
+.product-info {
+    padding: 13px;
+}
 
-        /* ================================
-           PRODUCTS
-        ================================= */
+.product-title {
+    font-size: 14px;
+    font-weight: 800;
 
-        .product-grid {
-            display: grid;
+    margin-bottom: 4px;
+}
 
-            grid-template-columns: repeat(2, 1fr);
+.product-description {
+    font-size: 11px;
+    color: var(--muted);
 
-            gap: 12px;
-        }
+    min-height: 34px;
+}
 
-        .product-card {
-            background: #ffffff;
+.product-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-            border: 1px solid #e8eaf0;
+    margin-top: 10px;
+}
 
-            border-radius: 16px;
+.price {
+    font-size: 15px;
+    font-weight: 900;
+    color: var(--primary);
+}
 
-            overflow: hidden;
+.buy-btn {
+    border: 0;
 
-            transition: 0.2s;
-        }
+    padding: 8px 12px;
 
-        .product-card:hover {
-            transform: translateY(-2px);
-        }
+    border-radius: 9px;
 
-        .product-image {
-            height: 120px;
+    color: white;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    background: var(--primary);
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #f0edff,
-                    #e8e3ff
-                );
+    font-size: 12px;
+    font-weight: 700;
+}
 
-            font-size: 42px;
-        }
+/* =========================================================
+   SERVICE CATEGORY
+   ========================================================= */
 
-        .product-content {
-            padding: 13px;
-        }
+.category-grid {
+    display: grid;
 
-        .product-name {
-            font-weight: 800;
+    grid-template-columns:
+        repeat(2, 1fr);
 
-            margin-bottom: 4px;
-        }
+    gap: 12px;
+}
 
-        .product-description {
-            font-size: 12px;
-            color: #777d8b;
+.category-card {
+    position: relative;
+    overflow: hidden;
 
-            margin-bottom: 12px;
-        }
+    min-height: 125px;
 
-        .product-button {
-            width: 100%;
+    padding: 18px;
 
-            padding: 9px;
+    border-radius: 18px;
 
-            border: 0;
+    color: white;
 
-            border-radius: 9px;
+    background:
+        linear-gradient(
+            135deg,
+            #6c5ce7,
+            #4834d4
+        );
+}
 
-            background: #6c4cff;
-            color: #ffffff;
+.category-card:nth-child(2) {
+    background:
+        linear-gradient(
+            135deg,
+            #00b894,
+            #00cec9
+        );
+}
 
-            font-weight: 700;
-        }
+.category-card:nth-child(3) {
+    background:
+        linear-gradient(
+            135deg,
+            #e17055,
+            #fdcb6e
+        );
+}
 
+.category-card:nth-child(4) {
+    background:
+        linear-gradient(
+            135deg,
+            #0984e3,
+            #6c5ce7
+        );
+}
 
-        /* ================================
-           FEATURES
-        ================================= */
+.category-card h3 {
+    font-size: 17px;
+}
 
-        .feature-grid {
-            display: grid;
+.category-card p {
+    font-size: 12px;
+    opacity: .85;
 
-            gap: 12px;
-        }
+    margin-top: 4px;
+}
 
-        .feature-card {
-            background: #ffffff;
+.category-icon {
+    font-size: 38px;
+    margin-bottom: 8px;
+}
 
-            border: 1px solid #e8eaf0;
+/* =========================================================
+   PROMOTION
+   ========================================================= */
 
-            border-radius: 16px;
+.promo-grid {
+    display: grid;
 
-            padding: 18px;
-        }
+    grid-template-columns:
+        repeat(1, 1fr);
 
-        .feature-icon {
-            font-size: 25px;
+    gap: 12px;
+}
 
-            margin-bottom: 8px;
-        }
+.promo-card {
+    padding: 20px;
 
-        .feature-title {
-            font-weight: 800;
+    border-radius: 18px;
 
-            margin-bottom: 4px;
-        }
+    background: white;
 
-        .feature-text {
-            font-size: 13px;
+    border: 1px solid var(--border);
 
-            color: #737987;
-        }
+    box-shadow: var(--shadow);
+}
 
+.promo-card strong {
+    display: block;
 
-        /* ================================
-           FOOTER
-        ================================= */
+    color: var(--primary);
 
-        .footer {
-            margin-top: 20px;
+    margin-bottom: 4px;
+}
 
-            padding: 30px 16px;
+/* =========================================================
+   FAQ
+   ========================================================= */
 
-            background: #171329;
+.faq-list {
+    display: grid;
+    gap: 10px;
+}
 
-            color: #ffffff;
-        }
+.faq-item {
+    background: white;
 
-        .footer-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: auto;
-        }
+    border: 1px solid var(--border);
 
-        .footer-logo {
-            font-size: 20px;
+    border-radius: 14px;
 
-            font-weight: 800;
+    overflow: hidden;
+}
 
-            margin-bottom: 8px;
-        }
+.faq-question {
+    width: 100%;
 
-        .footer-text {
-            color: #aaa6bb;
+    border: 0;
 
-            font-size: 13px;
+    background: white;
 
-            margin-bottom: 20px;
-        }
+    padding: 16px;
 
-        .footer-links {
-            display: grid;
+    display: flex;
+    justify-content: space-between;
 
-            grid-template-columns: repeat(2, 1fr);
+    text-align: left;
 
-            gap: 10px;
+    font-weight: 700;
+}
 
-            font-size: 14px;
-        }
+.faq-answer {
+    display: none;
 
-        .footer-bottom {
-            margin-top: 25px;
+    padding: 0 16px 16px;
 
-            padding-top: 15px;
+    color: var(--muted);
 
-            border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 14px;
+}
 
-            color: #8e899f;
+.faq-item.active .faq-answer {
+    display: block;
+}
 
-            font-size: 12px;
-        }
+/* =========================================================
+   FOOTER
+   ========================================================= */
 
+.footer {
+    margin-top: 30px;
 
-        /* ================================
-           TABLET / DESKTOP
-        ================================= */
+    padding: 40px 0 100px;
 
-        @media (min-width: 700px) {
+    background: #111827;
 
-            .desktop-menu {
-                display: flex;
+    color: white;
+}
 
-                align-items: center;
+.footer-grid {
+    display: grid;
+    gap: 25px;
+}
 
-                gap: 22px;
+.footer h3 {
+    margin-bottom: 10px;
+}
 
-                font-size: 14px;
-                font-weight: 700;
-            }
+.footer p,
+.footer a {
+    color: #9ca3af;
 
-            .quick-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
+    font-size: 14px;
+}
 
-            .product-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
+.footer-links {
+    display: grid;
+    gap: 7px;
+}
 
-            .feature-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,.1);
 
-            .footer-links {
-                grid-template-columns: repeat(4, 1fr);
-            }
+    margin-top: 25px;
+    padding-top: 20px;
 
-            .hero-title {
-                font-size: 42px;
-            }
+    text-align: center;
 
-        }
+    color: #6b7280;
 
-    </style>
+    font-size: 12px;
+}
+
+/* =========================================================
+   BOTTOM NAVIGATION
+   ========================================================= */
+
+.bottom-nav {
+    position: fixed;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 1000;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+
+    background: rgba(255,255,255,.96);
+
+    backdrop-filter: blur(15px);
+
+    border-top: 1px solid var(--border);
+}
+
+.bottom-nav button {
+    border: 0;
+
+    background: transparent;
+
+    padding: 9px 3px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+.bottom-nav button span {
+    display: block;
+
+    font-size: 20px;
+
+    margin-bottom: 2px;
+}
+
+.bottom-nav button.active {
+    color: var(--primary);
+    font-weight: 800;
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 2000;
+
+    display: none;
+
+    align-items: flex-end;
+    justify-content: center;
+
+    background: rgba(0,0,0,.55);
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 550px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 20px;
+
+    background: white;
+
+    border-radius: 24px 24px 0 0;
+
+    animation: modalIn .25s ease;
+}
+
+@keyframes modalIn {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
+
+.modal-close {
+    width: 35px;
+    height: 35px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background: #f3f4f6;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+
+    padding: 12px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 11px;
+
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary);
+}
+
+.full-btn {
+    width: 100%;
+
+    border: 0;
+
+    padding: 13px;
+
+    border-radius: 11px;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-weight: 800;
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.toast {
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 75px;
+
+    z-index: 3000;
+
+    transform: translateX(-50%) translateY(30px);
+
+    width: min(90%, 400px);
+
+    padding: 13px 17px;
+
+    border-radius: 13px;
+
+    background: #111827;
+
+    color: white;
+
+    text-align: center;
+
+    font-size: 13px;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: .3s;
+}
+
+.toast.show {
+    opacity: 1;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (min-width: 600px) {
+
+    .quick-grid {
+        grid-template-columns:
+            repeat(4, 1fr);
+    }
+
+    .product-grid {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+    .category-grid {
+        grid-template-columns:
+            repeat(4, 1fr);
+    }
+
+    .promo-grid {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+    .footer-grid {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+    .bottom-nav {
+        display: none;
+    }
+
+    .footer {
+        padding-bottom: 40px;
+    }
+
+    .modal {
+        align-items: center;
+    }
+
+    .modal-box {
+        border-radius: 22px;
+    }
+}
+
+@media (min-width: 900px) {
+
+    .header-inner {
+        min-height: 78px;
+    }
+
+    .hero-box {
+        min-height: 330px;
+
+        padding: 55px;
+    }
+
+    .product-grid {
+        grid-template-columns:
+            repeat(4, 1fr);
+    }
+}
+</style>
 </head>
-
 
 <body>
 
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
 
-    <!-- =========================================
-         HEADER
-    ========================================== -->
+<header class="header">
 
-    <header class="header">
+    <div class="header-inner">
 
-        <div class="header-inner">
+        <a href="#home" class="logo">
 
-            <a href="#" class="logo">
+            <div class="logo-icon">
+                🎮
+            </div>
 
-                <span class="logo-icon">
-                    🎮
-                </span>
+            <span>
+                SAINGAM SHOP
+            </span>
 
-                <span>
-                    GameTopup
-                </span>
+        </a>
 
-            </a>
-
-
-            <nav class="desktop-menu">
-
-                <a href="#home">
-                    หน้าแรก
-                </a>
-
-                <a href="#services">
-                    บริการ
-                </a>
-
-                <a href="#games">
-                    เกม
-                </a>
-
-                <a href="#support">
-                    ติดต่อเรา
-                </a>
-
-            </nav>
-
+        <div class="header-actions">
 
             <button
-                class="login-button"
+                class="icon-btn"
+                onclick="openWallet()"
+                title="กระเป๋าเงิน"
+            >
+                💰
+            </button>
+
+            <button
+                class="login-btn"
                 onclick="openLogin()"
             >
                 เข้าสู่ระบบ
@@ -637,917 +1059,2314 @@
 
         </div>
 
-    </header>
+    </div>
+
+</header>
 
 
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
 
-    <!-- =========================================
-         HERO
-    ========================================== -->
+<main id="home">
 
-    <main id="home">
+<div class="container">
 
-        <section class="hero">
+    <!-- HERO -->
 
-            <div class="hero-container">
+    <section class="hero">
 
-                <div class="hero-card">
+        <div class="hero-box">
 
-                    <span class="hero-tag">
-                        ⚡ เติมอัตโนมัติ รวดเร็ว
-                    </span>
+            <div class="hero-content">
 
-                    <h1 class="hero-title">
-                        เติมเกม เติมเงิน<br>
-                        ง่ายในที่เดียว
-                    </h1>
+                <div class="hero-badge">
+                    ⚡ เติมเร็ว • ใช้งานง่าย • ปลอดภัย
+                </div>
 
-                    <p class="hero-description">
-                        บริการเติมเกม เติมเงินมือถือ
-                        ซื้อโปรเสริม และบริการดิจิทัล
-                        พร้อมระบบตรวจสอบคำสั่งซื้อ
-                    </p>
+                <h1>
+                    SAINGAM SHOP
+                </h1>
+
+                <p>
+                    ศูนย์รวมบริการเติมเกม เติมเงินมือถือ
+                    ซื้อแพ็กเกจเสริม และบริการดิจิทัล
+                    ครบจบในที่เดียว
+                </p>
+
+                <div class="hero-buttons">
 
                     <button
-                        class="hero-button"
-                        onclick="scrollToServices()"
+                        class="btn btn-primary"
+                        onclick="scrollToSection('services')"
                     >
-                        เริ่มใช้บริการ
+                        🚀 เริ่มใช้บริการ
+                    </button>
+
+                    <button
+                        class="btn btn-outline"
+                        onclick="openWallet()"
+                    >
+                        💳 เติมเงินเข้ากระเป๋า
                     </button>
 
                 </div>
 
             </div>
 
-        </section>
+        </div>
+
+    </section>
 
 
+    <!-- SEARCH -->
 
-        <!-- =========================================
-             SEARCH
-        ========================================== -->
+    <section class="search-area">
 
-        <section class="search-section">
+        <div class="search-box">
 
-            <div class="search-container">
-
-                <div class="search-box">
-
-                    <span class="search-icon">
-                        🔎
-                    </span>
-
-                    <input
-                        id="searchInput"
-                        class="search-input"
-                        type="search"
-                        placeholder="ค้นหาเกม บริการ หรือสินค้า..."
-                        oninput="searchProducts()"
-                    >
-
-                </div>
-
+            <div class="search-icon">
+                🔎
             </div>
 
-        </section>
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="ค้นหาเกม บริการ หรือแพ็กเกจ..."
+                oninput="searchProducts()"
+            >
+
+        </div>
+
+    </section>
 
 
+    <!-- QUICK LINKS -->
 
-        <!-- =========================================
-             QUICK SERVICES
-        ========================================== -->
+    <section class="section">
 
-        <section
-            class="section"
-            id="services"
-        >
+        <div class="section-header">
 
-            <div class="section-container">
+            <div>
 
-                <div class="section-header">
-
-                    <h2 class="section-title">
-                        บริการของเรา
-                    </h2>
-
-                    <p class="section-description">
-                        เลือกบริการที่คุณต้องการ
-                    </p>
-
+                <div class="section-title">
+                    เมนูด่วน
                 </div>
 
-
-                <div class="quick-grid">
-
-                    <a
-                        href="#games"
-                        class="quick-card"
-                    >
-
-                        <div class="quick-icon">
-                            🎮
-                        </div>
-
-                        <div class="quick-title">
-                            เติมเกม
-                        </div>
-
-                        <div class="quick-text">
-                            RoV, Free Fire, Genshin และเกมอื่น ๆ
-                        </div>
-
-                    </a>
-
-
-                    <a
-                        href="#mobile"
-                        class="quick-card"
-                    >
-
-                        <div class="quick-icon">
-                            📱
-                        </div>
-
-                        <div class="quick-title">
-                            เติมเงินมือถือ
-                        </div>
-
-                        <div class="quick-text">
-                            AIS, TrueMove H, DTAC
-                        </div>
-
-                    </a>
-
-
-                    <a
-                        href="#packages"
-                        class="quick-card"
-                    >
-
-                        <div class="quick-icon">
-                            🌐
-                        </div>
-
-                        <div class="quick-title">
-                            โปรเสริม
-                        </div>
-
-                        <div class="quick-text">
-                            อินเทอร์เน็ตและแพ็กเกจโทร
-                        </div>
-
-                    </a>
-
-
-                    <a
-                        href="#giftcard"
-                        class="quick-card"
-                    >
-
-                        <div class="quick-icon">
-                            🎁
-                        </div>
-
-                        <div class="quick-title">
-                            Gift Card
-                        </div>
-
-                        <div class="quick-text">
-                            บัตรเติมเงินและบริการดิจิทัล
-                        </div>
-
-                    </a>
-
+                <div class="section-subtitle">
+                    เลือกบริการที่ต้องการ
                 </div>
 
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================================
-             POPULAR GAMES
-        ========================================== -->
-
-        <section
-            class="section"
-            id="games"
-        >
-
-            <div class="section-container">
-
-                <div class="section-header">
-
-                    <h2 class="section-title">
-                        เกมยอดนิยม
-                    </h2>
-
-                    <p class="section-description">
-                        เลือกเกมที่ต้องการเติม
-                    </p>
-
-                </div>
-
-
-                <div
-                    class="product-grid"
-                    id="productGrid"
-                >
-
-
-                    <!-- ROV -->
-
-                    <div
-                        class="product-card"
-                        data-name="rov arena of valor"
-                    >
-
-                        <div class="product-image">
-                            ⚔️
-                        </div>
-
-                        <div class="product-content">
-
-                            <div class="product-name">
-                                RoV
-                            </div>
-
-                            <div class="product-description">
-                                เติมคูปอง / เครดิตเกม
-                            </div>
-
-                            <button
-                                class="product-button"
-                                onclick="selectProduct('RoV')"
-                            >
-                                เติมเกม
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- FREE FIRE -->
-
-                    <div
-                        class="product-card"
-                        data-name="free fire"
-                    >
-
-                        <div class="product-image">
-                            🔥
-                        </div>
-
-                        <div class="product-content">
-
-                            <div class="product-name">
-                                Free Fire
-                            </div>
-
-                            <div class="product-description">
-                                เติมเพชร Free Fire
-                            </div>
-
-                            <button
-                                class="product-button"
-                                onclick="selectProduct('Free Fire')"
-                            >
-                                เติมเกม
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- GENSHIN -->
-
-                    <div
-                        class="product-card"
-                        data-name="genshin impact"
-                    >
-
-                        <div class="product-image">
-                            ✨
-                        </div>
-
-                        <div class="product-content">
-
-                            <div class="product-name">
-                                Genshin Impact
-                            </div>
-
-                            <div class="product-description">
-                                เติม Genesis Crystal
-                            </div>
-
-                            <button
-                                class="product-button"
-                                onclick="selectProduct('Genshin Impact')"
-                            >
-                                เติมเกม
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- OTHER -->
-
-                    <div
-                        class="product-card"
-                        data-name="gift card"
-                    >
-
-                        <div class="product-image">
-                            🎁
-                        </div>
-
-                        <div class="product-content">
-
-                            <div class="product-name">
-                                Gift Card
-                            </div>
-
-                            <div class="product-description">
-                                บัตรเติมเงินดิจิทัล
-                            </div>
-
-                            <button
-                                class="product-button"
-                                onclick="selectProduct('Gift Card')"
-                            >
-                                ดูสินค้า
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================================
-             MOBILE
-        ========================================== -->
-
-        <section
-            class="section"
-            id="mobile"
-        >
-
-            <div class="section-container">
-
-                <div class="section-header">
-
-                    <h2 class="section-title">
-                        เติมเงินมือถือ
-                    </h2>
-
-                    <p class="section-description">
-                        รองรับเครือข่ายมือถือ
-                    </p>
-
-                </div>
-
-
-                <div class="quick-grid">
-
-                    <div class="quick-card">
-
-                        <div class="quick-icon">
-                            📱
-                        </div>
-
-                        <div class="quick-title">
-                            AIS
-                        </div>
-
-                        <div class="quick-text">
-                            เติมเงินมือถือ
-                        </div>
-
-                    </div>
-
-
-                    <div class="quick-card">
-
-                        <div class="quick-icon">
-                            📱
-                        </div>
-
-                        <div class="quick-title">
-                            TrueMove H
-                        </div>
-
-                        <div class="quick-text">
-                            เติมเงินมือถือ
-                        </div>
-
-                    </div>
-
-
-                    <div class="quick-card">
-
-                        <div class="quick-icon">
-                            📱
-                        </div>
-
-                        <div class="quick-title">
-                            DTAC
-                        </div>
-
-                        <div class="quick-text">
-                            เติมเงินมือถือ
-                        </div>
-
-                    </div>
-
-
-                    <div class="quick-card">
-
-                        <div class="quick-icon">
-                            🌐
-                        </div>
-
-                        <div class="quick-title">
-                            โปรเสริม
-                        </div>
-
-                        <div class="quick-text">
-                            อินเทอร์เน็ต / โทร
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================================
-             PACKAGES
-        ========================================== -->
-
-        <section
-            class="section"
-            id="packages"
-        >
-
-            <div class="section-container">
-
-                <div class="section-header">
-
-                    <h2 class="section-title">
-                        โปรเสริม
-                    </h2>
-
-                    <p class="section-description">
-                        ซื้อแพ็กเกจอินเทอร์เน็ตและโทร
-                    </p>
-
-                </div>
-
-
-                <div class="feature-grid">
-
-                    <div class="feature-card">
-
-                        <div class="feature-icon">
-                            🚀
-                        </div>
-
-                        <div class="feature-title">
-                            เน็ตเต็มสปีด
-                        </div>
-
-                        <div class="feature-text">
-                            เลือกแพ็กเกจอินเทอร์เน็ต
-                            ตามความต้องการ
-                        </div>
-
-                    </div>
-
-
-                    <div class="feature-card">
-
-                        <div class="feature-icon">
-                            ♾️
-                        </div>
-
-                        <div class="feature-title">
-                            เน็ตไม่อั้น
-                        </div>
-
-                        <div class="feature-text">
-                            แพ็กเกจอินเทอร์เน็ต
-                            สำหรับใช้งานต่อเนื่อง
-                        </div>
-
-                    </div>
-
-
-                    <div class="feature-card">
-
-                        <div class="feature-icon">
-                            ☎️
-                        </div>
-
-                        <div class="feature-title">
-                            แพ็กเกจโทร
-                        </div>
-
-                        <div class="feature-text">
-                            เลือกแพ็กเกจโทร
-                            สำหรับเบอร์มือถือ
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================================
-             GIFT CARD
-        ========================================== -->
-
-        <section
-            class="section"
-            id="giftcard"
-        >
-
-            <div class="section-container">
-
-                <div class="section-header">
-
-                    <h2 class="section-title">
-                        บริการดิจิทัล
-                    </h2>
-
-                    <p class="section-description">
-                        Gift Card และบริการดิจิทัลอื่น ๆ
-                    </p>
-
-                </div>
-
-
-                <div class="product-grid">
-
-                    <div class="product-card">
-
-                        <div class="product-image">
-                            🟢
-                        </div>
-
-                        <div class="product-content">
-
-                            <div class="product-name">
-                                Razer Gold
-                            </div>
-
-                            <div class="product-description">
-                                บัตรเติมเงินดิจิทัล
-                            </div>
-
-                            <button class="product-button">
-                                ดูสินค้า
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="product-card">
-
-                        <div class="product-image">
-                            🎮
-                        </div>
-
-                        <div class="product-content">
-
-                            <div class="product-name">
-                                Steam Wallet
-                            </div>
-
-                            <div class="product-description">
-                                เติมเงิน Steam
-                            </div>
-
-                            <button class="product-button">
-                                ดูสินค้า
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="product-card">
-
-                        <div class="product-image">
-                            🟠
-                        </div>
-
-                        <div class="product-content">
-
-                            <div class="product-name">
-                                Garena Shell
-                            </div>
-
-                            <div class="product-description">
-                                บัตรเติมเงิน Garena
-                            </div>
-
-                            <button class="product-button">
-                                ดูสินค้า
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="product-card">
-
-                        <div class="product-image">
-                            💳
-                        </div>
-
-                        <div class="product-content">
-
-                            <div class="product-name">
-                                บริการดิจิทัล
-                            </div>
-
-                            <div class="product-description">
-                                บริการอื่น ๆ
-                            </div>
-
-                            <button class="product-button">
-                                ดูบริการ
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================================
-             FEATURES
-        ========================================== -->
-
-        <section class="section">
-
-            <div class="section-container">
-
-                <div class="section-header">
-
-                    <h2 class="section-title">
-                        ทำไมต้องใช้บริการเรา
-                    </h2>
-
-                </div>
-
-
-                <div class="feature-grid">
-
-                    <div class="feature-card">
-
-                        <div class="feature-icon">
-                            ⚡
-                        </div>
-
-                        <div class="feature-title">
-                            รวดเร็ว
-                        </div>
-
-                        <div class="feature-text">
-                            ระบบออกแบบมาให้ทำรายการ
-                            ได้ง่ายและรวดเร็ว
-                        </div>
-
-                    </div>
-
-
-                    <div class="feature-card">
-
-                        <div class="feature-icon">
-                            🔒
-                        </div>
-
-                        <div class="feature-title">
-                            ปลอดภัย
-                        </div>
-
-                        <div class="feature-text">
-                            ตรวจสอบคำสั่งซื้อ
-                            และประวัติการทำรายการได้
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="feature-card"
-                        id="support"
-                    >
-
-                        <div class="feature-icon">
-                            💬
-                        </div>
-
-                        <div class="feature-title">
-                            มีทีมงานดูแล
-                        </div>
-
-                        <div class="feature-text">
-                            ติดต่อทีมงานเมื่อเกิดปัญหา
-                            จากการทำรายการ
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-
-    <!-- =========================================
-         FOOTER
-    ========================================== -->
-
-    <footer class="footer">
-
-        <div class="footer-container">
-
-            <div class="footer-logo">
-                🎮 GameTopup
-            </div>
-
-            <div class="footer-text">
-                เติมเกม เติมเงินมือถือ
-                และบริการดิจิทัล
-            </div>
-
-
-            <div class="footer-links">
-
-                <a href="#home">
-                    หน้าแรก
-                </a>
-
-                <a href="#services">
-                    บริการ
-                </a>
-
-                <a href="#games">
-                    เกม
-                </a>
-
-                <a href="#support">
-                    ติดต่อเรา
-                </a>
-
-            </div>
-
-
-            <div class="footer-bottom">
-                © 2026 GameTopup. All rights reserved.
             </div>
 
         </div>
 
-    </footer>
+
+        <div class="quick-grid">
+
+            <div
+                class="quick-card"
+                onclick="openService('game')"
+            >
+                <div class="quick-icon">
+                    🎮
+                </div>
+
+                <h3>
+                    เติมเกม
+                </h3>
+
+                <p>
+                    RoV / Free Fire / Genshin
+                </p>
+            </div>
 
 
+            <div
+                class="quick-card"
+                onclick="openService('mobile')"
+            >
+                <div class="quick-icon">
+                    📱
+                </div>
 
-    <!-- =========================================
-         JAVASCRIPT
-    ========================================== -->
+                <h3>
+                    เติมเงินมือถือ
+                </h3>
 
-    <script>
-
-        /* ================================
-           LOGIN
-        ================================= */
-
-        function openLogin() {
-
-            alert(
-                "ระบบเข้าสู่ระบบจะถูกเชื่อมต่อในขั้นตอนถัดไป"
-            );
-
-        }
+                <p>
+                    AIS / True / DTAC
+                </p>
+            </div>
 
 
-        /* ================================
-           SCROLL SERVICES
-        ================================= */
+            <div
+                class="quick-card"
+                onclick="openService('package')"
+            >
+                <div class="quick-icon">
+                    📶
+                </div>
 
-        function scrollToServices() {
+                <h3>
+                    โปรเสริม
+                </h3>
 
-            const services =
-                document.getElementById("services");
-
-            services.scrollIntoView({
-                behavior: "smooth"
-            });
-
-        }
-
-
-        /* ================================
-           SELECT PRODUCT
-        ================================= */
-
-        function selectProduct(productName) {
-
-            alert(
-                "คุณเลือกบริการ: " +
-                productName +
-                "\n\nหน้าสั่งซื้อจะถูกสร้างในขั้นตอนถัดไป"
-            );
-
-        }
+                <p>
+                    เน็ต / โทร
+                </p>
+            </div>
 
 
-        /* ================================
-           SEARCH
-        ================================= */
+            <div
+                class="quick-card"
+                onclick="openService('gift')"
+            >
+                <div class="quick-icon">
+                    🎁
+                </div>
 
-        function searchProducts() {
+                <h3>
+                    Gift Card
+                </h3>
 
-            const keyword =
-                document
-                .getElementById("searchInput")
-                .value
-                .toLowerCase()
-                .trim();
+                <p>
+                    บัตรเติมเงินดิจิทัล
+                </p>
+            </div>
 
-            const products =
-                document.querySelectorAll(
-                    ".product-card"
+        </div>
+
+    </section>
+
+
+    <!-- SERVICES -->
+
+    <section
+        class="section"
+        id="services"
+    >
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-title">
+                    บริการของเรา
+                </div>
+
+                <div class="section-subtitle">
+                    เลือกบริการที่ต้องการ
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="category-grid">
+
+            <div
+                class="category-card"
+                onclick="openService('game')"
+            >
+
+                <div class="category-icon">
+                    🎮
+                </div>
+
+                <h3>
+                    เติมเกม
+                </h3>
+
+                <p>
+                    เติมเกมออนไลน์รวดเร็ว
+                </p>
+
+            </div>
+
+
+            <div
+                class="category-card"
+                onclick="openService('mobile')"
+            >
+
+                <div class="category-icon">
+                    📱
+                </div>
+
+                <h3>
+                    เติมเงินมือถือ
+                </h3>
+
+                <p>
+                    เติมเครดิตเข้าหมายเลขมือถือ
+                </p>
+
+            </div>
+
+
+            <div
+                class="category-card"
+                onclick="openService('package')"
+            >
+
+                <div class="category-icon">
+                    📶
+                </div>
+
+                <h3>
+                    โปรเสริม
+                </h3>
+
+                <p>
+                    อินเทอร์เน็ตและโทร
+                </p>
+
+            </div>
+
+
+            <div
+                class="category-card"
+                onclick="openService('gift')"
+            >
+
+                <div class="category-icon">
+                    🎁
+                </div>
+
+                <h3>
+                    Digital
+                </h3>
+
+                <p>
+                    Gift Card และบริการดิจิทัล
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- POPULAR PRODUCTS -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-title">
+                    🔥 สินค้ายอดนิยม
+                </div>
+
+                <div class="section-subtitle">
+                    สินค้าที่ลูกค้าเลือกใช้บ่อย
+                </div>
+
+            </div>
+
+            <button
+                class="view-all"
+                onclick="showAllProducts()"
+            >
+                ดูทั้งหมด
+            </button>
+
+        </div>
+
+
+        <div
+            class="product-grid"
+            id="productGrid"
+        >
+
+            <!-- Product 1 -->
+
+            <div
+                class="product-card"
+                data-search="rov เติมเกม rov"
+            >
+
+                <div class="product-image">
+                    ⚔️
+                </div>
+
+                <div class="product-info">
+
+                    <div class="product-title">
+                        RoV
+                    </div>
+
+                    <div class="product-description">
+                        เติมคูปอง / แพ็กเกจ RoV
+                    </div>
+
+                    <div class="product-bottom">
+
+                        <span class="price">
+                            เริ่ม ฿10
+                        </span>
+
+                        <button
+                            class="buy-btn"
+                            onclick="openProduct('RoV')"
+                        >
+                            เติมเลย
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Product 2 -->
+
+            <div
+                class="product-card"
+                data-search="free fire ฟีฟาย เติมเกม"
+            >
+
+                <div class="product-image">
+                    🔥
+                </div>
+
+                <div class="product-info">
+
+                    <div class="product-title">
+                        Free Fire
+                    </div>
+
+                    <div class="product-description">
+                        เติมเพชร Free Fire
+                    </div>
+
+                    <div class="product-bottom">
+
+                        <span class="price">
+                            เริ่ม ฿10
+                        </span>
+
+                        <button
+                            class="buy-btn"
+                            onclick="openProduct('Free Fire')"
+                        >
+                            เติมเลย
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Product 3 -->
+
+            <div
+                class="product-card"
+                data-search="genshin genshin impact เติมเกม"
+            >
+
+                <div class="product-image">
+                    ⭐
+                </div>
+
+                <div class="product-info">
+
+                    <div class="product-title">
+                        Genshin Impact
+                    </div>
+
+                    <div class="product-description">
+                        เติม Genesis Crystal
+                    </div>
+
+                    <div class="product-bottom">
+
+                        <span class="price">
+                            เริ่ม ฿35
+                        </span>
+
+                        <button
+                            class="buy-btn"
+                            onclick="openProduct('Genshin Impact')"
+                        >
+                            เติมเลย
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Product 4 -->
+
+            <div
+                class="product-card"
+                data-search="ais เติมเงินมือถือ"
+            >
+
+                <div class="product-image">
+                    📱
+                </div>
+
+                <div class="product-info">
+
+                    <div class="product-title">
+                        AIS
+                    </div>
+
+                    <div class="product-description">
+                        เติมเงินมือถือ AIS
+                    </div>
+
+                    <div class="product-bottom">
+
+                        <span class="price">
+                            เริ่ม ฿10
+                        </span>
+
+                        <button
+                            class="buy-btn"
+                            onclick="openMobile('AIS')"
+                        >
+                            เติมเลย
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Product 5 -->
+
+            <div
+                class="product-card"
+                data-search="true เติมเงินมือถือ"
+            >
+
+                <div class="product-image">
+                    📲
+                </div>
+
+                <div class="product-info">
+
+                    <div class="product-title">
+                        TrueMove H
+                    </div>
+
+                    <div class="product-description">
+                        เติมเงินมือถือ TrueMove H
+                    </div>
+
+                    <div class="product-bottom">
+
+                        <span class="price">
+                            เริ่ม ฿10
+                        </span>
+
+                        <button
+                            class="buy-btn"
+                            onclick="openMobile('TrueMove H')"
+                        >
+                            เติมเลย
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Product 6 -->
+
+            <div
+                class="product-card"
+                data-search="dtac เติมเงินมือถือ"
+            >
+
+                <div class="product-image">
+                    📡
+                </div>
+
+                <div class="product-info">
+
+                    <div class="product-title">
+                        DTAC
+                    </div>
+
+                    <div class="product-description">
+                        เติมเงินมือถือ DTAC
+                    </div>
+
+                    <div class="product-bottom">
+
+                        <span class="price">
+                            เริ่ม ฿10
+                        </span>
+
+                        <button
+                            class="buy-btn"
+                            onclick="openMobile('DTAC')"
+                        >
+                            เติมเลย
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Product 7 -->
+
+            <div
+                class="product-card"
+                data-search="razer gold gift card"
+            >
+
+                <div class="product-image">
+                    🎟️
+                </div>
+
+                <div class="product-info">
+
+                    <div class="product-title">
+                        Razer Gold
+                    </div>
+
+                    <div class="product-description">
+                        Digital Gift Card
+                    </div>
+
+                    <div class="product-bottom">
+
+                        <span class="price">
+                            เริ่ม ฿50
+                        </span>
+
+                        <button
+                            class="buy-btn"
+                            onclick="openProduct('Razer Gold')"
+                        >
+                            ซื้อเลย
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Product 8 -->
+
+            <div
+                class="product-card"
+                data-search="steam wallet gift card"
+            >
+
+                <div class="product-image">
+                    🎮
+                </div>
+
+                <div class="product-info">
+
+                    <div class="product-title">
+                        Steam Wallet
+                    </div>
+
+                    <div class="product-description">
+                        Steam Wallet Code
+                    </div>
+
+                    <div class="product-bottom">
+
+                        <span class="price">
+                            เริ่ม ฿100
+                        </span>
+
+                        <button
+                            class="buy-btn"
+                            onclick="openProduct('Steam Wallet')"
+                        >
+                            ซื้อเลย
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROMOTIONS -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-title">
+                    🎉 โปรโมชั่น
+                </div>
+
+                <div class="section-subtitle">
+                    โปรโมชั่นและสิทธิพิเศษ
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="promo-grid">
+
+            <div class="promo-card">
+
+                <strong>
+                    ⚡ เติมเร็ว
+                </strong>
+
+                <div>
+                    ระบบออกคำสั่งซื้อและตรวจสอบสถานะ
+                    ได้อย่างรวดเร็ว
+                </div>
+
+            </div>
+
+
+            <div class="promo-card">
+
+                <strong>
+                    💰 Wallet
+                </strong>
+
+                <div>
+                    เติมเงินเข้ากระเป๋าเพื่อใช้ชำระบริการ
+                    ได้สะดวก
+                </div>
+
+            </div>
+
+
+            <div class="promo-card">
+
+                <strong>
+                    🎁 โปรโมชั่น
+                </strong>
+
+                <div>
+                    เตรียมพบกับโปรโมชั่นสำหรับสมาชิก
+                    SAINGAM SHOP
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FAQ -->
+
+    <section
+        class="section"
+        id="faq"
+    >
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-title">
+                    ❓ คำถามที่พบบ่อย
+                </div>
+
+                <div class="section-subtitle">
+                    FAQ
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="faq-list">
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    onclick="toggleFAQ(this)"
+                >
+                    เติมเกมใช้เวลานานไหม?
+                    <span>＋</span>
+                </button>
+
+                <div class="faq-answer">
+                    ระยะเวลาการเติมขึ้นอยู่กับบริการและผู้ให้บริการ
+                    ระบบจะแสดงสถานะคำสั่งซื้อให้ลูกค้าตรวจสอบ
+                </div>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    onclick="toggleFAQ(this)"
+                >
+                    ต้องสมัครสมาชิกหรือไม่?
+                    <span>＋</span>
+                </button>
+
+                <div class="faq-answer">
+                    สามารถออกแบบให้รองรับทั้งลูกค้าที่สมัครสมาชิก
+                    และลูกค้าที่สั่งซื้อแบบ Guest ได้
+                </div>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    onclick="toggleFAQ(this)"
+                >
+                    ถ้าเติมไม่สำเร็จต้องทำอย่างไร?
+                    <span>＋</span>
+                </button>
+
+                <div class="faq-answer">
+                    ตรวจสอบสถานะคำสั่งซื้อก่อน หากรายการมีปัญหา
+                    สามารถติดต่อแอดมินเพื่อให้ตรวจสอบได้
+                </div>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    onclick="toggleFAQ(this)"
+                >
+                    ติดต่อแอดมินได้ทางไหน?
+                    <span>＋</span>
+                </button>
+
+                <div class="faq-answer">
+                    สามารถเชื่อมต่อปุ่มติดต่อแอดมินเข้ากับ
+                    LINE Official Account ของร้านได้ในระบบจริง
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer class="footer">
+
+    <div class="container">
+
+        <div class="footer-grid">
+
+            <div>
+
+                <h3>
+                    🎮 SAINGAM SHOP
+                </h3>
+
+                <p>
+                    ศูนย์รวมบริการเติมเกม
+                    เติมเงินมือถือ และบริการดิจิทัล
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+                    บริการ
+                </h3>
+
+                <div class="footer-links">
+
+                    <a href="#services">
+                        เติมเกม
+                    </a>
+
+                    <a href="#services">
+                        เติมเงินมือถือ
+                    </a>
+
+                    <a href="#services">
+                        โปรเสริม
+                    </a>
+
+                    <a href="#services">
+                        Gift Card
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+                    ช่วยเหลือ
+                </h3>
+
+                <div class="footer-links">
+
+                    <a href="#faq">
+                        FAQ
+                    </a>
+
+                    <a
+                        href="#"
+                        onclick="contactAdmin(); return false;"
+                    >
+                        ติดต่อแอดมิน
+                    </a>
+
+                    <a
+                        href="#"
+                        onclick="openOrders(); return false;"
+                    >
+                        ตรวจสอบคำสั่งซื้อ
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            © 2026 SAINGAM SHOP
+            — All Rights Reserved.
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- =========================================================
+     BOTTOM NAV
+     ========================================================= -->
+
+<nav class="bottom-nav">
+
+    <button
+        class="active"
+        onclick="scrollToSection('home')"
+    >
+        <span>🏠</span>
+        หน้าแรก
+    </button>
+
+    <button
+        onclick="scrollToSection('services')"
+    >
+        <span>🛒</span>
+        บริการ
+    </button>
+
+    <button
+        onclick="openOrders()"
+    >
+        <span>📦</span>
+        คำสั่งซื้อ
+    </button>
+
+    <button
+        onclick="openLogin()"
+    >
+        <span>👤</span>
+        บัญชี
+    </button>
+
+</nav>
+
+
+<!-- =========================================================
+     LOGIN MODAL
+     ========================================================= -->
+
+<div
+    class="modal"
+    id="loginModal"
+    onclick="closeModalOutside(event, 'loginModal')"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>
+                เข้าสู่ระบบ
+            </h2>
+
+            <button
+                class="modal-close"
+                onclick="closeModal('loginModal')"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                อีเมล / เบอร์โทรศัพท์
+            </label>
+
+            <input
+                id="loginUser"
+                type="text"
+                placeholder="กรอกอีเมลหรือเบอร์โทรศัพท์"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                รหัสผ่าน
+            </label>
+
+            <input
+                id="loginPassword"
+                type="password"
+                placeholder="กรอกรหัสผ่าน"
+            >
+
+        </div>
+
+
+        <button
+            class="full-btn"
+            onclick="loginDemo()"
+        >
+            เข้าสู่ระบบ
+        </button>
+
+
+        <div style="
+            text-align:center;
+            margin:15px 0;
+            color:#6b7280;
+            font-size:13px;
+        ">
+            หรือเข้าสู่ระบบด้วย
+        </div>
+
+
+        <div
+            style="
+                display:grid;
+                grid-template-columns:repeat(3,1fr);
+                gap:8px;
+            "
+        >
+
+            <button
+                class="btn"
+                style="background:#f3f4f6;"
+                onclick="socialLogin('Google')"
+            >
+                Google
+            </button>
+
+            <button
+                class="btn"
+                style="background:#f3f4f6;"
+                onclick="socialLogin('Facebook')"
+            >
+                Facebook
+            </button>
+
+            <button
+                class="btn"
+                style="background:#f3f4f6;"
+                onclick="socialLogin('LINE')"
+            >
+                LINE
+            </button>
+
+        </div>
+
+
+        <p
+            style="
+                text-align:center;
+                margin-top:18px;
+                font-size:12px;
+                color:#9ca3af;
+            "
+        >
+            ระบบ Social Login จะเชื่อมต่อ Provider จริง
+            เมื่อเปิดใช้งาน Backend
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     WALLET MODAL
+     ========================================================= -->
+
+<div
+    class="modal"
+    id="walletModal"
+    onclick="closeModalOutside(event, 'walletModal')"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>
+                💰 กระเป๋าเงิน
+            </h2>
+
+            <button
+                class="modal-close"
+                onclick="closeModal('walletModal')"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div
+            style="
+                padding:20px;
+                border-radius:17px;
+                color:white;
+                background:
+                linear-gradient(
+                    135deg,
+                    #6c5ce7,
+                    #0984e3
                 );
+                margin-bottom:20px;
+            "
+        >
 
-            products.forEach(function(product) {
+            <div style="font-size:13px;opacity:.8;">
+                ยอดเงินคงเหลือ
+            </div>
 
-                const name =
-                    product
-                    .getAttribute("data-name");
+            <div
+                id="walletBalance"
+                style="
+                    font-size:32px;
+                    font-weight:900;
+                "
+            >
+                ฿0.00
+            </div>
 
-                if (!name) {
-                    product.style.display = "";
-                    return;
-                }
+        </div>
 
-                if (
-                    name
-                    .toLowerCase()
-                    .includes(keyword)
-                ) {
 
-                    product.style.display = "";
+        <div class="form-group">
 
-                } else {
+            <label>
+                จำนวนเงินที่ต้องการเติม
+            </label>
 
-                    product.style.display = "none";
+            <input
+                type="number"
+                id="walletAmount"
+                placeholder="เช่น 100"
+                min="10"
+            >
 
-                }
+        </div>
 
-            });
+
+        <button
+            class="full-btn"
+            onclick="createTopup()"
+        >
+            เติมเงินผ่าน PromptPay
+        </button>
+
+
+        <div
+            style="
+                margin-top:12px;
+                padding:13px;
+                background:#f8fafc;
+                border-radius:12px;
+                font-size:12px;
+                color:#6b7280;
+            "
+        >
+            🔒 ระบบจริงสามารถเชื่อมต่อ PromptPay
+            และ Payment Gateway เพื่อยืนยันยอดอัตโนมัติ
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     PRODUCT MODAL
+     ========================================================= -->
+
+<div
+    class="modal"
+    id="productModal"
+    onclick="closeModalOutside(event, 'productModal')"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2 id="productModalTitle">
+                เติมเกม
+            </h2>
+
+            <button
+                class="modal-close"
+                onclick="closeModal('productModal')"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div id="productFormArea">
+
+            <div class="form-group">
+
+                <label>
+                    User ID
+                </label>
+
+                <input
+                    type="text"
+                    id="gameUserId"
+                    placeholder="กรอก User ID"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Server
+                </label>
+
+                <input
+                    type="text"
+                    id="gameServer"
+                    placeholder="กรอก Server ถ้ามี"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    แพ็กเกจ
+                </label>
+
+                <select id="gamePackage">
+
+                    <option value="10">
+                        แพ็กเกจ ฿10
+                    </option>
+
+                    <option value="50">
+                        แพ็กเกจ ฿50
+                    </option>
+
+                    <option value="100">
+                        แพ็กเกจ ฿100
+                    </option>
+
+                    <option value="300">
+                        แพ็กเกจ ฿300
+                    </option>
+
+                    <option value="500">
+                        แพ็กเกจ ฿500
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                class="full-btn"
+                onclick="createGameOrder()"
+            >
+                ดำเนินการสั่งซื้อ
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MOBILE MODAL
+     ========================================================= -->
+
+<div
+    class="modal"
+    id="mobileModal"
+    onclick="closeModalOutside(event, 'mobileModal')"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2 id="mobileModalTitle">
+                เติมเงินมือถือ
+            </h2>
+
+            <button
+                class="modal-close"
+                onclick="closeModal('mobileModal')"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                เบอร์โทรศัพท์
+            </label>
+
+            <input
+                type="tel"
+                id="mobileNumber"
+                maxlength="10"
+                placeholder="08xxxxxxxx"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                จำนวนเงิน
+            </label>
+
+            <select id="mobileAmount">
+
+                <option value="10">
+                    ฿10
+                </option>
+
+                <option value="20">
+                    ฿20
+                </option>
+
+                <option value="50">
+                    ฿50
+                </option>
+
+                <option value="100">
+                    ฿100
+                </option>
+
+                <option value="300">
+                    ฿300
+                </option>
+
+                <option value="500">
+                    ฿500
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <button
+            class="full-btn"
+            onclick="createMobileOrder()"
+        >
+            ดำเนินการเติมเงิน
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     SERVICE MODAL
+     ========================================================= -->
+
+<div
+    class="modal"
+    id="serviceModal"
+    onclick="closeModalOutside(event, 'serviceModal')"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2 id="serviceTitle">
+                บริการ
+            </h2>
+
+            <button
+                class="modal-close"
+                onclick="closeModal('serviceModal')"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div
+            id="serviceContent"
+            style="
+                color:#6b7280;
+                font-size:14px;
+            "
+        >
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     ORDERS MODAL
+     ========================================================= -->
+
+<div
+    class="modal"
+    id="ordersModal"
+    onclick="closeModalOutside(event, 'ordersModal')"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>
+                📦 คำสั่งซื้อ
+            </h2>
+
+            <button
+                class="modal-close"
+                onclick="closeModal('ordersModal')"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div id="ordersList">
+
+            <div
+                style="
+                    padding:30px;
+                    text-align:center;
+                    color:#9ca3af;
+                "
+            >
+                ยังไม่มีคำสั่งซื้อ
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+     ========================================================= -->
+
+<div
+    class="toast"
+    id="toast"
+>
+</div>
+
+
+<script>
+
+/* =========================================================
+   SAINGAM SHOP
+   CUSTOMER FRONTEND JAVASCRIPT
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   GLOBAL DATA
+--------------------------------------------------------- */
+
+let walletBalance =
+    Number(
+        localStorage.getItem("saingam_wallet")
+    ) || 0;
+
+let orders =
+    JSON.parse(
+        localStorage.getItem("saingam_orders") || "[]"
+    );
+
+
+/* ---------------------------------------------------------
+   MODAL FUNCTIONS
+--------------------------------------------------------- */
+
+function openModal(id) {
+
+    document
+        .getElementById(id)
+        .classList.add("active");
+
+}
+
+
+function closeModal(id) {
+
+    document
+        .getElementById(id)
+        .classList.remove("active");
+
+}
+
+
+function closeModalOutside(event, id) {
+
+    if (event.target.id === id) {
+
+        closeModal(id);
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   LOGIN
+--------------------------------------------------------- */
+
+function openLogin() {
+
+    openModal("loginModal");
+
+}
+
+
+function loginDemo() {
+
+    const user =
+        document
+        .getElementById("loginUser")
+        .value
+        .trim();
+
+    const password =
+        document
+        .getElementById("loginPassword")
+        .value
+        .trim();
+
+
+    if (!user || !password) {
+
+        showToast(
+            "กรุณากรอกข้อมูลเข้าสู่ระบบ"
+        );
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "saingam_logged_in",
+        "true"
+    );
+
+
+    closeModal("loginModal");
+
+    showToast(
+        "เข้าสู่ระบบสำเร็จ"
+    );
+
+}
+
+
+function socialLogin(provider) {
+
+    showToast(
+        "Demo: เตรียมเชื่อมต่อ " +
+        provider +
+        " Login"
+    );
+
+}
+
+
+/* ---------------------------------------------------------
+   WALLET
+--------------------------------------------------------- */
+
+function openWallet() {
+
+    updateWallet();
+
+    openModal("walletModal");
+
+}
+
+
+function updateWallet() {
+
+    document
+        .getElementById("walletBalance")
+        .textContent =
+        "฿" +
+        walletBalance.toFixed(2);
+
+}
+
+
+function createTopup() {
+
+    const amount =
+        Number(
+            document
+            .getElementById("walletAmount")
+            .value
+        );
+
+
+    if (!amount || amount < 10) {
+
+        showToast(
+            "กรุณาระบุจำนวนเงินอย่างน้อย ฿10"
+        );
+
+        return;
+
+    }
+
+
+    /*
+        ระบบจริง:
+        ส่งคำขอไป Backend
+        -> Payment Gateway
+        -> PromptPay QR
+        -> Webhook
+        -> ตรวจสอบยอด
+        -> เพิ่ม Wallet
+    */
+
+    showToast(
+        "สร้างรายการเติมเงิน ฿" +
+        amount +
+        " สำเร็จ (Demo)"
+    );
+
+
+    document
+        .getElementById("walletAmount")
+        .value = "";
+
+}
+
+
+/* ---------------------------------------------------------
+   PRODUCT
+--------------------------------------------------------- */
+
+function openProduct(product) {
+
+    document
+        .getElementById("productModalTitle")
+        .textContent =
+        "เติม / ซื้อ " + product;
+
+    document
+        .getElementById("productModal")
+        .classList.add("active");
+
+}
+
+
+function createGameOrder() {
+
+    const userId =
+        document
+        .getElementById("gameUserId")
+        .value
+        .trim();
+
+    const server =
+        document
+        .getElementById("gameServer")
+        .value
+        .trim();
+
+    const amount =
+        Number(
+            document
+            .getElementById("gamePackage")
+            .value
+        );
+
+
+    if (!userId) {
+
+        showToast(
+            "กรุณากรอก User ID"
+        );
+
+        return;
+
+    }
+
+
+    createOrder({
+        type: "GAME",
+        product: document
+            .getElementById(
+                "productModalTitle"
+            )
+            .textContent,
+        amount: amount,
+        target: userId,
+        server: server
+    });
+
+
+    closeModal("productModal");
+
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE
+--------------------------------------------------------- */
+
+function openMobile(network) {
+
+    document
+        .getElementById("mobileModalTitle")
+        .textContent =
+        "เติมเงิน " + network;
+
+    document
+        .getElementById("mobileModal")
+        .dataset.network =
+        network;
+
+    openModal("mobileModal");
+
+}
+
+
+function createMobileOrder() {
+
+    const number =
+        document
+        .getElementById("mobileNumber")
+        .value
+        .trim();
+
+    const amount =
+        Number(
+            document
+            .getElementById("mobileAmount")
+            .value
+        );
+
+    const network =
+        document
+        .getElementById("mobileModal")
+        .dataset.network;
+
+
+    if (
+        !number ||
+        number.length < 9
+    ) {
+
+        showToast(
+            "กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง"
+        );
+
+        return;
+
+    }
+
+
+    createOrder({
+        type: "MOBILE",
+        product:
+            "เติมเงิน " + network,
+        amount: amount,
+        target: number,
+        network: network
+    });
+
+
+    closeModal("mobileModal");
+
+}
+
+
+/* ---------------------------------------------------------
+   SERVICE
+--------------------------------------------------------- */
+
+function openService(type) {
+
+    const title =
+        document.getElementById(
+            "serviceTitle"
+        );
+
+    const content =
+        document.getElementById(
+            "serviceContent"
+        );
+
+
+    if (type === "game") {
+
+        title.textContent =
+            "🎮 เติมเกม";
+
+        content.innerHTML = `
+            <p>
+                เลือกเกมที่ต้องการเติมเงิน
+            </p>
+
+            <br>
+
+            <button
+                class="full-btn"
+                onclick="openProduct('RoV')"
+            >
+                ⚔️ RoV
+            </button>
+
+            <br><br>
+
+            <button
+                class="full-btn"
+                onclick="openProduct('Free Fire')"
+            >
+                🔥 Free Fire
+            </button>
+
+            <br><br>
+
+            <button
+                class="full-btn"
+                onclick="openProduct('Genshin Impact')"
+            >
+                ⭐ Genshin Impact
+            </button>
+        `;
+
+    }
+
+
+    else if (type === "mobile") {
+
+        title.textContent =
+            "📱 เติมเงินมือถือ";
+
+        content.innerHTML = `
+            <p>
+                เลือกเครือข่าย
+            </p>
+
+            <br>
+
+            <button
+                class="full-btn"
+                onclick="openMobile('AIS')"
+            >
+                AIS
+            </button>
+
+            <br><br>
+
+            <button
+                class="full-btn"
+                onclick="openMobile('TrueMove H')"
+            >
+                TrueMove H
+            </button>
+
+            <br><br>
+
+            <button
+                class="full-btn"
+                onclick="openMobile('DTAC')"
+            >
+                DTAC
+            </button>
+        `;
+
+    }
+
+
+    else if (type === "package") {
+
+        title.textContent =
+            "📶 โปรเสริม";
+
+        content.innerHTML = `
+            <p>
+                ระบบนี้สามารถรองรับการเลือก
+                โปรเสริมอินเทอร์เน็ตและโทร
+                ตามเครือข่ายได้
+            </p>
+
+            <br>
+
+            <button
+                class="full-btn"
+                onclick="showToast('เตรียมเชื่อมระบบโปรเสริม')"
+            >
+                เลือกโปรเสริม
+            </button>
+        `;
+
+    }
+
+
+    else if (type === "gift") {
+
+        title.textContent =
+            "🎁 Digital Gift Card";
+
+        content.innerHTML = `
+            <p>
+                เลือกบัตรเติมเงินดิจิทัล
+            </p>
+
+            <br>
+
+            <button
+                class="full-btn"
+                onclick="openProduct('Razer Gold')"
+            >
+                Razer Gold
+            </button>
+
+            <br><br>
+
+            <button
+                class="full-btn"
+                onclick="openProduct('Steam Wallet')"
+            >
+                Steam Wallet
+            </button>
+        `;
+
+    }
+
+
+    openModal("serviceModal");
+
+}
+
+
+/* ---------------------------------------------------------
+   ORDERS
+--------------------------------------------------------- */
+
+function createOrder(data) {
+
+    const orderId =
+        "SG" +
+        Date.now()
+        .toString()
+        .slice(-8);
+
+
+    const order = {
+
+        id: orderId,
+
+        date:
+            new Date()
+            .toLocaleString(
+                "th-TH"
+            ),
+
+        status:
+            "PENDING",
+
+        ...data
+
+    };
+
+
+    orders.unshift(order);
+
+
+    localStorage.setItem(
+        "saingam_orders",
+        JSON.stringify(orders)
+    );
+
+
+    showToast(
+        "สร้างคำสั่งซื้อ " +
+        orderId +
+        " สำเร็จ"
+    );
+
+
+    setTimeout(() => {
+
+        openOrders();
+
+    }, 500);
+
+}
+
+
+function openOrders() {
+
+    const list =
+        document.getElementById(
+            "ordersList"
+        );
+
+
+    if (!orders.length) {
+
+        list.innerHTML = `
+            <div style="
+                padding:30px;
+                text-align:center;
+                color:#9ca3af;
+            ">
+                ยังไม่มีคำสั่งซื้อ
+            </div>
+        `;
+
+    }
+
+    else {
+
+        list.innerHTML =
+            orders
+            .map(order => `
+
+                <div style="
+                    padding:15px;
+                    margin-bottom:10px;
+                    border:1px solid #e5e7eb;
+                    border-radius:14px;
+                    background:#fff;
+                ">
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        gap:10px;
+                    ">
+
+                        <strong>
+                            ${order.product}
+                        </strong>
+
+                        <span style="
+                            color:#f39c12;
+                            font-size:12px;
+                            font-weight:800;
+                        ">
+                            ${order.status}
+                        </span>
+
+                    </div>
+
+                    <div style="
+                        margin-top:7px;
+                        font-size:12px;
+                        color:#6b7280;
+                    ">
+
+                        Order:
+                        ${order.id}
+
+                        <br>
+
+                        จำนวน:
+                        ฿${order.amount}
+
+                        <br>
+
+                        ${order.date}
+
+                    </div>
+
+                </div>
+
+            `)
+            .join("");
+
+    }
+
+
+    openModal("ordersModal");
+
+}
+
+
+/* ---------------------------------------------------------
+   FAQ
+--------------------------------------------------------- */
+
+function toggleFAQ(button) {
+
+    const item =
+        button.parentElement;
+
+    item.classList.toggle("active");
+
+
+    const symbol =
+        button.querySelector("span");
+
+
+    symbol.textContent =
+        item.classList.contains("active")
+            ? "−"
+            : "＋";
+
+}
+
+
+/* ---------------------------------------------------------
+   SEARCH
+--------------------------------------------------------- */
+
+function searchProducts() {
+
+    const keyword =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const cards =
+        document.querySelectorAll(
+            ".product-card"
+        );
+
+
+    cards.forEach(card => {
+
+        const text =
+            card
+            .dataset
+            .search
+            .toLowerCase();
+
+
+        card.style.display =
+            !keyword ||
+            text.includes(keyword)
+                ? ""
+                : "none";
+
+    });
+
+}
+
+
+function showAllProducts() {
+
+    document
+        .getElementById("searchInput")
+        .value = "";
+
+    searchProducts();
+
+    scrollToSection("services");
+
+}
+
+
+/* ---------------------------------------------------------
+   NAVIGATION
+--------------------------------------------------------- */
+
+function scrollToSection(id) {
+
+    const element =
+        document.getElementById(id);
+
+
+    if (element) {
+
+        element.scrollIntoView({
+            behavior: "smooth"
+        });
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   ADMIN CONTACT
+--------------------------------------------------------- */
+
+function contactAdmin() {
+
+    showToast(
+        "เตรียมเชื่อมต่อ LINE Official Account"
+    );
+
+}
+
+
+/* ---------------------------------------------------------
+   TOAST
+--------------------------------------------------------- */
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    setTimeout(() => {
+
+        toast.classList.remove(
+            "show"
+        );
+
+    }, 2500);
+
+}
+
+
+/* ---------------------------------------------------------
+   INITIALIZE
+--------------------------------------------------------- */
+
+updateWallet();
+
+
+/* ---------------------------------------------------------
+   ESC KEY
+--------------------------------------------------------- */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Escape") {
+
+            document
+                .querySelectorAll(".modal.active")
+                .forEach(modal => {
+
+                    modal.classList.remove(
+                        "active"
+                    );
+
+                });
 
         }
 
-    </script>
+    }
+);
+
+</script>
 
 </body>
 </html>
