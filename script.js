@@ -1,1516 +1,597 @@
-/* =========================================================
-   SUPABASE
-========================================================= */
+"use strict";
 
-const SUPABASE_URL =
-    "https://wljlcelgfthzyyuxvegn.supabase.co";
-
-
-const SUPABASE_ANON_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsamxjZWxnZnRoenl5dXh2ZWduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMDc0NzQsImV4cCI6MjEwNjg4MzQ3NH0.dymqAwYWp2YX54673-4R69fvLU9ujdmUXdi_LIvIKjM";
-
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-    );
-
-
-/* =========================================================
-   ตั้งค่าร้าน
-========================================================= */
+/* ==========================================
+   1. ตั้งค่าร้านและ SUPABASE
+========================================== */
 
 const SHOP = {
-
-    line:
-        "https://lin.ee/9q139qW",
-
-    facebook:
-        "https://www.facebook.com/share/1MwmyTJfCb/?mibextid=wwXIfr",
-
-    phone:
-        "0843123861"
-
+  line: "https://lin.ee/9q139qW",
+  facebook: "https://www.facebook.com/share/1MwmyTJfCb/?mibextid=wwXIfr",
+  phone: "0843123861"
 };
 
+const SUPABASE_URL = "https://wljlcelgfthzyyuxvegn.supabase.co";
 
-/* =========================================================
-   รายการเกมส์
-========================================================= */
+/* eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsamxjZWxnZnRoenl5dXh2ZWduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMDc0NzQsImV4cCI6MjEwNjg4MzQ3NH0.dymqAwYWp2YX54673-4R69fvLU9ujdmUXdi_LIvIKjM */
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsamxjZWxnZnRoenl5dXh2ZWduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMDc0NzQsImV4cCI6MjEwNjg4MzQ3NH0.dymqAwYWp2YX54673-4R69fvLU9ujdmUXdi_LIvIKjM";
 
-const games = [
+let supabaseClient = null;
+let supabaseReady = false;
+let currentOrder = null;
+let currentService = "เติมเกม / เติมเพชร";
 
-    {
-        name: "ROV",
-        icon: "🎮",
-        description: "Garena RoV",
-
-        packages: [
-            ["11 คูปอง", 10],
-            ["24 คูปอง", 19],
-            ["35 คูปอง", 29],
-            ["48 คูปอง", 39],
-            ["60 คูปอง", 49],
-            ["71 คูปอง", 59],
-            ["84 คูปอง", 69],
-            ["95 คูปอง", 79],
-            ["110 คูปอง", 89],
-            ["121 คูปอง", 99],
-            ["134 คูปอง", 109],
-            ["145 คูปอง", 119]
-        ]
-    },
-
-
-    {
-        name: "Free Fire",
-        icon: "🔥",
-        description: "เติมเพชร",
-
-        packages: [
-            ["100 Diamonds", 35],
-            ["310 Diamonds", 99],
-            ["520 Diamonds", 159]
-        ]
-    },
-
-
-    {
-        name: "PUBG Mobile",
-        icon: "🔫",
-        description: "เติม UC",
-
-        packages: [
-            ["60 UC", 35],
-            ["325 UC", 169],
-            ["660 UC", 329]
-        ]
-    },
-
-
-    {
-        name: "Mobile Legends",
-        icon: "⚔️",
-        description: "เติม Diamonds",
-
-        packages: [
-            ["86 Diamonds", 35],
-            ["172 Diamonds", 69],
-            ["257 Diamonds", 99]
-        ]
-    },
-
-
-    {
-        name: "Genshin Impact",
-        icon: "✨",
-        description: "Genesis Crystals",
-
-        packages: [
-            ["60 Crystals", 35],
-            ["300 Crystals", 169],
-            ["980 Crystals", 499]
-        ]
-    },
-
-
-    {
-        name: "Honkai: Star Rail",
-        icon: "🚄",
-        description: "Oneiric Shards",
-
-        packages: [
-            ["60 Shards", 35],
-            ["300 Shards", 169],
-            ["980 Shards", 499]
-        ]
-    },
-
-
-    {
-        name: "Ragnarok",
-        icon: "🧙",
-        description: "แพ็กเกจเติมเกม",
-
-        packages: [
-            ["แพ็กเริ่มต้น", 50],
-            ["แพ็กกลาง", 150],
-            ["แพ็กใหญ่", 300]
-        ]
-    },
-
-
-    {
-        name: "Wuthering Waves",
-        icon: "🌊",
-        description: "เติม Lunite",
-
-        packages: [
-            ["60 Lunite", 35],
-            ["300 Lunite", 169],
-            ["980 Lunite", 499]
-        ]
-    },
-
-
-    {
-        name: "Heartopia",
-        icon: "💗",
-        description: "เติมสกุลเงินในเกม",
-
-        packages: [
-            ["แพ็กเล็ก", 30],
-            ["แพ็กกลาง", 99],
-            ["แพ็กใหญ่", 299]
-        ]
-    },
-
-
-    {
-        name: "Rainbow Six Mobile",
-        icon: "🎯",
-        description: "เติมเครดิต",
-
-        packages: [
-            ["แพ็กเล็ก", 50],
-            ["แพ็กกลาง", 150],
-            ["แพ็กใหญ่", 300]
-        ]
-    },
-
-
-    {
-        name: "MONGIL: STAR DIVE",
-        icon: "⭐",
-        description: "เติมแพ็กเกจ",
-
-        packages: [
-            ["แพ็กเล็ก", 50],
-            ["แพ็กกลาง", 150],
-            ["แพ็กใหญ่", 300]
-        ]
-    },
-
-
-    {
-        name: "Kuroko Basketball",
-        icon: "🏀",
-        description: "Street Rivals",
-
-        packages: [
-            ["แพ็กเล็ก", 50],
-            ["แพ็กกลาง", 150],
-            ["แพ็กใหญ่", 300]
-        ]
-    },
-
-
-    {
-        name: "Gangstar Mirage City",
-        icon: "🏙️",
-        description: "เติมแพ็กเกจ",
-
-        packages: [
-            ["แพ็กเล็ก", 50],
-            ["แพ็กกลาง", 150],
-            ["แพ็กใหญ่", 300]
-        ]
-    },
-
-
-    {
-        name: "Aniimo",
-        icon: "🐾",
-        description: "เติมด้วย UID",
-
-        packages: [
-            ["แพ็กเล็ก", 30],
-            ["แพ็กกลาง", 99],
-            ["แพ็กใหญ่", 299]
-        ]
-    }
-
+const GAMES = [
+  { name: "ROV", icon: "⚔️", description: "เติมคูปอง / เกม MOBA" },
+  { name: "Free Fire", icon: "🔥", description: "เติมเพชร" },
+  { name: "PUBG Mobile", icon: "🎯", description: "UC และบริการเกม" },
+  { name: "Mobile Legends", icon: "🛡️", description: "Diamond" },
+  { name: "Genshin Impact", icon: "🌟", description: "บริการเกม" },
+  { name: "Honkai: Star Rail", icon: "🚄", description: "บริการเกม" },
+  { name: "Ragnarok", icon: "🧙", description: "บริการเกม" },
+  { name: "Wuthering Waves", icon: "🌊", description: "บริการเกม" },
+  { name: "Heartopia", icon: "🏡", description: "บริการเกม" },
+  { name: "Rainbow Six Mobile", icon: "🎮", description: "บริการเกม" },
+  { name: "MONGIL: STAR DIVE", icon: "💎", description: "บริการเกม" },
+  { name: "Kuroko Basketball", icon: "🏀", description: "บริการเกม" },
+  { name: "Gangstar Mirage City", icon: "🚘", description: "บริการเกม" },
+  { name: "Aniimo", icon: "🐾", description: "บริการเกม" }
 ];
 
+/* ==========================================
+   2. ฟังก์ชันทั่วไป
+========================================== */
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
-
-const gameGrid =
-    document.getElementById("gameGrid");
-
-const gameSearch =
-    document.getElementById("gameSearch");
-
-const noGames =
-    document.getElementById("noGames");
-
-const orderModal =
-    document.getElementById("orderModal");
-
-const orderForm =
-    document.getElementById("orderForm");
-
-const orderResult =
-    document.getElementById("orderResult");
-
-const navigation =
-    document.getElementById("navigation");
-
-const menuButton =
-    document.getElementById("menuButton");
-
-
-/* =========================================================
-   MONEY
-========================================================= */
-
-function formatMoney(number) {
-
-    return "฿" +
-        Number(number).toLocaleString("th-TH");
-
+function $(id) {
+  return document.getElementById(id);
 }
 
+function setMessage(id, message, type = "") {
+  const element = $(id);
+  if (!element) return;
+  element.textContent = message;
+  element.className = "form-message" + (type ? " " + type : "");
+}
 
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
+function setBusy(buttonId, busy, busyText, normalText) {
+  const button = $(buttonId);
+  if (!button) return;
+  button.disabled = busy;
+  button.textContent = busy ? busyText : normalText;
+}
+
+function openModal(id) {
+  const modal = $(id);
+  if (!modal) return;
+  modal.hidden = false;
+  document.body.classList.add("modal-open");
+}
+
+function closeModal(id) {
+  const modal = $(id);
+  if (!modal) return;
+  modal.hidden = true;
+
+  if (!document.querySelector(".modal:not([hidden])")) {
+    document.body.classList.remove("modal-open");
+  }
+}
+
+function closeAllModals() {
+  document.querySelectorAll(".modal").forEach(modal => {
+    modal.hidden = true;
+  });
+  document.body.classList.remove("modal-open");
+}
+
+function friendlyError(error) {
+  const message = String(error?.message || "");
+
+  if (/Invalid login credentials/i.test(message)) {
+    return "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
+  }
+  if (/Email not confirmed/i.test(message)) {
+    return "กรุณาเปิดอีเมลและกดยืนยันบัญชีก่อนเข้าสู่ระบบ";
+  }
+  if (/User already registered/i.test(message)) {
+    return "อีเมลนี้สมัครสมาชิกแล้ว กรุณาเข้าสู่ระบบ";
+  }
+  if (/Password should be at least/i.test(message)) {
+    return "รหัสผ่านสั้นเกินไป กรุณาตรวจสอบอีกครั้ง";
+  }
+  if (/rate limit/i.test(message)) {
+    return "คุณลองทำรายการหลายครั้งเกินไป กรุณารอสักครู่";
+  }
+
+  return message || "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง";
+}
 
 function escapeHtml(value) {
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[char]);
 }
 
+/* ==========================================
+   3. เริ่มต้น SUPABASE
+========================================== */
 
-/* =========================================================
-   RENDER GAMES
-========================================================= */
+function initSupabase() {
+  if (!window.supabase?.createClient) {
+    console.error("ไม่พบ Supabase SDK");
+    return;
+  }
 
-function renderGames(gameList = games) {
+  if (
+    !SUPABASE_ANON_KEY ||
+    SUPABASE_ANON_KEY === "ใส่_SUPABASE_ANON_PUBLIC_KEY_ของคุณตรงนี้"
+  ) {
+    console.warn("กรุณาใส่ Supabase anon/public key ก่อนใช้ระบบสมาชิก");
+    return;
+  }
 
-    gameGrid.innerHTML = "";
+  try {
+    supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+    supabaseReady = true;
 
-
-    if (gameList.length === 0) {
-
-        noGames.hidden = false;
-
-        return;
-
-    }
-
-
-    noGames.hidden = true;
-
-
-    gameList.forEach(game => {
-
-        const article =
-            document.createElement("article");
-
-        article.className =
-            "game-card";
-
-
-        let priceHTML = "";
-
-
-        game.packages.forEach(pack => {
-
-            priceHTML += `
-
-                <div class="price-row">
-
-                    <span>
-                        ${escapeHtml(pack[0])}
-                    </span>
-
-                    <b>
-                        ${formatMoney(pack[1])}
-                    </b>
-
-                </div>
-
-            `;
-
-        });
-
-
-        article.innerHTML = `
-
-            <div class="game-icon">
-                ${game.icon}
-            </div>
-
-            <h3>
-                ${escapeHtml(game.name)}
-            </h3>
-
-            <p>
-                ${escapeHtml(game.description)}
-            </p>
-
-            <div class="price-list">
-                ${priceHTML}
-            </div>
-
-            <button
-                class="button button-primary button-full"
-                type="button"
-            >
-                🛒 สั่งเติมเกม
-            </button>
-
-        `;
-
-
-        const orderButton =
-            article.querySelector("button");
-
-
-        orderButton.addEventListener(
-            "click",
-            function () {
-
-                openOrder(game.name);
-
-            }
-        );
-
-
-        gameGrid.appendChild(article);
-
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+      updateMemberUI(session?.user || null);
     });
 
+    supabaseClient.auth.getSession().then(({ data, error }) => {
+      if (error) {
+        console.error("ตรวจสอบ session ไม่สำเร็จ:", error.message);
+        return;
+      }
+      updateMemberUI(data.session?.user || null);
+    });
+  } catch (error) {
+    console.error("เริ่มต้น Supabase ไม่สำเร็จ:", error);
+  }
 }
 
+function requireSupabase() {
+  if (supabaseReady && supabaseClient) return true;
 
-/* =========================================================
-   SEARCH
-========================================================= */
-
-gameSearch.addEventListener(
-    "input",
-    function () {
-
-        const keyword =
-            gameSearch.value
-                .trim()
-                .toLowerCase();
-
-
-        if (!keyword) {
-
-            renderGames(games);
-
-            return;
-
-        }
-
-
-        const filteredGames =
-            games.filter(game => {
-
-                const text =
-                    (
-                        game.name +
-                        " " +
-                        game.description
-                    ).toLowerCase();
-
-
-                return text.includes(keyword);
-
-            });
-
-
-        renderGames(filteredGames);
-
-    }
-);
-
-
-/* =========================================================
-   OPEN ORDER
-========================================================= */
-
-function openOrder(service) {
-
-    const serviceInput =
-        document.getElementById(
-            "serviceInput"
-        );
-
-
-    const selectedService =
-        document.getElementById(
-            "selectedService"
-        );
-
-
-    orderForm.reset();
-
-
-    serviceInput.value =
-        service;
-
-
-    selectedService.textContent =
-        "บริการ: " + service;
-
-
-    orderResult.hidden =
-        true;
-
-
-    orderResult.innerHTML =
-        "";
-
-
-    orderModal.classList.add(
-        "show"
-    );
-
-
-    orderModal.setAttribute(
-        "aria-hidden",
-        "false"
-    );
-
-
-    document.body.style.overflow =
-        "hidden";
-
+  alert("ระบบสมาชิกยังไม่พร้อม กรุณาตรวจสอบ Supabase URL และ anon/public key ใน script.js");
+  return false;
 }
 
+/* ==========================================
+   4. แสดงเกมและค้นหาเกม
+========================================== */
 
-/* =========================================================
-   CLOSE ORDER
-========================================================= */
+function renderGames(searchText = "") {
+  const grid = $("gameGrid");
+  if (!grid) return;
 
-function closeOrder() {
+  const query = searchText.trim().toLowerCase();
+  const filtered = GAMES.filter(game =>
+    game.name.toLowerCase().includes(query)
+  );
 
-    orderModal.classList.remove(
-        "show"
-    );
+  grid.innerHTML = filtered.map(game => `
+    <button class="game-card" type="button"
+      data-game="${escapeHtml(game.name)}">
+      <span class="game-icon">${game.icon}</span>
+      <strong>${escapeHtml(game.name)}</strong>
+      <small>${escapeHtml(game.description)}</small>
+      <span class="text-link">เลือกเกม →</span>
+    </button>
+  `).join("");
 
-
-    orderModal.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-
-
-    document.body.style.overflow =
-        "";
-
+  if ($("gameEmpty")) {
+    $("gameEmpty").hidden = filtered.length > 0;
+  }
 }
 
+/* ==========================================
+   5. ระบบสมาชิก
+========================================== */
 
-/* =========================================================
-   CLICK OUTSIDE
-========================================================= */
-
-orderModal.addEventListener(
-    "click",
-    function (event) {
-
-        if (
-            event.target === orderModal
-        ) {
-
-            closeOrder();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   ESCAPE
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    function (event) {
-
-        if (
-            event.key === "Escape"
-        ) {
-
-            closeOrder();
-
-            closeMemberModal();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   ORDER NUMBER
-========================================================= */
-
-function generateOrderNumber() {
-
-    const now =
-        new Date();
-
-
-    const year =
-        now.getFullYear()
-            .toString()
-            .slice(-2);
-
-
-    const month =
-        String(
-            now.getMonth() + 1
-        ).padStart(2, "0");
-
-
-    const day =
-        String(
-            now.getDate()
-        ).padStart(2, "0");
-
-
-    const random =
-        Math.floor(
-            1000 +
-            Math.random() * 9000
-        );
-
-
-    return (
-        "TP" +
-        year +
-        month +
-        day +
-        random
-    );
-
+function getUsername(user) {
+  return user?.user_metadata?.username ||
+    user?.email?.split("@")[0] ||
+    "สมาชิก";
 }
 
+function updateMemberUI(user) {
+  const guest = $("memberGuest");
+  const loggedIn = $("memberLoggedIn");
 
-/* =========================================================
-   ORDER FORM
-========================================================= */
+  if (!guest || !loggedIn) return;
 
-orderForm.addEventListener(
-    "submit",
-    function (event) {
+  guest.hidden = Boolean(user);
+  loggedIn.hidden = !user;
 
-        event.preventDefault();
-
-
-        const service =
-            document.getElementById(
-                "serviceInput"
-            ).value;
-
-
-        const name =
-            document.getElementById(
-                "customerName"
-            ).value.trim();
-
-
-        const phone =
-            document.getElementById(
-                "customerPhone"
-            ).value.trim();
-
-
-        const gameId =
-            document.getElementById(
-                "gameId"
-            ).value.trim();
-
-
-        const packageName =
-            document.getElementById(
-                "packageInput"
-            ).value.trim();
-
-
-        const note =
-            document.getElementById(
-                "note"
-            ).value.trim()
-            || "-";
-
-
-        const orderNumber =
-            generateOrderNumber();
-
-
-        const message =
-
-`📋 รายการสั่งซื้อ
-
-เลขออเดอร์: ${orderNumber}
-
-บริการ:
-${service}
-
-ชื่อ:
-${name}
-
-เบอร์โทร:
-${phone}
-
-UID / เบอร์มือถือ:
-${gameId}
-
-แพ็กเกจ / จำนวนเงิน:
-${packageName}
-
-หมายเหตุ:
-${note}`;
-
-
-        window.currentOrderMessage =
-            message;
-
-
-        orderResult.hidden =
-            false;
-
-
-        orderResult.innerHTML = `
-
-            <strong>
-                ✅ สร้างออเดอร์เรียบร้อย
-            </strong>
-
-            <pre>
-${escapeHtml(message)}
-            </pre>
-
-            <button
-                type="button"
-                class="button button-primary button-full"
-                onclick="sendOrderToLine()"
-            >
-                💬 ส่งรายละเอียดทาง LINE
-            </button>
-
-        `;
-
-    }
-);
-
-
-/* =========================================================
-   LINE
-========================================================= */
-
-function sendOrderToLine() {
-
-    const lineURL =
-        SHOP.line;
-
-
-    window.open(
-        lineURL,
-        "_blank"
-    );
-
+  if (user) {
+    $("memberUsername").textContent = getUsername(user);
+    $("memberEmail").textContent = user.email || "";
+  } else {
+    $("memberUsername").textContent = "";
+    $("memberEmail").textContent = "";
+  }
 }
-
-
-/* =========================================================
-   MOBILE MENU
-========================================================= */
-
-menuButton.addEventListener(
-    "click",
-    function () {
-
-        navigation.classList.toggle(
-            "open"
-        );
-
-    }
-);
-
-
-const navigationLinks =
-    navigation.querySelectorAll("a");
-
-
-navigationLinks.forEach(
-    function (link) {
-
-        link.addEventListener(
-            "click",
-            function () {
-
-                navigation.classList.remove(
-                    "open"
-                );
-
-            }
-        );
-
-    }
-);
-
-
-/* =========================================================
-   YEAR
-========================================================= */
-
-document.getElementById(
-    "year"
-).textContent =
-    new Date().getFullYear();
-
-
-/* =========================================================
-   CONTACT
-========================================================= */
-
-function updateContactLinks() {
-
-    document
-        .querySelectorAll(".line-button")
-        .forEach(function (link) {
-
-            link.href =
-                SHOP.line;
-
-        });
-
-
-    document
-        .querySelectorAll(".facebook-button")
-        .forEach(function (link) {
-
-            link.href =
-                SHOP.facebook;
-
-        });
-
-
-    document
-        .querySelectorAll(".phone-button")
-        .forEach(function (link) {
-
-            link.href =
-                "tel:" + SHOP.phone;
-
-        });
-
-}
-
-
-/* =========================================================
-   MEMBER ELEMENTS
-========================================================= */
-
-const memberModal =
-    document.getElementById(
-        "memberModal"
-    );
-
-
-const registerBox =
-    document.getElementById(
-        "registerBox"
-    );
-
-
-const loginBox =
-    document.getElementById(
-        "loginBox"
-    );
-
-
-const registerForm =
-    document.getElementById(
-        "registerForm"
-    );
-
-
-const loginForm =
-    document.getElementById(
-        "loginForm"
-    );
-
-
-const memberLoggedOut =
-    document.getElementById(
-        "memberLoggedOut"
-    );
-
-
-const memberLoggedIn =
-    document.getElementById(
-        "memberLoggedIn"
-    );
-
-
-const loggedInUsername =
-    document.getElementById(
-        "loggedInUsername"
-    );
-
-
-/* =========================================================
-   OPEN REGISTER
-========================================================= */
 
 function openRegister() {
-
-    memberModal.classList.add(
-        "show"
-    );
-
-
-    memberModal.setAttribute(
-        "aria-hidden",
-        "false"
-    );
-
-
-    registerBox.hidden =
-        false;
-
-
-    loginBox.hidden =
-        true;
-
+  setMessage("registerMessage", "");
+  $("registerForm")?.reset();
+  closeModal("loginModal");
+  openModal("registerModal");
 }
-
-
-/* =========================================================
-   OPEN LOGIN
-========================================================= */
 
 function openLogin() {
-
-    memberModal.classList.add(
-        "show"
-    );
-
-
-    memberModal.setAttribute(
-        "aria-hidden",
-        "false"
-    );
-
-
-    registerBox.hidden =
-        true;
-
-
-    loginBox.hidden =
-        false;
-
+  setMessage("loginMessage", "");
+  $("loginForm")?.reset();
+  closeModal("registerModal");
+  openModal("loginModal");
 }
 
+async function registerMember(event) {
+  event.preventDefault();
+  if (!requireSupabase()) return;
 
-/* =========================================================
-   SHOW REGISTER
-========================================================= */
+  const username = $("registerUsername").value.trim();
+  const email = $("registerEmail").value.trim();
+  const password = $("registerPassword").value;
+  const confirmPassword = $("registerPasswordConfirm").value;
 
-function showRegisterBox() {
+  if (!/^[A-Za-z0-9_]{3,24}$/.test(username)) {
+    setMessage("registerMessage",
+      "ชื่อผู้ใช้ต้องมี 3–24 ตัว ใช้ภาษาอังกฤษ ตัวเลข หรือ _ เท่านั้น",
+      "error");
+    return;
+  }
 
-    registerBox.hidden =
-        false;
+  if (password.length < 6) {
+    setMessage("registerMessage", "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร", "error");
+    return;
+  }
 
+  if (password !== confirmPassword) {
+    setMessage("registerMessage", "รหัสผ่านทั้งสองช่องไม่ตรงกัน", "error");
+    return;
+  }
 
-    loginBox.hidden =
-        true;
+  setBusy("registerSubmit", true, "กำลังสมัคร...", "สร้างบัญชี");
+  setMessage("registerMessage", "กำลังสร้างบัญชี กรุณารอสักครู่");
 
-}
+  try {
+    const { data, error } = await supabaseClient.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { username },
+        emailRedirectTo: window.location.origin + window.location.pathname
+      }
+    });
 
+    if (error) throw error;
 
-/* =========================================================
-   SHOW LOGIN
-========================================================= */
-
-function showLoginBox() {
-
-    registerBox.hidden =
-        true;
-
-
-    loginBox.hidden =
-        false;
-
-}
-
-
-/* =========================================================
-   CLOSE MEMBER
-========================================================= */
-
-function closeMemberModal() {
-
-    memberModal.classList.remove(
-        "show"
-    );
-
-
-    memberModal.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-
-}
-
-
-/* =========================================================
-   MEMBER OUTSIDE CLICK
-========================================================= */
-
-memberModal.addEventListener(
-    "click",
-    function (event) {
-
-        if (
-            event.target === memberModal
-        ) {
-
-            closeMemberModal();
-
-        }
-
+    if (data.session?.user) {
+      updateMemberUI(data.session.user);
+      setMessage("memberStatus", "สมัครสมาชิกสำเร็จแล้ว", "success");
+      closeModal("registerModal");
+    } else {
+      setMessage(
+        "registerMessage",
+        "สร้างบัญชีแล้ว กรุณาตรวจสอบอีเมลและกดยืนยันบัญชี จากนั้นกลับมาเข้าสู่ระบบ",
+        "success"
+      );
     }
-);
-
-
-/* =========================================================
-   REGISTER
-========================================================= */
-
-registerForm.addEventListener(
-    "submit",
-    async function (event) {
-
-        event.preventDefault();
-
-
-        const username =
-            document
-                .getElementById(
-                    "registerUsername"
-                )
-                .value
-                .trim();
-
-
-        const email =
-            document
-                .getElementById(
-                    "registerEmail"
-                )
-                .value
-                .trim();
-
-
-        const password =
-            document
-                .getElementById(
-                    "registerPassword"
-                )
-                .value;
-
-
-        if (
-            username.length < 3
-        ) {
-
-            alert(
-                "Username ต้องมีอย่างน้อย 3 ตัวอักษร"
-            );
-
-            return;
-
-        }
-
-
-        if (
-            password.length < 6
-        ) {
-
-            alert(
-                "Password ต้องมีอย่างน้อย 6 ตัวอักษร"
-            );
-
-            return;
-
-        }
-
-
-        const button =
-            document.getElementById(
-                "registerSubmit"
-            );
-
-
-        button.disabled =
-            true;
-
-
-        button.textContent =
-            "กำลังสมัครสมาชิก...";
-
-
-        try {
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient.auth.signUp({
-
-                    email:
-                        email,
-
-                    password:
-                        password,
-
-                    options: {
-
-                        data: {
-                            username:
-                                username
-                        }
-
-                    }
-
-                });
-
-
-            if (error) {
-
-                alert(
-                    "สมัครสมาชิกไม่สำเร็จ: " +
-                    error.message
-                );
-
-                return;
-
-            }
-
-
-            if (!data.user) {
-
-                alert(
-                    "ไม่สามารถสร้างบัญชีได้ กรุณาลองใหม่อีกครั้ง"
-                );
-
-                return;
-
-            }
-
-
-            /*
-             * ถ้ามี Session ทันที
-             * แสดงว่าสามารถเข้าสู่ระบบได้ทันที
-             */
-
-            if (data.session) {
-
-                await saveMember(
-                    data.user.id,
-                    username
-                );
-
-
-                alert(
-                    "สมัครสมาชิกสำเร็จแล้ว 🎉"
-                );
-
-
-                registerForm.reset();
-
-
-                closeMemberModal();
-
-
-                await loadMember();
-
-            } else {
-
-                /*
-                 * กรณีต้องยืนยัน Email
-                 */
-
-                alert(
-                    "สมัครสมาชิกสำเร็จแล้วครับ 🎉\n\n" +
-                    "กรุณาตรวจสอบ Email เพื่อยืนยันบัญชี " +
-                    "แล้วจึงเข้าสู่ระบบ"
-                );
-
-
-                registerForm.reset();
-
-
-                showLoginBox();
-
-            }
-
-
-        } catch (error) {
-
-            console.error(
-                error
-            );
-
-
-            alert(
-                "เกิดข้อผิดพลาด: " +
-                error.message
-            );
-
-
-        } finally {
-
-            button.disabled =
-                false;
-
-
-            button.textContent =
-                "สมัครสมาชิก";
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   SAVE MEMBER
-========================================================= */
-
-async function saveMember(
-    authUserId,
-    username
-) {
-
-    const {
-        data: existing
-    } =
-        await supabaseClient
-            .from("members")
-            .select("id, username")
-            .eq(
-                "auth_user_id",
-                authUserId
-            )
-            .maybeSingle();
-
-
-    if (existing) {
-
-        return true;
-
+  } catch (error) {
+    setMessage("registerMessage", friendlyError(error), "error");
+  } finally {
+    setBusy("registerSubmit", false, "กำลังสมัคร...", "สร้างบัญชี");
+  }
+}
+
+async function loginMember(event) {
+  event.preventDefault();
+  if (!requireSupabase()) return;
+
+  const email = $("loginEmail").value.trim();
+  const password = $("loginPassword").value;
+
+  setBusy("loginSubmit", true, "กำลังเข้าสู่ระบบ...", "เข้าสู่ระบบ");
+  setMessage("loginMessage", "กำลังตรวจสอบบัญชี");
+
+  try {
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) throw error;
+
+    updateMemberUI(data.user);
+    setMessage("memberStatus", "เข้าสู่ระบบสำเร็จ ยินดีต้อนรับครับ", "success");
+    closeModal("loginModal");
+    $("loginForm").reset();
+  } catch (error) {
+    setMessage("loginMessage", friendlyError(error), "error");
+  } finally {
+    setBusy("loginSubmit", false, "กำลังเข้าสู่ระบบ...", "เข้าสู่ระบบ");
+  }
+}
+
+async function logoutMember() {
+  if (!requireSupabase()) return;
+
+  const button = $("logoutButton");
+  button.disabled = true;
+
+  try {
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) throw error;
+
+    updateMemberUI(null);
+    setMessage("memberStatus", "ออกจากระบบแล้ว", "success");
+  } catch (error) {
+    setMessage("memberStatus", friendlyError(error), "error");
+  } finally {
+    button.disabled = false;
+  }
+}
+
+/* ==========================================
+   6. ระบบเปิดแบบฟอร์มสั่งซื้อ
+========================================== */
+
+function openOrder(service) {
+  currentService = service || "เติมเกม / เติมเพชร";
+
+  $("orderTitle").textContent = "สั่งซื้อ: " + currentService;
+  $("packageInput").value = currentService;
+  $("gameId").value = "";
+  $("orderNote").value = "";
+  $("orderAmount").value = "";
+  setMessage("orderMessage", "");
+  openModal("orderModal");
+}
+
+function closeOrder() {
+  closeModal("orderModal");
+}
+
+function generateOrderNumber() {
+  const date = new Date();
+  const datePart =
+    date.getFullYear().toString() +
+    String(date.getMonth() + 1).padStart(2, "0") +
+    String(date.getDate()).padStart(2, "0");
+
+  const randomPart = Math.random().toString(36).slice(2, 8).toUpperCase();
+
+  return `SG-${datePart}-${randomPart}`;
+}
+
+/* ==========================================
+   7. สร้างออเดอร์และบันทึก SUPABASE
+========================================== */
+
+async function createOrder(event) {
+  event.preventDefault();
+
+  const customerName = $("customerName").value.trim();
+  const customerPhone = $("customerPhone").value.trim();
+  const gameId = $("gameId").value.trim();
+  const packageName = $("packageInput").value.trim();
+  const note = $("orderNote").value.trim();
+  const rawAmount = $("orderAmount").value.trim();
+  const amount = rawAmount === "" ? null : Number(rawAmount);
+
+  if (!customerName || !customerPhone || !gameId || !packageName) {
+    setMessage("orderMessage", "กรุณากรอกข้อมูลที่จำเป็นให้ครบ", "error");
+    return;
+  }
+
+  if (amount !== null && (!Number.isFinite(amount) || amount < 0 || amount > 1000000)) {
+    setMessage("orderMessage", "กรุณาตรวจสอบราคาอีกครั้ง", "error");
+    return;
+  }
+
+  setBusy("orderSubmit", true, "กำลังสร้างออเดอร์...", "สร้างออเดอร์");
+  setMessage("orderMessage", "กำลังบันทึกรายการ กรุณารอสักครู่");
+
+  try {
+    let user = null;
+
+    if (supabaseReady && supabaseClient) {
+      const { data } = await supabaseClient.auth.getUser();
+      user = data?.user || null;
     }
 
+    const order = {
+      order_number: generateOrderNumber(),
+      auth_user_id: user?.id || null,
+      customer_name: customerName,
+      customer_phone: customerPhone,
+      game_name: currentService,
+      game_id: gameId,
+      package_name: packageName,
+      amount,
+      note,
+      status: "pending"
+    };
 
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("members")
-            .insert({
+    if (supabaseReady && supabaseClient) {
+      const { data, error } = await supabaseClient
+        .from("orders")
+        .insert(order)
+        .select("order_number")
+        .single();
 
-                username:
-                    username,
-
-                auth_user_id:
-                    authUserId
-
-            });
-
-
-    if (error) {
-
-        /*
-         * ไม่ทำให้การสมัครสมาชิกพัง
-         * เพราะบัญชี Auth ถูกสร้างแล้ว
-         */
-
-        console.error(
-            "ไม่สามารถบันทึก members:",
-            error
+      if (error) {
+        console.error("บันทึกออเดอร์ไม่สำเร็จ:", error.message);
+        setMessage(
+          "ยังบันทึกลงฐานข้อมูลไม่ได้ กรุณาตรวจสอบการตั้งค่า Supabase แล้วลองใหม่",
+          "error"
         );
-
-        return false;
-
-    }
-
-
-    return true;
-
-}
-
-
-/* =========================================================
-   LOGIN
-========================================================= */
-
-loginForm.addEventListener(
-    "submit",
-    async function (event) {
-
-        event.preventDefault();
-
-
-        const email =
-            document
-                .getElementById(
-                    "loginEmail"
-                )
-                .value
-                .trim();
-
-
-        const password =
-            document
-                .getElementById(
-                    "loginPassword"
-                )
-                .value;
-
-
-        const button =
-            document.getElementById(
-                "loginSubmit"
-            );
-
-
-        button.disabled =
-            true;
-
-
-        button.textContent =
-            "กำลังเข้าสู่ระบบ...";
-
-
-        try {
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient.auth.signInWithPassword({
-
-                    email:
-                        email,
-
-                    password:
-                        password
-
-                });
-
-
-            if (error) {
-
-                alert(
-                    "เข้าสู่ระบบไม่สำเร็จ: " +
-                    error.message
-                );
-
-                return;
-
-            }
-
-
-            const username =
-                data.user
-                    .user_metadata
-                    ?.username;
-
-
-            if (username) {
-
-                await saveMember(
-                    data.user.id,
-                    username
-                );
-
-            }
-
-
-            alert(
-                "เข้าสู่ระบบสำเร็จครับ 🎉"
-            );
-
-
-            loginForm.reset();
-
-
-            closeMemberModal();
-
-
-            await loadMember();
-
-
-        } catch (error) {
-
-            console.error(
-                error
-            );
-
-
-            alert(
-                "เกิดข้อผิดพลาด: " +
-                error.message
-            );
-
-
-        } finally {
-
-            button.disabled =
-                false;
-
-
-            button.textContent =
-                "เข้าสู่ระบบ";
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   LOAD MEMBER
-========================================================= */
-
-async function loadMember() {
-
-    try {
-
-        const {
-            data: {
-                session
-            }
-        } =
-            await supabaseClient.auth.getSession();
-
-
-        if (!session) {
-
-            memberLoggedOut.hidden =
-                false;
-
-
-            memberLoggedIn.hidden =
-                true;
-
-
-            return;
-
-        }
-
-
-        const username =
-            session.user
-                .user_metadata
-                ?.username
-            ||
-            session.user.email;
-
-
-        loggedInUsername.textContent =
-            username;
-
-
-        memberLoggedOut.hidden =
-            true;
-
-
-        memberLoggedIn.hidden =
-            false;
-
-
-    } catch (error) {
-
-        console.error(
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-async function logout() {
-
-    const {
-        error
-    } =
-        await supabaseClient.auth.signOut();
-
-
-    if (error) {
-
-        alert(
-            "ออกจากระบบไม่สำเร็จ: " +
-            error.message
-        );
-
         return;
+      }
 
+      order.order_number = data.order_number;
+    } else {
+      setMessage("ระบบฐานข้อมูลยังไม่พร้อม กรุณาตรวจสอบการตั้งค่า", "error");
+      return;
     }
 
+    currentOrder = order;
 
-    memberLoggedOut.hidden =
-        false;
+    $("resultOrderNumber").textContent = order.order_number;
+    $("resultDetails").textContent =
+      `${order.game_name} · ${order.package_name}`;
 
-
-    memberLoggedIn.hidden =
-        true;
-
-
-    alert(
-        "ออกจากระบบแล้วครับ"
-    );
-
+    closeModal("orderModal");
+    openModal("resultModal");
+    $("orderForm").reset();
+  } catch (error) {
+    console.error(error);
+    setMessage("สร้างออเดอร์ไม่สำเร็จ กรุณาลองใหม่", "error");
+  } finally {
+    setBusy("orderSubmit", false, "กำลังสร้างออเดอร์...", "สร้างออเดอร์");
+  }
 }
 
+/* ==========================================
+   8. ส่งรายละเอียดไป LINE
+========================================== */
 
-/* =========================================================
-   AUTH STATE
-========================================================= */
+function makeOrderMessage(order) {
+  return [
+    "สวัสดีครับ ต้องการแจ้งออเดอร์ SAINGAM SHOP",
+    `เลขออเดอร์: ${order.order_number}`,
+    `ชื่อผู้ติดต่อ: ${order.customer_name}`,
+    `เบอร์โทร: ${order.customer_phone}`,
+    `บริการ: ${order.game_name}`,
+    `UID / ID / เบอร์มือถือ: ${order.game_id}`,
+    `แพ็กเกจ: ${order.package_name}`,
+    `ราคา: ${order.amount === null ? "รอร้านยืนยัน" : order.amount + " บาท"}`,
+    `หมายเหตุ: ${order.note || "-"}`,
+    "สถานะ: รอร้านตรวจสอบและยืนยัน"
+  ].join("\n");
+}
 
-supabaseClient.auth.onAuthStateChange(
-    function () {
+function sendOrderToLine() {
+  if (!currentOrder) return;
 
-        loadMember();
+  const message = makeOrderMessage(currentOrder);
+  const url = "https://line.me/R/msg/text/?" + encodeURIComponent(message);
+  window.open(url, "_blank", "noopener,noreferrer");
+}
 
-    }
-);
+async function copyOrderNumber() {
+  if (!currentOrder) return;
 
+  try {
+    await navigator.clipboard.writeText(currentOrder.order_number);
+    $("copyOrderButton").textContent = "คัดลอกแล้ว ✓";
+  } catch {
+    const temp = document.createElement("textarea");
+    temp.value = currentOrder.order_number;
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand("copy");
+    temp.remove();
+    $("copyOrderButton").textContent = "คัดลอกแล้ว ✓";
+  }
+}
 
-/* =========================================================
-   START WEBSITE
-========================================================= */
+/* ==========================================
+   9. ลิงก์ติดต่อร้าน
+========================================== */
 
-renderGames();
+function updateContactLinks() {
+  const lineLink = $("lineLink");
+  const facebookLink = $("facebookLink");
 
-updateContactLinks();
+  if (lineLink) lineLink.href = SHOP.line;
+  if (facebookLink) facebookLink.href = SHOP.facebook;
 
-loadMember();
+  document.querySelectorAll(".phone-button").forEach(link => {
+    link.href = "tel:" + SHOP.phone;
+  });
+}
+
+/* ==========================================
+   10. เริ่มต้นและผูกปุ่มทั้งหมด
+========================================== */
+
+function initWebsite() {
+  initSupabase();
+  renderGames();
+  updateContactLinks();
+
+  if ($("currentYear")) {
+    $("currentYear").textContent = new Date().getFullYear();
+  }
+
+  $("gameSearch")?.addEventListener("input", event => {
+    renderGames(event.target.value);
+  });
+
+  $("gameGrid")?.addEventListener("click", event => {
+    const button = event.target.closest("[data-game]");
+    if (button) openOrder(button.dataset.game);
+  });
+
+  document.querySelectorAll("[data-service]").forEach(button => {
+    button.addEventListener("click", () => openOrder(button.dataset.service));
+  });
+
+  $("askLineButton")?.addEventListener("click", () => {
+    window.open(SHOP.line, "_blank", "noopener,noreferrer");
+  });
+
+  $("menuToggle")?.addEventListener("click", () => {
+    $("navLinks")?.classList.toggle("open");
+  });
+
+  $("navLinks")?.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      $("navLinks")?.classList.remove("open");
+    });
+  });
+
+  $("openRegisterButton")?.addEventListener("click", openRegister);
+  $("openLoginButton")?.addEventListener("click", openLogin);
+  $("switchToLogin")?.addEventListener("click", openLogin);
+  $("switchToRegister")?.addEventListener("click", openRegister);
+
+  $("registerForm")?.addEventListener("submit", registerMember);
+  $("loginForm")?.addEventListener("submit", loginMember);
+  $("logoutButton")?.addEventListener("click", logoutMember);
+
+  $("orderForm")?.addEventListener("submit", createOrder);
+  $("closeOrderButton")?.addEventListener("click", closeOrder);
+
+  $("sendOrderLineButton")?.addEventListener("click", sendOrderToLine);
+  $("copyOrderButton")?.addEventListener("click", copyOrderNumber);
+
+  document.querySelectorAll("[data-close-modal]").forEach(button => {
+    button.addEventListener("click", () => closeModal(button.dataset.closeModal));
+  });
+
+  document.querySelectorAll(".modal").forEach(modal => {
+    modal.addEventListener("click", event => {
+      if (event.target === modal) closeModal(modal.id);
+    });
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeAllModals();
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initWebsite);
+} else {
+  initWebsite();
+}
