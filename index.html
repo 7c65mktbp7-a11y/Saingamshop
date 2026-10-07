@@ -1,330 +1,637 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#17152b">
-  <meta name="description" content="SAINGAM SHOP บริการเติมเกม เติมเงินมือถือ และแพ็กเกจอินเทอร์เน็ต">
-  <title>SAINGAM SHOP | ร้านเติมเกมออนไลน์</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SAINGAM SHOP | เติมเกม เติมเงิน โปรเสริม และบริการดิจิทัลอื่นๆ</title>
+
+    <meta
+        name="description"
+        content="SAINGAM SHOP บริการเติมเกม เติมเงินมือถือ ซื้อโปรเสริม และบริการดิจิทัลอื่นๆ"
+    >
+
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header class="site-header">
-  <div class="container header-inner">
-    <a class="brand" href="#home">
-      <span class="brand-icon">S</span>
-      <span>SAINGAM <b>SHOP</b></span>
-    </a>
-    <button class="menu-toggle" id="menuToggle" aria-label="เปิดเมนู">☰</button>
-    <nav class="nav-links" id="navLinks">
-      <a href="#home">หน้าแรก</a>
-      <a href="#games">🎮 เติมเกม</a>
-      <a href="#mobile">📱 เติมเงินมือถือ</a>
-      <a href="#packages">📶 โปรเสริม</a>
-      <a href="#orders">📦 วิธีสั่งซื้อ</a>
-      <a href="#member">👤 สมาชิก</a>
-      <a href="#contact">ติดต่อเรา</a>
-    </nav>
-  </div>
-</header>
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+    <header class="site-header">
 
-<main>
-  <section class="hero" id="home">
-    <div class="container hero-grid">
-      <div class="hero-content">
-        <span class="eyebrow">WELCOME TO SAINGAM SHOP</span>
-        <h1>เติมเกมง่าย ๆ<br>สะดวกทุกขั้นตอน</h1>
-        <p>เลือกเกม เลือกแพ็กเกจ กรอกข้อมูล และส่งคำสั่งซื้อผ่านร้านได้ในที่เดียว</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#games">เลือกเกมเลย</a>
-          <a class="btn btn-outline" href="#member">สมัครสมาชิก</a>
+        <div class="container header-inner">
+
+            <a href="#home" class="logo">
+                <span class="logo-icon">🎮</span>
+
+                <span class="logo-text">
+                    <strong>SAINGAM</strong>
+                    <small>SHOP</small>
+                </span>
+            </a>
+
+            <button
+                class="menu-toggle"
+                id="menuToggle"
+                type="button"
+                aria-label="เปิดเมนู"
+            >
+                ☰
+            </button>
+
+            <nav class="main-nav" id="mainNav">
+
+                <a href="#home">
+                    🏠 หน้าแรก
+                </a>
+
+                <a href="#games">
+                    🎮 เติมเกม
+                </a>
+
+                <a href="#mobile">
+                    📱 เติมเงินมือถือ
+                </a>
+
+                <a href="#addons">
+                    📶 ซื้อโปรเสริม
+                </a>
+
+                <a href="#services">
+                    📦 บริการอื่นๆ
+                </a>
+
+                <a href="#howto">
+                    📋 วิธีสั่งซื้อ
+                </a>
+
+                <a href="#member">
+                    👤 สมาชิก
+                </a>
+
+                <a href="#contact">
+                    📞 ติดต่อเรา
+                </a>
+
+            </nav>
+
         </div>
-        <div class="hero-points">
-          <span>✓ สั่งซื้อได้บนมือถือ</span>
-          <span>✓ ตรวจสอบเลขออเดอร์</span>
-          <span>✓ ติดต่อร้านได้โดยตรง</span>
-        </div>
-      </div>
-      <div class="hero-art">
-        <div class="hero-orbit orbit-one"></div>
-        <div class="hero-orbit orbit-two"></div>
-        <div class="hero-controller">🎮</div>
-        <div class="floating-card float-top">⚡ เติมเกม</div>
-        <div class="floating-card float-bottom">💎 แพ็กเกจพิเศษ</div>
-      </div>
-    </div>
-  </section>
 
-  <section class="trust-strip">
-    <div class="container trust-grid">
-      <div><strong>🎮</strong><span>รวมเกมยอดนิยม</span></div>
-      <div><strong>📦</strong><span>มีเลขออเดอร์</span></div>
-      <div><strong>📱</strong><span>รองรับมือถือ</span></div>
-      <div><strong>💬</strong><span>ติดต่อร้านได้</span></div>
-    </div>
-  </section>
+    </header>
 
-  <section class="section" id="games">
-    <div class="container">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">GAME TOP UP</span>
-          <h2>เลือกเกมที่ต้องการเติม</h2>
-          <p>ค้นหาชื่อเกมแล้วกดเลือกเพื่อเริ่มสั่งซื้อ</p>
-        </div>
-        <span class="section-icon">🎮</span>
-      </div>
-      <input class="search-input" id="gameSearch" type="search"
-             placeholder="ค้นหาเกม เช่น ROV, Free Fire..." aria-label="ค้นหาเกม">
-      <div class="game-grid" id="gameGrid"></div>
-      <p class="empty-message" id="gameEmpty" hidden>ไม่พบเกมที่ค้นหา</p>
-    </div>
-  </section>
 
-  <section class="section section-soft" id="mobile">
-    <div class="container">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">MOBILE TOP UP</span>
-          <h2>เติมเงินมือถือ</h2>
-          <p>เลือกบริการที่ต้องการแล้วกรอกเบอร์โทรศัพท์</p>
-        </div>
-        <span class="section-icon">📱</span>
-      </div>
-      <div class="service-grid">
-        <button class="service-card" data-service="เติมเงินมือถือ">
-          <span class="service-icon">📲</span>
-          <strong>เติมเงินมือถือ</strong>
-          <span>สั่งซื้อผ่านแบบฟอร์ม</span>
-          <span class="text-link">เลือกบริการ →</span>
-        </button>
-        <button class="service-card" data-service="แพ็กเกจอินเทอร์เน็ตมือถือ">
-          <span class="service-icon">📶</span>
-          <strong>แพ็กเกจอินเทอร์เน็ต</strong>
-          <span>ระบุแพ็กเกจที่ต้องการ</span>
-          <span class="text-link">เลือกบริการ →</span>
-        </button>
-        <button class="service-card" data-service="บริการดิจิทัลอื่น ๆ">
-          <span class="service-icon">✨</span>
-          <strong>บริการอื่น ๆ</strong>
-          <span>สอบถามรายละเอียดกับร้าน</span>
-          <span class="text-link">เลือกบริการ →</span>
-        </button>
-      </div>
-    </div>
-  </section>
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+    <main>
 
-  <section class="section" id="packages">
-    <div class="container">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">OUR SERVICES</span>
-          <h2>บริการของร้าน</h2>
-          <p>เลือกบริการและสอบถามราคาได้โดยตรง</p>
-        </div>
-        <span class="section-icon">✨</span>
-      </div>
-      <div class="package-grid">
-        <article class="package-card">
-          <div class="package-icon">💎</div>
-          <h3>เติมเพชร / เติมเกม</h3>
-          <p>เลือกเกมและแจ้งแพ็กเกจที่ต้องการ</p>
-          <button class="btn btn-primary btn-full" data-service="เติมเกม / เติมเพชร">สั่งซื้อ</button>
-        </article>
-        <article class="package-card">
-          <div class="package-icon">📡</div>
-          <h3>โปรอินเทอร์เน็ต</h3>
-          <p>ระบุเครือข่ายและแพ็กเกจที่ต้องการ</p>
-          <button class="btn btn-primary btn-full" data-service="โปรอินเทอร์เน็ต">สั่งซื้อ</button>
-        </article>
-        <article class="package-card">
-          <div class="package-icon">💬</div>
-          <h3>บริการอื่น ๆ</h3>
-          <p>สอบถามข้อมูลก่อนยืนยันรายการ</p>
-          <button class="btn btn-outline btn-full" id="askLineButton">สอบถามร้าน</button>
-        </article>
-      </div>
-    </div>
-  </section>
+        <section class="hero" id="home">
 
-  <section class="section section-soft" id="orders">
-    <div class="container">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">HOW TO ORDER</span>
-          <h2>วิธีสั่งซื้อ</h2>
-          <p>ทำตามขั้นตอนด้านล่างเพื่อส่งคำสั่งซื้อ</p>
-        </div>
-      </div>
-      <div class="steps-grid">
-        <div class="step-card"><span>01</span><h3>เลือกบริการ</h3><p>เลือกเกมหรือบริการที่ต้องการ</p></div>
-        <div class="step-card"><span>02</span><h3>กรอกข้อมูล</h3><p>กรอกข้อมูลติดต่อและรายละเอียดรายการ</p></div>
-        <div class="step-card"><span>03</span><h3>รับเลขออเดอร์</h3><p>ระบบสร้างหมายเลขสำหรับอ้างอิงรายการ</p></div>
-        <div class="step-card"><span>04</span><h3>ติดต่อร้าน</h3><p>ส่งรายละเอียดไป LINE เพื่อให้ร้านตรวจสอบ</p></div>
-      </div>
-      <div class="notice">
-        <strong>หมายเหตุ</strong>
-        <p>การสร้างเลขออเดอร์ไม่ได้ยืนยันว่าชำระเงินแล้วหรือเติมสำเร็จ ต้องรอร้านตรวจสอบและยืนยันสถานะก่อนทุกครั้ง</p>
-      </div>
-    </div>
-  </section>
+            <div class="container hero-grid">
 
-  <section class="section" id="member">
-    <div class="container member-container">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">MEMBER ACCOUNT</span>
-          <h2>ระบบสมาชิก</h2>
-          <p>สมัครบัญชีด้วยชื่อผู้ใช้ อีเมล และรหัสผ่าน</p>
-        </div>
-        <span class="section-icon">👤</span>
-      </div>
-      <div class="member-box">
-        <div class="member-avatar">👤</div>
-        <div id="memberGuest">
-          <h3>ยินดีต้อนรับสู่ SAINGAM SHOP</h3>
-          <p>สมัครสมาชิกหรือเข้าสู่ระบบเพื่อใช้บัญชีของคุณ</p>
-          <div class="button-row">
-            <button class="btn btn-primary" id="openRegisterButton">สมัครสมาชิก</button>
-            <button class="btn btn-outline" id="openLoginButton">เข้าสู่ระบบ</button>
-          </div>
-        </div>
-        <div id="memberLoggedIn" hidden>
-          <h3>สวัสดี <span id="memberUsername"></span> 👋</h3>
-          <p id="memberEmail"></p>
-          <button class="btn btn-outline" id="logoutButton">ออกจากระบบ</button>
-        </div>
-        <p class="form-message" id="memberStatus" role="status" aria-live="polite"></p>
-      </div>
-    </div>
-  </section>
+                <div class="hero-content">
 
-  <section class="section contact-section" id="contact">
-    <div class="container contact-card">
-      <div>
-        <span class="eyebrow">CONTACT US</span>
-        <h2>ต้องการสอบถามเพิ่มเติม?</h2>
-        <p>ติดต่อร้านผ่าน LINE, Facebook หรือโทรศัพท์</p>
-      </div>
-      <div class="contact-actions">
-        <a class="btn btn-line" id="lineLink" href="https://lin.ee/9q139qW" target="_blank" rel="noopener">LINE ร้าน</a>
-        <a class="btn btn-facebook" id="facebookLink" href="https://www.facebook.com/share/1MwmyTJfCb/?mibextid=wwXIfr" target="_blank" rel="noopener">Facebook</a>
-        <a class="btn btn-outline phone-button" href="tel:0843123861">โทรหาร้าน</a>
-      </div>
-    </div>
-  </section>
-</main>
+                    <div class="hero-badge">
+                        ⚡ SAINGAM SHOP
+                    </div>
 
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <a class="brand footer-brand" href="#home"><span class="brand-icon">S</span><span>SAINGAM <b>SHOP</b></span></a>
-    <p>© <span id="currentYear"></span> SAINGAM SHOP. All rights reserved.</p>
-  </div>
-</footer>
+                    <h1>
+                        ราคาถูก
+                        <span>บริการรวดเร็ว</span>
+                        มีให้ที่เรา
+                    </h1>
 
-<!-- หน้าต่างสมัครสมาชิก -->
-<div class="modal" id="registerModal" role="dialog" aria-modal="true" aria-labelledby="registerTitle" hidden>
-  <div class="modal-card member-modal-card">
-    <button class="modal-close" type="button" data-close-modal="registerModal" aria-label="ปิด">×</button>
-    <span class="modal-icon">✨</span>
-    <h2 id="registerTitle">สมัครสมาชิก</h2>
-    <p class="modal-subtitle">กรอกข้อมูลให้ครบทุกช่อง</p>
-    <form id="registerForm">
-      <label for="registerUsername">ชื่อผู้ใช้</label>
-      <input id="registerUsername" name="username" type="text" minlength="3" maxlength="24"
-             pattern="[A-Za-z0-9_]+" autocomplete="username" placeholder="ภาษาอังกฤษ ตัวเลข หรือ _" required>
-      <small>ใช้ตัวอักษรอังกฤษ ตัวเลข และ _ ความยาว 3–24 ตัว</small>
+                    <p>
+                        บริการเติมเกม เติมเงินมือถือ
+                        ซื้อโปรเสริม และบริการดิจิทัล
+                        สั่งซื้อออนไลน์ได้ง่ายผ่านเว็บไซต์
+                    </p>
 
-      <label for="registerEmail">อีเมล</label>
-      <input id="registerEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+                    <div class="hero-actions">
 
-      <label for="registerPassword">รหัสผ่าน</label>
-      <input id="registerPassword" name="password" type="password" minlength="6"
-             autocomplete="new-password" placeholder="อย่างน้อย 6 ตัวอักษร" required>
+                        <a href="#games" class="btn btn-primary">
+                            🎮 เริ่มเติมเกม
+                        </a>
 
-      <label for="registerPasswordConfirm">ยืนยันรหัสผ่าน</label>
-      <input id="registerPasswordConfirm" name="passwordConfirm" type="password"
-             minlength="6" autocomplete="new-password" placeholder="กรอกรหัสผ่านอีกครั้ง" required>
+                        <a href="#addons" class="btn btn-secondary">
+                            📶 ซื้อโปรเสริม
+                        </a>
 
-      <p class="form-message" id="registerMessage" role="status" aria-live="polite"></p>
-      <button class="btn btn-primary btn-full" id="registerSubmit" type="submit">สร้างบัญชี</button>
-    </form>
-    <p class="switch-auth">มีบัญชีแล้ว? <button type="button" id="switchToLogin">เข้าสู่ระบบ</button></p>
-  </div>
-</div>
+                    </div>
 
-<!-- หน้าต่างเข้าสู่ระบบ -->
-<div class="modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle" hidden>
-  <div class="modal-card member-modal-card">
-    <button class="modal-close" type="button" data-close-modal="loginModal" aria-label="ปิด">×</button>
-    <span class="modal-icon">👋</span>
-    <h2 id="loginTitle">เข้าสู่ระบบ</h2>
-    <p class="modal-subtitle">กรอกอีเมลและรหัสผ่านของคุณ</p>
-    <form id="loginForm">
-      <label for="loginEmail">อีเมล</label>
-      <input id="loginEmail" name="email" type="email" autocomplete="email" required>
-      <label for="loginPassword">รหัสผ่าน</label>
-      <input id="loginPassword" name="password" type="password" autocomplete="current-password" required>
-      <p class="form-message" id="loginMessage" role="status" aria-live="polite"></p>
-      <button class="btn btn-primary btn-full" id="loginSubmit" type="submit">เข้าสู่ระบบ</button>
-    </form>
-    <p class="switch-auth">ยังไม่มีบัญชี? <button type="button" id="switchToRegister">สมัครสมาชิก</button></p>
-  </div>
-</div>
+                </div>
 
-<!-- หน้าต่างสั่งซื้อ -->
-<div class="modal" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="orderTitle" hidden>
-  <div class="modal-card order-modal-card">
-    <button class="modal-close" type="button" id="closeOrderButton" aria-label="ปิด">×</button>
-    <span class="eyebrow">NEW ORDER</span>
-    <h2 id="orderTitle">แบบฟอร์มสั่งซื้อ</h2>
-    <p class="modal-subtitle">กรอกข้อมูลให้ถูกต้องก่อนส่งรายการ</p>
-    <form id="orderForm">
-      <label for="customerName">ชื่อผู้ติดต่อ</label>
-      <input id="customerName" name="customerName" maxlength="100" autocomplete="name" required>
 
-      <label for="customerPhone">เบอร์โทรศัพท์</label>
-      <input id="customerPhone" name="customerPhone" type="tel" maxlength="20" autocomplete="tel" required>
+                <div class="hero-card">
 
-      <label for="gameId">UID / ID เกม / เบอร์มือถือ</label>
-      <input id="gameId" name="gameId" maxlength="100" placeholder="กรอกข้อมูลสำหรับบริการนี้" required>
+                    <div class="hero-card-icon">
+                        ⚡
+                    </div>
 
-      <label for="packageInput">เกมหรือบริการ / แพ็กเกจ</label>
-      <input id="packageInput" name="packageInput" maxlength="200" required>
+                    <h2>
+                        บริการออนไลน์
+                    </h2>
 
-      <label for="orderAmount">ราคาที่ตกลงกับร้าน (บาท)</label>
-      <input id="orderAmount" name="amount" type="number" min="0" max="1000000" step="0.01" placeholder="กรอกเมื่อทราบราคา">
+                    <p>
+                        สั่งซื้อสะดวก
+                        ตรวจสอบออเดอร์ได้
+                        และติดต่อร้านผ่าน LINE
+                    </p>
 
-      <label for="orderNote">หมายเหตุ (ถ้ามี)</label>
-      <textarea id="orderNote" name="note" rows="3" maxlength="1000" placeholder="รายละเอียดเพิ่มเติม"></textarea>
+                    <div class="hero-card-list">
 
-      <p class="form-message" id="orderMessage" role="status" aria-live="polite"></p>
-      <button class="btn btn-primary btn-full" id="orderSubmit" type="submit">สร้างออเดอร์</button>
-      <p class="fine-print">ยังไม่ถือว่าชำระเงินหรือเติมสำเร็จจนกว่าร้านจะยืนยัน</p>
-    </form>
-  </div>
-</div>
+                        <div>
+                            <span>✓</span>
+                            เติมเกม
+                        </div>
 
-<!-- หน้าต่างผลการสั่งซื้อ -->
-<div class="modal" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resultTitle" hidden>
-  <div class="modal-card result-card">
-    <button class="modal-close" type="button" data-close-modal="resultModal" aria-label="ปิด">×</button>
-    <span class="result-icon">📦</span>
-    <h2 id="resultTitle">สร้างออเดอร์แล้ว</h2>
-    <p>หมายเลขออเดอร์ของคุณ</p>
-    <div class="order-number" id="resultOrderNumber"></div>
-    <p id="resultDetails"></p>
-    <div class="button-row button-row-stacked">
-      <button class="btn btn-line btn-full" id="sendOrderLineButton">ส่งรายละเอียดไป LINE</button>
-      <button class="btn btn-outline btn-full" id="copyOrderButton">คัดลอกเลขออเดอร์</button>
-      <button class="btn btn-primary btn-full" data-close-modal="resultModal">เสร็จสิ้น</button>
-    </div>
-    <p class="fine-print">เก็บเลขออเดอร์นี้ไว้ใช้อ้างอิงกับร้าน</p>
-  </div>
-</div>
+                        <div>
+                            <span>✓</span>
+                            เติมเงินมือถือ
+                        </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js"></script>
-</body>
-</html>
+                        <div>
+                            <span>✓</span>
+                            ซื้อโปรเสริม
+                        </div>
+
+                        <div>
+                            <span>✓</span>
+                            บริการดิจิทัล
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TRUST BAR
+        ====================================================== -->
+        <section class="trust-bar">
+
+            <div class="container trust-grid">
+
+                <div class="trust-item">
+                    <span>⚡</span>
+                    <div>
+                        <strong>รวดเร็ว</strong>
+                        <small>ดำเนินการไว</small>
+                    </div>
+                </div>
+
+                <div class="trust-item">
+                    <span>💳</span>
+                    <div>
+                        <strong>สั่งซื้อง่าย</strong>
+                        <small>ทำรายการออนไลน์</small>
+                    </div>
+                </div>
+
+                <div class="trust-item">
+                    <span>📋</span>
+                    <div>
+                        <strong>มีเลขออเดอร์</strong>
+                        <small>ตรวจสอบรายการ</small>
+                    </div>
+                </div>
+
+                <div class="trust-item">
+                    <span>💬</span>
+                    <div>
+                        <strong>มีแอดมินดูแล</strong>
+                        <small>ติดต่อผ่าน LINE</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             GAMES
+        ====================================================== -->
+        <section class="section" id="games">
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <span class="section-label">
+                        🎮 GAME TOP UP
+                    </span>
+
+                    <h2>
+                        เติมเกม
+                    </h2>
+
+                    <p>
+                        เลือกเกมที่ต้องการ
+                        จากนั้นเลือกแพ็กเกจและสั่งซื้อ
+                    </p>
+
+                </div>
+
+
+                <div class="search-box">
+
+                    <span>🔎</span>
+
+                    <input
+                        type="search"
+                        id="gameSearch"
+                        placeholder="ค้นหาเกม..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <div
+                    class="game-grid"
+                    id="gamesGrid"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             MOBILE TOP UP
+        ====================================================== -->
+        <section
+            class="section section-soft"
+            id="mobile"
+        >
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <span class="section-label">
+                        📱 MOBILE TOP UP
+                    </span>
+
+                    <h2>
+                        เติมเงินมือถือ
+                    </h2>
+
+                    <p>
+                        เลือกเครือข่ายที่ต้องการ
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="service-grid"
+                    id="mobileGrid"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ADDONS
+        ====================================================== -->
+        <section
+            class="section"
+            id="addons"
+        >
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <span class="section-label">
+                        📶 INTERNET ADD-ON
+                    </span>
+
+                    <h2>
+                        ซื้อโปรเสริม
+                    </h2>
+
+                    <p>
+                        เลือกเครือข่าย
+                        แล้วเลือกแพ็กเกจโปรเสริมที่ต้องการ
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="service-grid"
+                    id="addonsGrid"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             OTHER SERVICES
+        ====================================================== -->
+        <section
+            class="section section-soft"
+            id="services"
+        >
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <span class="section-label">
+                        📦 DIGITAL SERVICES
+                    </span>
+
+                    <h2>
+                        บริการอื่นๆ
+                    </h2>
+
+                    <p>
+                        บริการดิจิทัลอื่นๆ ของ SAINGAM SHOP
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="service-grid"
+                    id="servicesGrid"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             HOW TO ORDER
+        ====================================================== -->
+        <section
+            class="section"
+            id="howto"
+        >
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <span class="section-label">
+                        📋 HOW TO ORDER
+                    </span>
+
+                    <h2>
+                        วิธีสั่งซื้อ
+                    </h2>
+
+                    <p>
+                        ขั้นตอนการสั่งซื้อสินค้า
+                    </p>
+
+                </div>
+
+
+                <div class="steps-grid">
+
+                    <div class="step-card">
+
+                        <div class="step-number">
+                            1
+                        </div>
+
+                        <div class="step-icon">
+                            🎮
+                        </div>
+
+                        <h3>
+                            เลือกบริการ
+                        </h3>
+
+                        <p>
+                            เลือกเกม เติมเงินมือถือ
+                            หรือซื้อโปรเสริม
+                        </p>
+
+                    </div>
+
+
+                    <div class="step-card">
+
+                        <div class="step-number">
+                            2
+                        </div>
+
+                        <div class="step-icon">
+                            📦
+                        </div>
+
+                        <h3>
+                            เลือกแพ็กเกจ
+                        </h3>
+
+                        <p>
+                            ตรวจสอบรายละเอียด
+                            และราคาของแพ็กเกจ
+                        </p>
+
+                    </div>
+
+
+                    <div class="step-card">
+
+                        <div class="step-number">
+                            3
+                        </div>
+
+                        <div class="step-icon">
+                            📝
+                        </div>
+
+                        <h3>
+                            กรอกข้อมูล
+                        </h3>
+
+                        <p>
+                            กรอกชื่อ เบอร์โทร
+                            และข้อมูลสำหรับทำรายการ
+                        </p>
+
+                    </div>
+
+
+                    <div class="step-card">
+
+                        <div class="step-number">
+                            4
+                        </div>
+
+                        <div class="step-icon">
+                            🎫
+                        </div>
+
+                        <h3>
+                            รับเลขออเดอร์
+                        </h3>
+
+                        <p>
+                            ระบบสร้างเลขออเดอร์
+                            สำหรับติดตามรายการ
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             MEMBER
+        ====================================================== -->
+        <section
+            class="section section-soft"
+            id="member"
+        >
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <span class="section-label">
+                        👤 MEMBER
+                    </span>
+
+                    <h2>
+                        ระบบสมาชิก
+                    </h2>
+
+                    <p>
+                        สมัครสมาชิกและเข้าสู่ระบบ
+                        เพื่อใช้บริการ
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="member-card"
+                    id="memberCard"
+                >
+
+                    <div class="member-icon">
+                        👤
+                    </div>
+
+                    <div class="member-content">
+
+                        <h3 id="memberTitle">
+                            ยังไม่ได้เข้าสู่ระบบ
+                        </h3>
+
+                        <p id="memberText">
+                            สมัครสมาชิกเพื่อใช้งานระบบสมาชิก
+                        </p>
+
+                    </div>
+
+
+                    <div class="member-actions">
+
+                        <button
+                            class="btn btn-primary"
+                            id="openRegisterBtn"
+                            type="button"
+                        >
+                            สมัครสมาชิก
+                        </button>
+
+                        <button
+                            class="btn btn-secondary"
+                            id="openLoginBtn"
+                            type="button"
+                        >
+                            เข้าสู่ระบบ
+                        </button>
+
+                        <button
+                            class="btn btn-danger hidden"
+                            id="logoutBtn"
+                            type="button"
+                        >
+                            ออกจากระบบ
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CONTACT
+        ====================================================== -->
+        <section
+            class="section"
+            id="contact"
+        >
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <span class="section-label">
+                        📞 CONTACT
+                    </span>
+
+                    <h2>
+                        ติดต่อเรา
+                    </h2>
+
+                    <p>
+                        หากมีปัญหาหรือสอบถามเพิ่มเติม
+                        สามารถติดต่อได้ 24 ชั่วโมง
+                    </p>
+
+                </div>
+
+
+                <div class="contact-grid">
+
+                    <a
+                        href="https://lin.ee/9q139qW"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="contact-card"
+                    >
+
+                        <div class="contact-icon">
+                            💬
+                        </div>
+
+                        <div>
+                            <h3>
+                                LINE
+                            </h3>
+
+                            <p>
+                                ติดต่อ
