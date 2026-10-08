@@ -9,43 +9,54 @@
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,sans-serif;background:#f5f7fb;color:#101828}
 button,input{font:inherit}button{cursor:pointer;border:0}.top{background:#0d1730;color:#fff;padding:12px 18px;font-size:14px;display:flex;justify-content:space-between}.header{background:#fff;padding:16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5;border-bottom:1px solid #e6e9ef}.logo{width:54px;height:54px;border-radius:17px;background:linear-gradient(135deg,#3520a5,#1458db);display:grid;place-items:center;color:#fff;font-weight:900;font-size:30px}.brand{font-size:25px;font-weight:900;flex:1}.wallet{background:#1458db;color:#fff;border-radius:18px;padding:10px 16px;text-align:center;font-weight:800}.wrap{max-width:1050px;margin:auto;padding:18px}.hero{background:linear-gradient(135deg,#101a36,#252c75);color:#fff;border-radius:28px;padding:30px 22px;margin-bottom:20px}.hero h1{font-size:36px;line-height:1.15;margin:10px 0}.hero p{opacity:.85}.search{display:flex;background:#fff;border-radius:16px;padding:5px}.search input{flex:1;border:0;outline:0;padding:14px}.search button,.primary{background:#1458db;color:#fff;border-radius:12px;padding:13px 18px;font-weight:800}.tabs{display:flex;gap:10px;overflow:auto;margin:15px 0}.tab{background:#fff;border:1px solid #d8dee9;padding:10px 18px;border-radius:999px;color:#1458db}.tab.active{background:#101828;color:#fff}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{background:#fff;border:1px solid #e5e8ee;border-radius:20px;padding:18px;box-shadow:0 5px 18px #10182808}.icon{font-size:38px}.card h3{margin:8px 0}.muted{color:#667085}.actions{display:flex;gap:8px;margin-top:12px}.secondary{background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:12px 16px;color:#1458db;font-weight:800}.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:10px;z-index:4}.bottom button{background:none;color:#344054}.modal{pointer-events:none;position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:20}.modal.show{display:flex;pointer-events:auto}.sheet{background:#fff;width:min(760px,100%);max-height:90vh;overflow:auto;border-radius:28px 28px 0 0;padding:22px}.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.close{background:#f2f4f7;border-radius:14px;padding:10px 15px;color:#1458db;font-size:24px}.field{margin:12px 0}.field label{display:block;font-weight:800;margin-bottom:6px}.field input{width:100%;padding:14px;border:1px solid #cbd5e1;border-radius:12px;outline:0}.field input:focus{border-color:#1458db}.notice{background:#eff6ff;border:1px solid #bfdbfe;padding:14px;border-radius:14px;color:#174ea6;margin:12px 0}.danger{color:#c62828}.success{color:#087f5b}.hidden{display:none!important}.list{display:grid;gap:10px}.item{border:1px solid #e5e7eb;border-radius:14px;padding:13px;background:#fafafa}.loading{text-align:center;padding:25px}.footer{height:80px}
 @media(min-width:700px){.bottom{display:none}.modal{align-items:center}.sheet{border-radius:24px}}
+
+/* Set 29: hamburger navigation + customer pages */
+.menuBtn{width:46px;height:46px;border-radius:14px;background:#101828;color:#fff;display:grid;place-items:center;font-size:25px;font-weight:900;line-height:1}
+.header .brand{min-width:0}.header .brand small{display:block;font-size:11px;color:#667085;font-weight:600;margin-top:2px}
+.drawerBackdrop{position:fixed;inset:0;background:#0008;z-index:50;display:none;opacity:0;transition:opacity .2s}.drawerBackdrop.show{display:block;opacity:1}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(390px,92vw);background:#fff;z-index:51;transform:translateX(105%);transition:transform .25s ease;box-shadow:-15px 0 40px #0002;overflow:auto;padding:18px}.drawer.show{transform:translateX(0)}
+.drawerHead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:15px;border-bottom:1px solid #e5e7eb}.drawerLogo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#3520a5,#1458db);display:grid;place-items:center;color:#fff;font-weight:900;font-size:24px}.drawerTitle{flex:1;font-weight:900;font-size:19px}.drawerClose{background:#f2f4f7;border-radius:12px;padding:9px 13px;font-size:23px;color:#1458db}.drawerMenu{display:grid;gap:8px;margin-top:16px}.drawerMenu button{background:#f8fafc;border:1px solid #e5e7eb;text-align:left;padding:15px;border-radius:16px;font-weight:850;color:#101828;display:flex;align-items:center;gap:12px}.drawerMenu .mi{font-size:22px;width:28px;text-align:center}.drawerUser{margin-top:16px;background:#eef4ff;border:1px solid #c7d7fe;border-radius:18px;padding:14px}.drawerActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.page{display:none}.page.active{display:block}.homeIntro{background:#fff;border:1px solid #e5e7eb;border-radius:24px;padding:22px;margin-bottom:18px}.sectionTitle{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:22px 0 12px}.sectionTitle h2{margin:0;font-size:25px}.sectionTitle p{margin:4px 0 0;color:#667085}.serviceGroup{margin:16px 0 22px}.serviceGroup h3{margin:0 0 10px;font-size:20px}.serviceGroup .sub{color:#667085;margin:-4px 0 12px}.newsGrid{display:grid;gap:12px}.newsCard{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:17px}.contactGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.contactCard{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:18px;text-align:center}.contactIcon{font-size:36px;margin-bottom:8px}.contactCard a{display:block;text-decoration:none;color:#1458db;font-weight:850}.about{background:#fff;border:1px solid #e5e7eb;border-radius:24px;padding:24px;line-height:1.8}.about h1{text-align:center;font-size:32px;margin:0 0 14px}.about .shopName{text-align:center;font-size:30px;font-weight:950;letter-spacing:.2px;margin:0 0 28px}.about p{margin:0 0 18px}.about .warning{background:#fff7ed;border:1px solid #fed7aa;border-radius:16px;padding:15px}.about .copyright{text-align:center;border-top:1px solid #e5e7eb;margin-top:25px;padding-top:18px;color:#667085}.heroBrand{display:flex;align-items:center;justify-content:space-between;gap:15px}.heroBrand .sLogo{width:72px;height:72px;flex:0 0 72px;border-radius:22px;background:linear-gradient(135deg,#3520a5,#1458db);display:grid;place-items:center;color:#fff;font-size:42px;font-weight:950;box-shadow:0 10px 30px #0003}.providerNote{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:16px;padding:12px;color:#475467;font-size:13px;margin:10px 0 14px}
+@media(max-width:699px){.header{padding:11px 12px}.header .brand{font-size:19px}.header .wallet{padding:8px 10px;border-radius:14px;font-size:12px}.wrap{padding:14px}.hero{padding:23px 17px;border-radius:23px}.hero h1{font-size:30px}.contactGrid{grid-template-columns:1fr 1fr}.about{padding:18px}.about h1{font-size:27px}.about .shopName{font-size:25px}.heroBrand .sLogo{width:60px;height:60px;flex-basis:60px;font-size:34px}}
+@media(min-width:700px){.bottom{display:none!important}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 <div class="top"><span>⚡ เติมไว ใช้งานง่าย</span><span>🛡️ ระบบปลอดภัย</span></div>
 <header class="header">
-  <div class="logo">S</div><div class="brand">Saingam Shop</div>
+  <div class="logo">S</div><div class="brand">Saingam Shop<small>Digital Service Online</small></div>
   <button type="button" class="secondary" id="accountBtn">👤 บัญชี</button>
   <button type="button" class="wallet" id="walletBtn">Wallet<br><span id="walletBalance">฿0.00</span></button>
+  <button type="button" class="menuBtn" id="menuBtn" aria-label="เปิดเมนู">☰</button>
 </header>
 
 <main class="wrap">
-<section class="hero">
-  <div>ร้านเติมเกม & บริการดิจิทัล</div>
-  <h1>เติมเกม เติมเงิน<br>ได้ง่ายในที่เดียว</h1>
-  <p>สมัครสมาชิกและทำรายการผ่านระบบ Saingam Shop ได้โดยตรง</p>
-  <div class="search"><input id="search" placeholder="ค้นหาเกม หรือบริการ..."><button onclick="renderProducts()">ค้นหา</button></div>
-</section>
+  <section id="page-home" class="page active">
+    <section class="hero">
+      <div class="heroBrand"><div><div>ร้านเติมเกม & บริการดิจิทัล</div><h1>เติมเกม เติมเงิน<br>ได้ง่ายในที่เดียว</h1></div><div class="sLogo">S</div></div>
+      <p>ราคาคุ้ม บริการไว และตรวจสอบรายการได้ด้วยตัวเอง</p>
+      <div class="search"><input id="search" placeholder="ค้นหาเกม หรือบริการ..." autocomplete="off"><button type="button" onclick="renderProducts()">ค้นหา</button></div>
+    </section>
+    <div class="homeIntro"><div class="sectionTitle" style="margin-top:0"><div><h2>บริการยอดนิยม</h2><p>เลือกบริการที่ต้องการจากเมนู ☰ หรือรายการด้านล่าง</p></div></div><div id="homeProducts" class="grid"><div class="loading">กำลังโหลดสินค้า...</div></div></div>
+    <div class="card" style="margin:14px 0;background:#eef4ff;border-color:#c7d7fe"><div class="row"><div><b style="font-size:18px">🧾 ประวัติการซื้อ</b><div class="muted" style="margin-top:4px">ดูออเดอร์ทั้งหมดและสถานะล่าสุดของคุณ</div></div><button class="primary" type="button" onclick="openOrders()">ดูประวัติ</button></div></div>
+  </section>
 
-<div class="card" style="margin:14px 0;background:#eef4ff;border-color:#c7d7fe"><div class="row"><div><b style="font-size:18px">🧾 ประวัติการซื้อ</b><div class="muted" style="margin-top:4px">ดูออเดอร์ทั้งหมดและสถานะล่าสุดของคุณ</div></div><button class="primary" type="button" onclick="openOrders()">ดูประวัติ</button></div></div>
-<div class="tabs">
-<button class="tab active" onclick="filterCat('all',this)">ทั้งหมด</button>
-<button class="tab" onclick="filterCat('game',this)">เกม</button>
-<button class="tab" onclick="filterCat('mobile',this)">มือถือ</button>
-<button class="tab" onclick="filterCat('digital',this)">ดิจิทัล</button>
-</div>
+  <section id="page-games" class="page"><div class="sectionTitle"><div><h2>🎮 เติมเกม</h2><p>แยกตามเกมอย่างชัดเจน และแสดงแพ็กเกจที่เปิดให้บริการ</p></div></div><div class="providerNote">รายการเกมและเรทราคาจะแสดงตามสินค้าที่เปิดใช้งานในระบบ Saingam Shop และเมื่อเชื่อมต่อ WePay จริงแล้วสามารถนำรายการจากผู้ให้บริการมาแสดงได้อัตโนมัติ</div><div id="gameProducts"><div class="loading">กำลังโหลดเกม...</div></div></section>
 
-<section id="products" class="grid"><div class="loading">กำลังโหลดสินค้า...</div></section>
-<div class="footer"></div>
+  <section id="page-mobile" class="page"><div class="sectionTitle"><div><h2>📱 เติมเงินมือถือ</h2><p>แยกเครือข่ายชัดเจน พร้อมเรทราคาของแต่ละเครือข่าย</p></div></div><div class="providerNote">รายการเครือข่ายและเรทราคาจะแสดงตามบริการที่เปิดใช้งานในระบบ และจะพร้อมเชื่อม WePay ในขั้น API จริง</div><div id="mobileProducts"><div class="loading">กำลังโหลดเครือข่าย...</div></div></section>
+
+  <section id="page-addon" class="page"><div class="sectionTitle"><div><h2>📶 ซื้อโปรเสริม</h2><p>แยกตามเครือข่ายและแพ็กเกจให้เลือกง่าย</p></div></div><div class="providerNote">หน้าโปรเสริมเตรียมไว้สำหรับแพ็กเกจที่ WePay เปิดรับบริการ เมื่อเชื่อมต่อ API แล้วรายการจะขึ้นตามจริง</div><div id="addonProducts"><div class="loading">กำลังโหลดโปรเสริม...</div></div></section>
+
+  <section id="page-news" class="page"><div class="sectionTitle"><div><h2>📰 ข่าวสาร</h2><p>อัปเดตบริการ โปรโมชั่น และประกาศสำคัญจากร้าน</p></div></div><div class="newsGrid"><div class="newsCard"><b>📢 โปรโมชั่นและราคาพิเศษ</b><p class="muted">พื้นที่สำหรับประกาศโปรเกม โปรเติมเงินมือถือ และโปรเสริมล่าสุด</p></div><div class="newsCard"><b>🛠️ แจ้งปรับปรุงระบบ</b><p class="muted">หากมีการปิดปรับปรุงหรือบริการบางรายการชั่วคราว จะแจ้งให้ทราบที่นี่</p></div><div class="newsCard"><b>💡 ข่าวสารบริการใหม่</b><p class="muted">ติดตามเกม เครือข่าย และบริการดิจิทัลใหม่ ๆ ที่เพิ่มเข้ามา</p></div><div class="newsCard"><b>🔐 แจ้งเตือนความปลอดภัย</b><p class="muted">Saingam Shop จะไม่ขอรหัสผ่านหรือรหัส OTP ของคุณผ่านแชต</p></div></div></section>
+
+  <section id="page-contact" class="page"><div class="sectionTitle"><div><h2>📞 ติดต่อเรา</h2><p>สอบถามก่อนซื้อหรือแจ้งปัญหาการใช้งานได้</p></div></div><div class="contactGrid"><div class="contactCard"><div class="contactIcon">📘</div><b>Facebook</b><p class="muted">ติดต่อร้านผ่าน Facebook</p><a href="https://www.facebook.com/share/1PrVn9DEY2/?mibextid=wwXIfr" target="_blank" rel="noopener">เปิด Facebook</a></div><div class="contactCard"><div class="contactIcon">💬</div><b>Line</b><p class="muted">ช่องทาง Line ของร้าน</p><a href="#" onclick="alert('กำลังรอใส่ลิงก์ Line ของร้าน');return false;">เปิด Line</a></div><div class="contactCard"><div class="contactIcon">☎️</div><b>โทรศัพท์</b><p class="muted">084-312-3861</p><a href="tel:0843123861">โทรหาร้าน</a></div><div class="contactCard"><div class="contactIcon">✉️</div><b>Gmail</b><p class="muted">กำลังเตรียมช่องทางนี้</p><span class="muted">เร็ว ๆ นี้</span></div></div></section>
+
+  <section id="page-about" class="page"><div class="about"><h1>เกี่ยวกับเรา</h1><div class="shopName">Saingam Shop</div><p><b>Saingam Shop</b> บริการเติมเกม เติมเงินมือถือ ซื้อโปรเสริมและบริการดิจิทัลอื่นๆ</p><p><b>Saingam Shop</b> เราเป็นผู้ให้บริการเติมเกมสุดคุ้ม Rov, Free Fire, Genshin Impact, VALORANT, Arena Breakout, PUBG Mobile และเกมอื่นๆมากกว่า 30 เกม</p><p><b>Saingam Shop</b> เราเป็นผู้ให้บริการเติมเงินมือถือสุดคุ้ม Ais, Dtac, True, My by NT</p><p><b>Saingam Shop</b> เราเป็นผู้ให้บริการซื้อโปรเสริมสุดคุ้ม Ais, Dtac, True, My by NT</p><p><b>Saingam Shop</b> เราเป็นผู้ให้บริการดิจิทัลสุดคุ้ม True money และอื่นๆ</p><p><b>ราคาถูก แอดมินบริการดี บริการไว้ใจได้ ต้องที่เราเท่านั้น เปิดให้บริการตลอด 24 ชั่วโมง</b></p><p>ทั้งนี้ ผู้ใช้บริการสามารถติดต่อปรึกษาทางร้านก่อนซื้อบริการได้ทาง Facebook Line และติดต่อทางโทรศัพท์</p><div class="warning">เราคือผู้ให้บริการเติมเกมออนไลน์ เป็นเพียงตัวแทนจำหน่ายเท่านั้น โปรดระวังมิจฉาชีพแอบอ้างเพื่อหลอกให้ผู้อื่นชำระค่าบริการแทน</div><div class="copyright">© 2026 Saingam Digital Service Online</div></div></section>
+  <div class="footer"></div>
 </main>
 
-<nav class="bottom">
-<button onclick="scrollTo({top:0,behavior:'smooth'})">หน้าแรก</button>
-<button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">บริการ</button>
-<button onclick="openAccount()">บัญชี</button>
-<button onclick="openWallet()">Wallet</button>
-</nav>
+<div class="drawerBackdrop" id="drawerBackdrop"></div><aside class="drawer" id="drawer" aria-hidden="true"><div class="drawerHead"><div class="drawerLogo">S</div><div class="drawerTitle">Saingam Shop<br><span class="muted" style="font-size:12px;font-weight:600">เมนูบริการ</span></div><button class="drawerClose" type="button" onclick="closeMenu()">×</button></div><div class="drawerMenu"><button type="button" onclick="goPage('home')"><span class="mi">🏠</span>หน้าหลัก</button><button type="button" onclick="goPage('games')"><span class="mi">🎮</span>เติมเกม</button><button type="button" onclick="goPage('mobile')"><span class="mi">📱</span>เติมเงินมือถือ</button><button type="button" onclick="goPage('addon')"><span class="mi">📶</span>ซื้อโปรเสริม</button><button type="button" onclick="goPage('news')"><span class="mi">📰</span>ข่าวสาร</button><button type="button" onclick="goPage('contact')"><span class="mi">📞</span>ติดต่อเรา</button><button type="button" onclick="goPage('about')"><span class="mi">ℹ️</span>เกี่ยวกับเรา</button></div><div class="drawerUser"><b>บัญชีและ Wallet</b><div class="muted" style="margin-top:5px">ยอดคงเหลือ <b id="drawerBalance">฿0.00</b></div><div class="drawerActions"><button class="secondary" type="button" onclick="closeMenu();openAccount()">👤 บัญชี</button><button class="primary" type="button" onclick="closeMenu();openWallet()">💰 Wallet</button></div></div></aside>
 
 <div class="modal" id="accountModal"><div class="sheet">
 <div class="row"><h2 id="accountTitle">เข้าสู่ระบบ / สมัครสมาชิก</h2><button class="close" onclick="closeModal('accountModal')">×</button></div>
@@ -103,15 +114,13 @@ async function loadProducts(){
     products = Array.isArray(r) ? r : (Array.isArray(r.products) ? r.products : (Array.isArray(r.data) ? r.data : []));
     renderProducts();
   }
-  catch(e){document.getElementById('products').innerHTML='<div class="card"><b>โหลดสินค้าไม่สำเร็จ</b><p class="muted">'+e.message+'</p></div>';}
+  catch(e){const box=document.getElementById('homeProducts');if(box)box.innerHTML='<div class="card"><b>โหลดสินค้าไม่สำเร็จ</b><p class="muted">'+esc(e.message)+'</p></div>';}
 }
 function renderProducts(){
   const q=document.getElementById('search').value.trim().toLowerCase();
-  const list=products.filter(p=>(category==='all'||p.category===category)&&(!q||String(p.name).toLowerCase().includes(q)));
-  document.getElementById('products').innerHTML=list.map(p=>`
-  <div class="card"><div class="icon">${p.category==='game'?'🎮':p.category==='mobile'?'📱':'💳'}</div>
-  <h3>${esc(p.name)}</h3><p class="muted">${esc(p.description||'บริการดิจิทัล')}</p>
-  <div class="actions"><button class="primary" onclick="viewProduct(${p.id})">ดูแพ็กเกจ</button></div></div>`).join('')||'<div class="card">ไม่พบรายการ</div>';
+  const list=products.filter(p=>(!q||String(p.name).toLowerCase().includes(q)||String(p.description||'').toLowerCase().includes(q)));
+  const target=document.getElementById('homeProducts'); if(!target)return;
+  target.innerHTML=list.length?list.slice(0,12).map(p=>`<div class="card"><div class="icon">${p.category==='game'?'🎮':p.category==='mobile'?'📱':'💳'}</div><h3>${esc(p.name)}</h3><p class="muted">${esc(p.description||'บริการดิจิทัล')}</p><div class="actions"><button class="primary" onclick="viewProduct(${Number(p.id)})">ดูแพ็กเกจ</button></div></div>`).join(''):'<div class="card"><b>ไม่พบรายการ</b><p class="muted">ลองค้นหาชื่อเกมหรือบริการอื่น</p></div>';
 }
 function filterCat(c,el){category=c;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));el.classList.add('active');renderProducts();}
 async function viewProduct(id){
@@ -265,13 +274,20 @@ async function openOrders(){
  }catch(e){box.innerHTML='<div class="danger">โหลดประวัติไม่สำเร็จ: '+esc(e.message)+'</div>';}
 }
 
+function closeMenu(){document.getElementById('drawer').classList.remove('show');document.getElementById('drawerBackdrop').classList.remove('show');document.getElementById('drawer').setAttribute('aria-hidden','true')}
+function openMenu(){document.getElementById('drawer').classList.add('show');document.getElementById('drawerBackdrop').classList.add('show');document.getElementById('drawer').setAttribute('aria-hidden','false')}
+function goPage(name){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));const el=document.getElementById('page-'+name);if(el)el.classList.add('active');closeMenu();window.scrollTo({top:0,behavior:'smooth'});if(name==='games')renderServiceGroups('game','gameProducts');if(name==='mobile')renderServiceGroups('mobile','mobileProducts');if(name==='addon')renderAddonGroups()}
+function renderServiceGroups(cat,targetId){const target=document.getElementById(targetId);if(!target)return;const list=products.filter(p=>p.category===cat);if(!list.length){target.innerHTML='<div class="card"><b>ยังไม่มีรายการเปิดบริการ</b><p class="muted">เมื่อเพิ่มสินค้าในระบบ รายการจะแสดงแยกตามบริการตรงนี้</p></div>';return}target.innerHTML=list.map(p=>`<div class="serviceGroup"><h3>${cat==='game'?'🎮 ':'📱 '}${esc(p.name)}</h3><div class="sub">${esc(p.description||'เลือกแพ็กเกจและเรทราคาของ '+p.name)}</div><div class="card"><div class="row"><div><b>${esc(p.name)}</b><div class="muted">กดเพื่อดูแพ็กเกจและราคา</div></div><button class="primary" onclick="viewProduct(${Number(p.id)})">ดูเรทราคา</button></div></div></div>`).join('')}
+function renderAddonGroups(){const target=document.getElementById('addonProducts');if(!target)return;const list=products.filter(p=>/โปร|เสริม|package|แพ็ก/i.test(String(p.name)+' '+String(p.description||''))||p.category==='addon');if(!list.length){target.innerHTML='<div class="card"><b>ยังไม่มีรายการโปรเสริม</b><p class="muted">หน้านี้เตรียมไว้สำหรับแพ็กเกจเสริมจาก WePay เมื่อเชื่อมต่อ API แล้วรายการจะขึ้นอัตโนมัติ</p></div>';return}target.innerHTML=list.map(p=>`<div class="serviceGroup"><h3>📶 ${esc(p.name)}</h3><div class="sub">${esc(p.description||'แพ็กเกจเสริม')}</div><div class="card"><div class="row"><div><b>${esc(p.name)}</b><div class="muted">ดูแพ็กเกจและราคา</div></div><button class="primary" onclick="viewProduct(${Number(p.id)})">ดูเรทราคา</button></div></div></div>`).join('')}
 function showSheet(title,body){let m=document.getElementById('genericModal');if(!m){m=document.createElement('div');m.id='genericModal';m.className='modal';document.body.appendChild(m)}m.innerHTML='<div class="sheet"><div class="row"><h2>'+title+'</h2><button class="close" onclick="closeModal(\'genericModal\')">×</button></div>'+body+'</div>';m.classList.add('show')}
 function v(id){return document.getElementById(id).value.trim()}
 function msg(id,t,c){const e=document.getElementById(id);e.textContent=t;e.className=c}
-function setBalance(n){document.getElementById('walletBalance').textContent='฿'+Number(n).toFixed(2);const x=document.getElementById('userBalance');if(x)x.textContent='฿'+Number(n).toFixed(2)}
+function setBalance(n){const v='฿'+Number(n).toFixed(2);document.getElementById('walletBalance').textContent=v;const x=document.getElementById('userBalance');if(x)x.textContent=v;const d=document.getElementById('drawerBalance');if(d)d.textContent=v}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 document.getElementById('accountBtn').addEventListener('click',openAccount);
 document.getElementById('walletBtn').addEventListener('click',openWallet);
+document.getElementById('menuBtn').addEventListener('click',openMenu);
+document.getElementById('drawerBackdrop').addEventListener('click',closeMenu);
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
 loadProducts(); if(token)refreshAccountUI();
 
