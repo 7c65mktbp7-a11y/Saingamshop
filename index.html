@@ -10,6 +10,7 @@
 button,input{font:inherit}button{cursor:pointer;border:0}.top{background:#0d1730;color:#fff;padding:12px 18px;font-size:14px;display:flex;justify-content:space-between}.header{background:#fff;padding:16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5;border-bottom:1px solid #e6e9ef}.logo{width:54px;height:54px;border-radius:17px;background:linear-gradient(135deg,#3520a5,#1458db);display:grid;place-items:center;color:#fff;font-weight:900;font-size:30px}.brand{font-size:25px;font-weight:900;flex:1}.wallet{background:#1458db;color:#fff;border-radius:18px;padding:10px 16px;text-align:center;font-weight:800}.wrap{max-width:1050px;margin:auto;padding:18px}.hero{background:linear-gradient(135deg,#101a36,#252c75);color:#fff;border-radius:28px;padding:30px 22px;margin-bottom:20px}.hero h1{font-size:36px;line-height:1.15;margin:10px 0}.hero p{opacity:.85}.search{display:flex;background:#fff;border-radius:16px;padding:5px}.search input{flex:1;border:0;outline:0;padding:14px}.search button,.primary{background:#1458db;color:#fff;border-radius:12px;padding:13px 18px;font-weight:800}.tabs{display:flex;gap:10px;overflow:auto;margin:15px 0}.tab{background:#fff;border:1px solid #d8dee9;padding:10px 18px;border-radius:999px;color:#1458db}.tab.active{background:#101828;color:#fff}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{background:#fff;border:1px solid #e5e8ee;border-radius:20px;padding:18px;box-shadow:0 5px 18px #10182808}.icon{font-size:38px}.card h3{margin:8px 0}.muted{color:#667085}.actions{display:flex;gap:8px;margin-top:12px}.secondary{background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:12px 16px;color:#1458db;font-weight:800}.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:10px;z-index:4}.bottom button{background:none;color:#344054}.modal{pointer-events:none;position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:20}.modal.show{display:flex;pointer-events:auto}.sheet{background:#fff;width:min(760px,100%);max-height:90vh;overflow:auto;border-radius:28px 28px 0 0;padding:22px}.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.close{background:#f2f4f7;border-radius:14px;padding:10px 15px;color:#1458db;font-size:24px}.field{margin:12px 0}.field label{display:block;font-weight:800;margin-bottom:6px}.field input{width:100%;padding:14px;border:1px solid #cbd5e1;border-radius:12px;outline:0}.field input:focus{border-color:#1458db}.notice{background:#eff6ff;border:1px solid #bfdbfe;padding:14px;border-radius:14px;color:#174ea6;margin:12px 0}.danger{color:#c62828}.success{color:#087f5b}.hidden{display:none!important}.list{display:grid;gap:10px}.item{border:1px solid #e5e7eb;border-radius:14px;padding:13px;background:#fafafa}.loading{text-align:center;padding:25px}.footer{height:80px}
 @media(min-width:700px){.bottom{display:none}.modal{align-items:center}.sheet{border-radius:24px}}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 <div class="top"><span>⚡ เติมไว ใช้งานง่าย</span><span>🛡️ ระบบปลอดภัย</span></div>
@@ -191,10 +192,23 @@ async function login(){
  try{const identifier=v('email').trim(),password=v('password');if(!identifier||!password){msg('authMsg','กรุณากรอกอีเมลหรือเบอร์โทร และรหัสผ่าน','danger');return}const r=await api('/api/auth/login',{method:'POST',body:JSON.stringify({identifier,password})});token=r.token;localStorage.setItem('saingam_token',token);msg('authMsg','เข้าสู่ระบบสำเร็จ','success');await refreshAccountUI();refreshWalletUI();}catch(e){msg('authMsg',e.message,'danger')}
 }
 function logout(){token='';me=null;localStorage.removeItem('saingam_token');refreshAccountUI();setBalance(0);document.getElementById('walletHistory').innerHTML='';}
-function showPromptPayPending(id,amount){
+async function showPromptPayPending(id,amount){
  const box=document.getElementById('promptpayBox');
  box.classList.remove('hidden');
- box.innerHTML='<div class="notice"><b>PromptPay QR</b><br>รายการ #'+id+' จำนวน ฿'+Number(amount).toFixed(2)+' ถูกสร้างแล้ว<br><span class="muted">ขั้นนี้เชื่อม Wallet กับ Backend จริงแล้ว แต่ QR PromptPay ของร้านยังไม่ได้ตั้งค่า จึงยังไม่ควรโอนเงินจริง ยอดจะเข้า Wallet ก็ต่อเมื่อ Admin อนุมัติรายการ</span></div><button class="secondary" style="width:100%" onclick="loadWalletHistory()">ตรวจสอบสถานะอีกครั้ง</button>';
+ box.innerHTML='<div class="notice"><b>PromptPay QR</b><br>กำลังสร้าง QR สำหรับ ฿'+Number(amount).toFixed(2)+'...</div>';
+ try{
+  const q=await api('/api/wallet/promptpay/qr?amount='+encodeURIComponent(Number(amount).toFixed(2)));
+  if(!q.configured || !q.payload) throw new Error(q.message||'ยังไม่ได้ตั้งค่า PromptPay');
+  box.innerHTML='<div class="notice"><b>PromptPay QR</b><br>รายการ #'+id+' จำนวน <b>฿'+Number(amount).toFixed(2)+'</b><br><span class="muted">สแกน QR เพื่อชำระเงิน แล้วเก็บสลิป/เลขอ้างอิงไว้ จากนั้นรอ Admin ตรวจสอบและอนุมัติ</span></div><div id="promptpayQr" style="display:flex;justify-content:center;align-items:center;background:#fff;padding:18px;border-radius:16px;margin:12px 0;border:1px solid #e2e8f0"></div><button class="secondary" style="width:100%" onclick="loadWalletHistory()">ตรวจสอบสถานะอีกครั้ง</button>';
+  const qrBox=document.getElementById('promptpayQr');
+  if(window.QRCode){
+   new QRCode(qrBox,{text:q.payload,width:240,height:240,correctLevel:QRCode.CorrectLevel.M});
+  }else{
+   qrBox.innerHTML='<div class="danger">โหลดตัวสร้าง QR ไม่สำเร็จ กรุณารีเฟรชหน้าแล้วลองใหม่</div>';
+  }
+ }catch(e){
+  box.innerHTML='<div class="notice danger"><b>สร้าง PromptPay QR ไม่สำเร็จ</b><br>'+esc(e.message)+'</div><button class="secondary" style="width:100%" onclick="loadWalletHistory()">ตรวจสอบสถานะอีกครั้ง</button>';
+ }
 }
 async function createTopup(){
  const amount=Number(v('topupAmount'));
