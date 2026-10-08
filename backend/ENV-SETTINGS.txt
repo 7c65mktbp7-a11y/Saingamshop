@@ -1,0 +1,9 @@
+Saingam Shop Backend - Environment Settings
+
+ใส่ค่าเหล่านี้ในหน้า Environment ของแพลตฟอร์มที่ Deploy Backend
+
+PORT=3000
+JWT_SECRET=ตั้งรหัสลับยาวๆของระบบ
+ADMIN_EMAIL=อีเมลแอดมิน
+ADMIN_PASSWORD=รหัสผ่านแอดมิน
+CORS_ORIGIN=*
