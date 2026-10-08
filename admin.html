@@ -145,12 +145,12 @@ async function login(){
  if(!identifier||!password){$('loginMsg').textContent='กรุณากรอกอีเมล/เบอร์โทรและรหัสผ่าน';return;}
  $('loginBtn').disabled=true;$('loginBtn').textContent='กำลังเข้าสู่ระบบ...';
  try{
-  const d=await api('/api/auth/login',{method:'POST',body:JSON.stringify({identifier,password})});
+  const d=await api('/api/auth/login',{method:'POST',body:JSON.stringify({identifier,login:identifier,password})});
   if(!d.token)throw new Error('ไม่พบ Token จาก Backend');
   token=d.token;localStorage.setItem('saingam_admin_token',token);
   if(!d.user || !['admin','super_admin'].includes(d.user.role)) throw new Error('บัญชีนี้ไม่มีสิทธิ์ Admin');
   $('loginGate').style.display='none'; await loadAll();
- }catch(e){localStorage.removeItem('saingam_admin_token');token='';$('loginMsg').textContent=e.message;}
+ }catch(e){localStorage.removeItem('saingam_admin_token');token='';$('loginMsg').textContent=e.message||'เข้าสู่ระบบไม่สำเร็จ';}
  finally{$('loginBtn').disabled=false;$('loginBtn').textContent='เข้าสู่ระบบ Admin';}
 }
 $('loginBtn').addEventListener('click',login);
