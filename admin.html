@@ -210,6 +210,15 @@ async function updateOrderStatus(id){
    alert('บันทึกสถานะออเดอร์แล้ว');
  }catch(e){alert(e.message);}
 }
+async function loadUsers(){
+ try{
+  const d=await api('/api/admin/users');
+  users=Array.isArray(d)?d:(d.users||[]);
+  renderUsers();
+ }catch(e){
+  $('usersBody').innerHTML='<tr><td colspan="6">'+esc(e.message)+'</td></tr>';
+ }
+}
 function renderUsers(){
  const q=($('userSearch').value||'').toLowerCase();
  const rows=users.filter(u=>(String(u.name||'')+' '+String(u.email||'')+' '+String(u.phone||'')).toLowerCase().includes(q));
