@@ -87,7 +87,7 @@ main{flex:1;min-width:0;padding:15px 15px 82px}.page{display:none}.page.active{d
 </section>
 
 <section id="settings" class="page">
- <div class="title"><div><h1>ตั้งค่า</h1><span class="date">การตั้งค่าระบบจะเพิ่มในขั้นถัดไป</span></div></div>
+ <div class="title"><div><h1>ตั้งค่า</h1><span class="date">การตั้งค่าระบบจะเพิ่มในขั้นถัดไป</span></div><button class="btn btn-primary" id="refreshSettings" type="button">↻ รีเฟรช</button></div>
  <div class="panel"><div class="panel-body">
   <p style="margin-top:0"><b>Backend:</b> <span id="apiStatus">กำลังตรวจสอบ...</span></p>
   <p class="muted" style="font-size:12px">API: https://saingam-shop-api.onrender.com</p>
@@ -259,7 +259,26 @@ async function loadAll(){
  try{await loadDashboard();await loadUsers();await loadProducts();await loadTopups();checkHealth();}
  catch(e){showModal('เชื่อมต่อ Backend ไม่สำเร็จ',e.message);}
 }
-$('refreshOrders').addEventListener('click',loadOrders);$('refreshUsers').addEventListener('click',loadUsers);$('refreshProducts').addEventListener('click',loadProducts);$('refreshTopups').addEventListener('click',loadTopups);
+async function refreshPage(page, buttonId){
+ const b=$(buttonId); if(!b)return;
+ const original=b.textContent;
+ try{
+  b.disabled=true; b.textContent='กำลังรีเฟรช...';
+  if(page==='dashboard') await loadDashboard();
+  else if(page==='orders'){await loadOrders(); await loadDashboard();}
+  else if(page==='products') await loadProducts();
+  else if(page==='users') await loadUsers();
+  else if(page==='wallet') await loadTopups();
+  else if(page==='settings') await checkHealth();
+  b.textContent='✓ อัปเดตแล้ว';
+ }catch(e){ showModal('รีเฟรชไม่สำเร็จ',e.message||'เกิดข้อผิดพลาด'); b.textContent=original; }
+ finally{ setTimeout(()=>{b.textContent=original; b.disabled=false;},900); }
+}
+$('refreshOrders').addEventListener('click',()=>refreshPage('orders','refreshOrders'));
+$('refreshUsers').addEventListener('click',()=>refreshPage('users','refreshUsers'));
+$('refreshProducts').addEventListener('click',()=>refreshPage('products','refreshProducts'));
+$('refreshTopups').addEventListener('click',()=>refreshPage('wallet','refreshTopups'));
+$('refreshSettings').addEventListener('click',()=>refreshPage('settings','refreshSettings'));
 $('orderSearch').addEventListener('input',renderOrders);$('userSearch').addEventListener('input',renderUsers);
 $('closeModal').addEventListener('click',()=>$('modal').classList.remove('show'));$('modalOk').addEventListener('click',()=>$('modal').classList.remove('show'));$('modal').addEventListener('click',e=>{if(e.target.id==='modal')$('modal').classList.remove('show')});
 
