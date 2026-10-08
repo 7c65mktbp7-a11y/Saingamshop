@@ -8,11 +8,19 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: 22.22.0
       - key: JWT_SECRET
         sync: false
       - key: ADMIN_EMAIL
         sync: false
       - key: ADMIN_PASSWORD
+        sync: false
+      - key: PROMPTPAY_ID
+        sync: false
+      - key: PROMPTPAY_NAME
+        value: SAINGAM SHOP
+      - key: PAYMENT_WEBHOOK_SECRET
         sync: false
       - key: CORS_ORIGIN
         value: "*"
