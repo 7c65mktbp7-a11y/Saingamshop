@@ -441,6 +441,26 @@ app.post("/api/wallet/topup", auth, (req, res) => {
   });
 });
 
+app.post("/api/wallet/topup/:id/paid", auth, (req, res) => {
+  const id = Number(req.params.id);
+  const tx = db.prepare(
+    "SELECT * FROM wallet_transactions WHERE id=? AND user_id=? AND type='topup'"
+  ).get(id, req.user.id);
+  if (!tx) return res.status(404).json({ ok:false, message:"ไม่พบรายการเติมเงิน" });
+  if (tx.status !== "awaiting_payment") {
+    return res.status(400).json({ ok:false, message:"รายการนี้แจ้งชำระแล้วหรือถูกดำเนินการไปแล้ว" });
+  }
+  const reference = String(req.body?.reference || tx.reference || "").trim();
+  db.prepare(
+    "UPDATE wallet_transactions SET status=?, reference=?, note=? WHERE id=?"
+  ).run("pending", reference, "ลูกค้าแจ้งชำระเงินแล้ว รอ Admin ตรวจสอบยอดเงินจริง", id);
+  res.json({
+    ok:true,
+    message:"แจ้งชำระเงินแล้ว รอ Admin ตรวจสอบยอดเงินจริง",
+    transaction: db.prepare("SELECT * FROM wallet_transactions WHERE id=?").get(id)
+  });
+});
+
 app.get("/api/admin/wallet/pending", auth, adminOnly, (req, res) => {
   const rows = db.prepare(`
     SELECT wt.*, u.name, u.email, u.phone
