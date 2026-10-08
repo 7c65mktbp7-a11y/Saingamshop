@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111827">
+<title>Saingam Shop | เติมเกม เติมเงิน บริการดิจิทัล</title>
+<style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f7fb;color:#111827}
+button,input,select{font:inherit}button{cursor:pointer;border:0}
+.container{width:min(1120px,calc(100% - 28px));margin:auto}
+.topbar{background:#111827;color:#fff;font-size:13px;padding:8px 0}
+.topbar .container{display:flex;justify-content:space-between;gap:10px}
+header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #e5e7eb}
+.nav{height:66px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px}
+.logo-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;display:grid;place-items:center}
+.nav-actions{display:flex;gap:8px}
+.icon-btn{width:42px;height:42px;border-radius:12px;background:#f3f4f6}
+.primary{background:#2563eb;color:#fff;border-radius:12px;padding:11px 16px;font-weight:700}
+.hero{padding:22px 0 12px}
+.hero-box{background:linear-gradient(135deg,#111827,#312e81);border-radius:24px;color:#fff;padding:28px;position:relative;overflow:hidden}
+.hero-box:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(99,102,241,.28);right:-70px;top:-80px}
+.badge{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18);padding:7px 10px;border-radius:999px;font-size:12px}
+.hero h1{font-size:clamp(27px,6vw,46px);line-height:1.1;margin:14px 0 10px;max-width:650px}
+.hero p{color:#dbeafe;max-width:650px;margin:0 0 20px}
+.hero-search{display:flex;background:#fff;border-radius:14px;padding:5px;max-width:650px}
+.hero-search input{flex:1;border:0;outline:0;padding:10px 12px;min-width:0}
+.hero-search button{padding:10px 14px;border-radius:10px;background:#2563eb;color:#fff;font-weight:700}
+section{padding:22px 0}.section-title{display:flex;align-items:end;justify-content:space-between;margin-bottom:13px}.section-title h2{font-size:21px;margin:0}.muted{color:#6b7280;font-size:13px}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.quick{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:15px 10px;text-align:center;box-shadow:0 4px 16px rgba(15,23,42,.04)}
+.quick-icon{font-size:24px;margin-bottom:6px}.quick b{font-size:13px;display:block}.quick span{font-size:11px;color:#6b7280}
+.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:5px}.tab{white-space:nowrap;padding:9px 13px;border-radius:999px;background:#fff;border:1px solid #e5e7eb;font-size:13px}.tab.active{background:#111827;color:#fff;border-color:#111827}
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;overflow:hidden;box-shadow:0 4px 16px rgba(15,23,42,.04)}
+.card-cover{height:105px;background:linear-gradient(135deg,#eef2ff,#dbeafe);display:grid;place-items:center;font-size:42px}
+.card-body{padding:13px}.card-body h3{font-size:15px;margin:0 0 5px}.price{font-weight:800;color:#2563eb}.card-body small{color:#6b7280}
+.buy{width:100%;margin-top:10px;background:#111827;color:#fff;border-radius:10px;padding:10px;font-weight:700}
+.contact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.contact{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:15px;display:flex;gap:12px;align-items:center;text-decoration:none;color:#111827}
+.contact .ci{width:42px;height:42px;border-radius:12px;background:#f3f4f6;display:grid;place-items:center;font-size:21px}.contact b{display:block;font-size:14px}.contact span{font-size:12px;color:#6b7280}
+.faq{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px;margin-bottom:8px}.faq summary{font-weight:700;font-size:14px;cursor:pointer}.faq p{color:#6b7280;font-size:13px;line-height:1.6}
+footer{background:#111827;color:#cbd5e1;padding:28px 0 90px;margin-top:20px}footer b{color:#fff}.footer-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}footer a{color:#cbd5e1;text-decoration:none;font-size:13px;display:block;margin:8px 0}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e7eb;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);padding:7px 5px calc(7px + env(safe-area-inset-bottom))}
+.bottom-nav a{text-decoration:none;color:#6b7280;text-align:center;font-size:11px}.bottom-nav a b{display:block;font-size:20px;line-height:22px}.bottom-nav a.active{color:#2563eb}
+.modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.58);z-index:50;padding:18px;align-items:flex-end;justify-content:center}.modal.show{display:flex}
+.modal-box{background:#fff;border-radius:22px 22px 14px 14px;width:min(520px,100%);padding:20px;max-height:90vh;overflow:auto}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{background:#f3f4f6;border-radius:10px;width:38px;height:38px}.field{margin:12px 0}.field label{font-size:13px;font-weight:700;display:block;margin-bottom:6px}.field input,.field select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:11px;outline:0}.submit{width:100%;padding:13px;border-radius:11px;background:#2563eb;color:#fff;font-weight:800}
+.notice{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;border-radius:13px;padding:12px;font-size:12px;line-height:1.6}
+@media(min-width:700px){.products{grid-template-columns:repeat(4,1fr)}.quick-grid{grid-template-columns:repeat(8,1fr)}.contact-grid{grid-template-columns:repeat(4,1fr)}.modal{align-items:center}.modal-box{border-radius:22px}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="container"><span>⚡ เติมไว ใช้งานง่าย</span><span>🛡️ ระบบปลอดภัย</span></div></div>
+
+<header>
+  <div class="container nav">
+    <div class="logo"><div class="logo-mark">S</div>Saingam Shop</div>
+    <div class="nav-actions">
+      <button class="icon-btn" onclick="openModal('login')">👤</button>
+      <button class="primary" onclick="openModal('wallet')">เติมเงิน</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+ <div class="container">
+  <div class="hero-box">
+   <span class="badge">ร้านเติมเกม & บริการดิจิทัล</span>
+   <h1>เติมเกม เติมเงิน<br>ได้ง่ายในที่เดียว</h1>
+   <p>เลือกบริการที่ต้องการ กรอกข้อมูล แล้วดำเนินการได้อย่างรวดเร็ว รองรับบริการเกม มือถือ และดิจิทัล</p>
+   <div class="hero-search">
+    <input id="searchInput" placeholder="ค้นหาเกม หรือบริการ..." oninput="searchProducts()">
+    <button onclick="searchProducts()">ค้นหา</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="services">
+ <div class="container">
+  <div class="section-title"><h2>บริการด่วน</h2><span class="muted">เลือกบริการ</span></div>
+  <div class="quick-grid">
+   <div class="quick" onclick="filterTab('เกม')"><div class="quick-icon">🎮</div><b>เติมเกม</b><span>RoV / Free Fire</span></div>
+   <div class="quick" onclick="filterTab('มือถือ')"><div class="quick-icon">📱</div><b>เติมมือถือ</b><span>AIS / True / dtac</span></div>
+   <div class="quick" onclick="filterTab('ดิจิทัล')"><div class="quick-icon">🎫</div><b>บัตรดิจิทัล</b><span>Steam / Razer</span></div>
+   <div class="quick" onclick="openModal('wallet')"><div class="quick-icon">💰</div><b>เติม Wallet</b><span>เติมเงินเข้าบัญชี</span></div>
+   <div class="quick" onclick="document.getElementById('contact').scrollIntoView()"><div class="quick-icon">💬</div><b>ติดต่อเรา</b><span>แอดมินช่วยเหลือ</span></div>
+   <div class="quick" onclick="document.getElementById('faq').scrollIntoView()"><div class="quick-icon">❓</div><b>ช่วยเหลือ</b><span>คำถามที่พบบ่อย</span></div>
+   <div class="quick" onclick="openModal('login')"><div class="quick-icon">👤</div><b>บัญชีของฉัน</b><span>ประวัติรายการ</span></div>
+   <div class="quick" onclick="showDemo()"><div class="quick-icon">📋</div><b>เช็กออเดอร์</b><span>ตรวจสอบสถานะ</span></div>
+  </div>
+ </div>
+</section>
+
+<section id="products">
+ <div class="container">
+  <div class="section-title"><h2>บริการยอดนิยม</h2><span class="muted">เลือกแล้วสั่งซื้อได้</span></div>
+  <div class="tabs">
+   <button class="tab active" onclick="filterTab('ทั้งหมด',this)">ทั้งหมด</button>
+   <button class="tab" onclick="filterTab('เกม',this)">เกม</button>
+   <button class="tab" onclick="filterTab('มือถือ',this)">มือถือ</button>
+   <button class="tab" onclick="filterTab('ดิจิทัล',this)">ดิจิทัล</button>
+  </div>
+  <div class="products" id="productGrid"></div>
+ </div>
+</section>
+
+<section id="contact">
+ <div class="container">
+  <div class="section-title"><h2>ช่องทางการติดต่อ</h2><span class="muted">พร้อมช่วยเหลือคุณ</span></div>
+  <div class="contact-grid">
+   <a class="contact" href="#" onclick="contactPlaceholder(event,'LINE OA')"><div class="ci">💚</div><div><b>LINE OA</b><span>แชตกับร้าน</span></div></a>
+   <a class="contact" href="#" onclick="contactPlaceholder(event,'Facebook')"><div class="ci">📘</div><div><b>Facebook</b><span>เพจร้านค้า</span></div></a>
+   <a class="contact" href="#" onclick="contactPlaceholder(event,'โทรศัพท์')"><div class="ci">📞</div><div><b>โทรศัพท์</b><span>ติดต่อแอดมิน</span></div></a>
+   <a class="contact" href="#" onclick="contactPlaceholder(event,'Live Chat')"><div class="ci">💬</div><div><b>Live Chat</b><span>สอบถามทันที</span></div></a>
+  </div>
+ </div>
+</section>
+
+<section id="faq">
+ <div class="container">
+  <div class="section-title"><h2>คำถามที่พบบ่อย</h2></div>
+  <details class="faq"><summary>เติมเกมใช้เวลานานไหม?</summary><p>ระบบออกแบบให้รองรับการทำรายการอย่างรวดเร็ว โดยระยะเวลาจริงจะขึ้นกับบริการและผู้ให้บริการ API ที่เชื่อมต่อในระบบหลังบ้าน</p></details>
+  <details class="faq"><summary>ถ้าเติมแล้วไม่เข้า ต้องทำอย่างไร?</summary><p>เก็บเลขคำสั่งซื้อไว้ แล้วติดต่อแอดมินผ่านช่องทางติดต่อด้านบน ทีมงานจะตรวจสอบสถานะรายการให้</p></details>
+  <details class="faq"><summary>สามารถตรวจสอบประวัติการเติมได้หรือไม่?</summary><p>ได้ครับ หลังเข้าสู่ระบบสามารถดูประวัติคำสั่งซื้อและยอด Wallet ได้จากบัญชีของตนเอง</p></details>
+ </div>
+</section>
+</main>
+
+<footer>
+ <div class="container footer-grid">
+  <div><b>Saingam Shop</b><p style="font-size:13px;line-height:1.6">ร้านเติมเกม เติมมือถือ และบริการดิจิทัลแบบครบวงจร</p></div>
+  <div><b>เมนู</b><a href="#services">บริการ</a><a href="#products">สินค้ายอดนิยม</a><a href="#contact">ติดต่อเรา</a><a href="#faq">ช่วยเหลือ</a></div>
+ </div>
+ <div class="container" style="border-top:1px solid #374151;margin-top:20px;padding-top:15px;font-size:11px">© 2026 Saingam Shop — Customer Website</div>
+</footer>
+
+<nav class="bottom-nav">
+ <a href="#" class="active"><b>⌂</b>หน้าแรก</a>
+ <a href="#products"><b>🎮</b>บริการ</a>
+ <a href="#contact"><b>💬</b>ติดต่อ</a>
+ <a href="#" onclick="openModal('login');return false"><b>👤</b>บัญชี</a>
+</nav>
+
+<div class="modal" id="modal">
+ <div class="modal-box">
+  <div class="modal-head"><h2 id="modalTitle" style="margin:0;font-size:20px"></h2><button class="close" onclick="closeModal()">✕</button></div>
+  <div id="modalContent"></div>
+ </div>
+</div>
+
+<script>
+const API_URL = "https://saingam-shop-api.onrender.com";
+let currentProducts = [];
+let activeCategory = "ทั้งหมด";
+let selectedProduct = null;
+
+const localProducts = [
+  {id:1,name:"RoV เติมคูปอง",category:"เกม",description:"เติมคูปองเข้าเกม",icon:"⚔️"},
+  {id:2,name:"Free Fire",category:"เกม",description:"เติมเพชร Free Fire",icon:"🔥"},
+  {id:3,name:"Genshin Impact",category:"เกม",description:"เติม Genesis Crystals",icon:"✨"},
+  {id:4,name:"Garena Shells",category:"ดิจิทัล",description:"บัตรเติมเงินดิจิทัล",icon:"🎫"},
+  {id:5,name:"Steam Wallet",category:"ดิจิทัล",description:"เติมเงิน Steam",icon:"🎮"},
+  {id:6,name:"Razer Gold",category:"ดิจิทัล",description:"เติมเงิน Razer Gold",icon:"💳"},
+  {id:7,name:"AIS เติมเงิน",category:"มือถือ",description:"เติมเงินเข้าหมายเลข AIS",icon:"📱"},
+  {id:8,name:"TrueMove H",category:"มือถือ",description:"เติมเงินเข้าหมายเลข True",icon:"📲"}
+];
+
+function getToken(){ return localStorage.getItem("saingam_token") || ""; }
+function getUser(){ try{return JSON.parse(localStorage.getItem("saingam_user")||"null")}catch{return null;} }
+function saveSession(data){ localStorage.setItem("saingam_token",data.token); localStorage.setItem("saingam_user",JSON.stringify(data.user)); }
+function clearSession(){ localStorage.removeItem("saingam_token"); localStorage.removeItem("saingam_user"); }
+
+async function api(path, options={}){
+  const headers={"Content-Type":"application/json",...(options.headers||{})};
+  const token=getToken(); if(token) headers.Authorization="Bearer "+token;
+  const res=await fetch(API_URL+path,{...options,headers});
+  let data={}; try{data=await res.json();}catch{}
+  if(!res.ok) throw new Error(data.message||"เกิดข้อผิดพลาดจากระบบ");
+  return data;
+}
+
+function escapeHtml(v){return String(v??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[c]));}
+function money(v){return "฿"+Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2});}
+function notify(msg){alert(msg);}
+
+async function loadProducts(){
+  try{
+    const q=document.getElementById("searchInput")?.value.trim()||"";
+    const params=new URLSearchParams();
+    if(activeCategory!=="ทั้งหมด") params.set("category",activeCategory);
+    if(q) params.set("search",q);
+    const data=await api("/api/products"+(params.toString()?"?"+params.toString():""));
+    currentProducts=data.products||[];
+    render(currentProducts);
+  }catch(e){
+    currentProducts=localProducts.filter(p=>activeCategory==="ทั้งหมด"||p.category===activeCategory);
+    render(currentProducts);
+  }
+}
+
+function render(list=currentProducts){
+ const grid=document.getElementById("productGrid");
+ grid.innerHTML=list.map(p=>`<div class="card"><div class="card-cover">${escapeHtml(p.icon||"🎮")}</div><div class="card-body"><small>${escapeHtml(p.category)}</small><h3>${escapeHtml(p.name)}</h3><div class="muted">${escapeHtml(p.description||"")}</div><div class="price">เริ่มต้น ฿10</div><button class="buy" onclick="openOrder(${Number(p.id)})">เลือกบริการ</button></div></div>`).join("")||'<div class="notice" style="grid-column:1/-1">ไม่พบรายการที่ค้นหา</div>';
+}
+
+function filterTab(cat,el){
+ if(el){document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));el.classList.add("active");}
+ activeCategory=cat; loadProducts();
+ document.getElementById("products").scrollIntoView({behavior:"smooth"});
+}
+let searchTimer;
+function searchProducts(){clearTimeout(searchTimer);searchTimer=setTimeout(loadProducts,250);}
+
+function openModal(type){
+ const m=document.getElementById("modal"), title=document.getElementById("modalTitle"), content=document.getElementById("modalContent");
+ if(type==="wallet") renderWalletModal();
+ if(type==="login") renderLoginModal();
+ if(type==="account") renderAccountModal();
+ m.classList.add("show");
+}
+function renderLoginModal(){
+ document.getElementById("modalTitle").textContent="เข้าสู่ระบบ / สมัครสมาชิก";
+ document.getElementById("modalContent").innerHTML=`
+ <div class="notice">เชื่อมต่อ Backend แล้ว บัญชีและคำสั่งซื้อจะถูกเก็บในระบบหลังบ้าน</div>
+ <div class="field"><label>อีเมลหรือเบอร์โทร</label><input id="loginIdentifier" placeholder="เช่น 0812345678 หรือ email@example.com"></div>
+ <div class="field"><label>รหัสผ่าน</label><input id="loginPassword" type="password" placeholder="อย่างน้อย 6 ตัวอักษร"></div>
+ <button class="submit" onclick="loginUser()">เข้าสู่ระบบ</button>
+ <button style="width:100%;margin-top:8px;padding:12px;border:1px solid #d1d5db;border-radius:11px;background:#fff" onclick="renderRegisterModal()">ยังไม่มีบัญชี? สมัครสมาชิก</button>`;
+}
+function renderRegisterModal(){
+ document.getElementById("modalTitle").textContent="สมัครสมาชิก";
+ document.getElementById("modalContent").innerHTML=`
+ <div class="field"><label>ชื่อ</label><input id="regName" placeholder="ชื่อของคุณ"></div>
+ <div class="field"><label>อีเมล</label><input id="regEmail" type="email" placeholder="email@example.com"></div>
+ <div class="field"><label>เบอร์โทร</label><input id="regPhone" inputmode="tel" placeholder="08xxxxxxxx"></div>
+ <div class="field"><label>รหัสผ่าน</label><input id="regPassword" type="password" placeholder="อย่างน้อย 6 ตัวอักษร"></div>
+ <button class="submit" onclick="registerUser()">สมัครสมาชิก</button>
+ <button style="width:100%;margin-top:8px;padding:12px;border:1px solid #d1d5db;border-radius:11px;background:#fff" onclick="renderLoginModal()">กลับไปเข้าสู่ระบบ</button>`;
+}
+async function registerUser(){
+ const name=document.getElementById("regName").value.trim(), email=document.getElementById("regEmail").value.trim(), phone=document.getElementById("regPhone").value.trim(), password=document.getElementById("regPassword").value;
+ if(!name||!password||(!email&&!phone)) return notify("กรุณากรอกชื่อ และอีเมลหรือเบอร์โทร พร้อมรหัสผ่าน");
+ try{const data=await api("/api/auth/register",{method:"POST",body:JSON.stringify({name,email:email||undefined,phone:phone||undefined,password})});saveSession(data);notify("สมัครสมาชิกสำเร็จครับ");renderAccountModal();updateHeader();}catch(e){notify(e.message);}
+}
+async function loginUser(){
+ const identifier=document.getElementById("loginIdentifier").value.trim(), password=document.getElementById("loginPassword").value;
+ if(!identifier||!password)return notify("กรุณากรอกข้อมูลให้ครบ");
+ try{const data=await api("/api/auth/login",{method:"POST",body:JSON.stringify({identifier,password})});saveSession(data);notify("เข้าสู่ระบบสำเร็จครับ");renderAccountModal();updateHeader();}catch(e){notify(e.message);}
+}
+function renderAccountModal(){
+ const u=getUser();
+ if(!u){renderLoginModal();return;}
+ document.getElementById("modalTitle").textContent="บัญชีของฉัน";
+ document.getElementById("modalContent").innerHTML=`
+ <div class="notice"><b>${escapeHtml(u.name)}</b><br>${escapeHtml(u.email||u.phone||"")}<br>ยอด Wallet: <b>${money(u.wallet_balance)}</b></div>
+ <button class="submit" style="margin-top:12px" onclick="loadMyOrders()">ดูประวัติคำสั่งซื้อ</button>
+ <button style="width:100%;margin-top:8px;padding:12px;border:1px solid #d1d5db;border-radius:11px;background:#fff" onclick="renderWalletModal()">เติม Wallet</button>
+ <button style="width:100%;margin-top:8px;padding:12px;border:1px solid #fecaca;border-radius:11px;background:#fff;color:#b91c1c" onclick="logoutUser()">ออกจากระบบ</button>
+ <div id="accountExtra" style="margin-top:12px"></div>`;
+}
+async function refreshMe(){
+ if(!getToken())return;
+ try{const data=await api("/api/me");localStorage.setItem("saingam_user",JSON.stringify(data.user));updateHeader();}catch{clearSession();updateHeader();}
+}
+async function loadMyOrders(){
+ try{const data=await api("/api/orders/my");const box=document.getElementById("accountExtra");if(!box)return;box.innerHTML='<h3 style="font-size:16px">คำสั่งซื้อของฉัน</h3>'+((data.orders||[]).map(o=>`<div style="border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin:8px 0;font-size:12px"><b>${escapeHtml(o.order_no)}</b><br>${escapeHtml(o.product_name)} — ${money(o.amount)}<br>สถานะ: <b>${escapeHtml(o.status)}</b><br>${escapeHtml(o.target||"")}</div>`).join("")||'<div class="muted">ยังไม่มีคำสั่งซื้อ</div>');}catch(e){notify(e.message);}
+}
+async function renderWalletModal(){
+ const m=document.getElementById("modal");document.getElementById("modalTitle").textContent="เติมเงิน Wallet";
+ if(!getToken()){
+   document.getElementById("modalContent").innerHTML='<div class="notice">กรุณาเข้าสู่ระบบก่อนเติม Wallet</div><button class="submit" style="margin-top:12px" onclick="renderLoginModal()">เข้าสู่ระบบ</button>';
+   m.classList.add("show");return;
+ }
+ document.getElementById("modalContent").innerHTML=`<div class="notice">ตอนนี้ระบบสามารถสร้างรายการเติมเงินและบันทึกเป็นรายการ <b>รอตรวจสอบ</b> ได้แล้ว ส่วน PromptPay อัตโนมัติจะเชื่อมในขั้นระบบการเงินถัดไป</div><div class="field"><label>จำนวนเงิน</label><input id="walletAmount" type="number" min="1" step="1" placeholder="เช่น 100"></div><div class="field"><label>เลขอ้างอิง (ถ้ามี)</label><input id="walletRef" placeholder="เลขสลิป / เลขรายการ"></div><button class="submit" onclick="topupWallet()">สร้างรายการเติมเงิน</button>`;
+ m.classList.add("show");
+}
+async function topupWallet(){
+ const amount=Number(document.getElementById("walletAmount").value), reference=document.getElementById("walletRef").value.trim();
+ if(!amount||amount<=0)return notify("กรุณาระบุจำนวนเงิน");
+ try{await api("/api/wallet/topup",{method:"POST",body:JSON.stringify({amount,reference})});notify("สร้างรายการเติมเงินแล้ว สถานะ: รอตรวจสอบ");await refreshMe();renderAccountModal();}catch(e){notify(e.message);}
+}
+
+function findProduct(id){return currentProducts.find(p=>Number(p.id)===Number(id))||localProducts.find(p=>Number(p.id)===Number(id));}
+async function openOrder(id){
+ const p=findProduct(id);selectedProduct=p;
+ document.getElementById("modalTitle").textContent=p?.name||"สั่งซื้อ";
+ document.getElementById("modalContent").innerHTML=`<div class="notice">สินค้า: <b>${escapeHtml(p?.name||"")}</b><br>กรอกข้อมูลผู้รับบริการ และจำนวนเงินสำหรับสร้างคำสั่งซื้อ</div><div class="field"><label>User ID / เบอร์โทร / ไอดีรับเงิน</label><input id="orderTarget" placeholder="กรอกข้อมูลผู้รับบริการ"></div><div class="field"><label>จำนวนเงิน</label><input id="orderAmount" type="number" min="1" step="1" placeholder="เช่น 100"></div><button class="submit" onclick="createOrder()">ยืนยันคำสั่งซื้อ</button>`;
+ document.getElementById("modal").classList.add("show");
+}
+async function createOrder(){
+ if(!getToken()){notify("กรุณาเข้าสู่ระบบก่อนสั่งซื้อครับ");renderLoginModal();return;}
+ const target=document.getElementById("orderTarget").value.trim(), amount=Number(document.getElementById("orderAmount").value);
+ if(!amount||amount<=0)return notify("กรุณาระบุจำนวนเงิน");
+ try{const data=await api("/api/orders",{method:"POST",body:JSON.stringify({product_id:Number(selectedProduct.id),target,amount})});notify("สร้างคำสั่งซื้อแล้ว: "+data.order.order_no);renderAccountModal();}catch(e){notify(e.message);}
+}
+function closeModal(){document.getElementById("modal").classList.remove("show");}
+function showDemo(){if(getToken())loadMyOrders();else openModal("login");}
+function contactPlaceholder(e,name){e.preventDefault();alert("ช่องทาง "+name+" จะใส่ลิงก์/เบอร์จริงเมื่อกำหนดข้อมูลร้านครับ");}
+function logoutUser(){clearSession();closeModal();updateHeader();notify("ออกจากระบบแล้วครับ");}
+function updateHeader(){
+ const u=getUser();const btn=document.querySelector('.nav-actions .icon-btn');if(btn)btn.textContent=u?"👤":"👤";
+ const primary=document.querySelector('.nav-actions .primary');if(primary)primary.textContent=u?"Wallet ฿"+Number(u.wallet_balance||0).toLocaleString("th-TH"):"เติมเงิน";
+}
+document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal();});
+
+refreshMe();updateHeader();loadProducts();
+</script>
+</body>
+</html>
