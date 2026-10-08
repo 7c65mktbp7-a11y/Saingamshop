@@ -51,7 +51,7 @@ main{flex:1;min-width:0;padding:15px 15px 82px}.page{display:none}.page.active{d
 
 <main>
 <section id="dashboard" class="page active">
- <div class="title"><div><h1>Dashboard</h1><span class="date">ข้อมูลจาก Backend จริง</span></div><button class="btn btn-primary" id="refreshDash" type="button">↻ รีเฟรช</button></div>
+ <div class="title"><div><h1>Dashboard</h1><span class="date">ข้อมูลจาก Backend จริง</span></div><button class="btn btn-primary" id="refreshDash" type="button" onclick="refreshDashboard()">↻ รีเฟรช</button></div>
  <div class="stats">
   <div class="stat"><div class="icon">💵</div><div class="label">ยอดขายรวม</div><div class="value" id="salesTotal">฿0.00</div></div>
   <div class="stat"><div class="icon">🧾</div><div class="label">ออเดอร์ทั้งหมด</div><div class="value" id="ordersTotal">0</div></div>
@@ -242,11 +242,23 @@ async function decideTopup(id,status){
 }
 async function checkHealth(){try{const d=await fetch(API+'/api/health').then(r=>r.json());$('apiStatus').textContent=d.status==='online'?'🟢 Online':'🟠 '+(d.status||'ไม่ทราบสถานะ');}catch(e){$('apiStatus').textContent='🔴 Offline';}}
 
+async function refreshDashboard(){
+ const b=$('refreshDash');
+ try{
+  b.disabled=true; b.textContent='กำลังรีเฟรช...';
+  await loadDashboard();
+  b.textContent='✓ อัปเดตแล้ว';
+  setTimeout(()=>{b.textContent='↻ รีเฟรช';b.disabled=false;},900);
+ }catch(e){
+  b.disabled=false; b.textContent='↻ รีเฟรช';
+  showModal('รีเฟรชไม่สำเร็จ',e.message||'เกิดข้อผิดพลาด');
+ }
+}
+
 async function loadAll(){
  try{await loadDashboard();await loadUsers();await loadProducts();await loadTopups();checkHealth();}
  catch(e){showModal('เชื่อมต่อ Backend ไม่สำเร็จ',e.message);}
 }
-$('refreshDash').addEventListener('click',()=>loadDashboard().catch(e=>showModal('ผิดพลาด',e.message)));
 $('refreshOrders').addEventListener('click',loadOrders);$('refreshUsers').addEventListener('click',loadUsers);$('refreshProducts').addEventListener('click',loadProducts);$('refreshTopups').addEventListener('click',loadTopups);
 $('orderSearch').addEventListener('input',renderOrders);$('userSearch').addEventListener('input',renderUsers);
 $('closeModal').addEventListener('click',()=>$('modal').classList.remove('show'));$('modalOk').addEventListener('click',()=>$('modal').classList.remove('show'));$('modal').addEventListener('click',e=>{if(e.target.id==='modal')$('modal').classList.remove('show')});
