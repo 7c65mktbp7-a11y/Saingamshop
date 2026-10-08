@@ -122,6 +122,13 @@ body{width:100%;min-width:0}
 .brand{min-width:0}
 .nav{min-width:0}
 .header .secondary,.header .wallet,.header .menuBtn{flex:0 0 auto}
+.authWalletBtn{background:linear-gradient(135deg,#0a91ff,#2e61ff)!important;color:#fff!important;border-color:transparent!important;border-radius:11px;padding:7px 11px;font-weight:900;font-size:10px;box-shadow:0 8px 22px rgba(37,99,235,.22)}
+#accountBtn.authWalletBtn{min-width:86px;text-align:center}
+#accountBtn.authWalletBtn .authWalletLabel{display:block;font-size:9px;line-height:1.05}
+#accountBtn.authWalletBtn .authWalletAmount{display:block;font-size:10px;line-height:1.15;margin-top:2px}
+#accountBtn.guestAccountBtn{white-space:nowrap}
+#accountBtn + #walletBtn{display:none!important}
+
 
 /* Desktop: full navigation and wallet */
 @media (min-width:901px){
@@ -171,8 +178,11 @@ body{width:100%;min-width:0}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}
 }
-</style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+.wallet{white-space:nowrap}.wallet #walletBalance{display:inline;margin-left:8px}\n</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+// Keep header state correct on first load and after restoring a saved session.
+document.addEventListener('DOMContentLoaded',()=>{ updateHeaderAuthUI(); if(token) refreshAccountUI(); });
+</script>
 <!-- Set 30: premium storefront redesign; backend/API behavior preserved -->
 <meta name="theme-color" content="#061224"><meta name="color-scheme" content="dark"><meta name="apple-mobile-web-app-capable" content="yes">
 </head>
@@ -191,7 +201,7 @@ body{width:100%;min-width:0}
     <button type="button" onclick="goPage('about')"><img class="miImg" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDk2IDk2Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjMGRkNmZmIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiMyZjYzZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3YTQyZmYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHJ4PSIyMiIgZmlsbD0iIzBiMmE0ZCIvPjxyZWN0IHg9IjQiIHk9IjQiIHdpZHRoPSI4OCIgaGVpZ2h0PSI4OCIgcng9IjIwIiBmaWxsPSJ1cmwoI2cpIiBvcGFjaXR5PSIuOTUiLz48Y2lyY2xlIGN4PSI0OCIgY3k9IjQ4IiByPSIyOSIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHg9IjQ4IiB5PSI2MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzgiIGZvbnQtd2VpZ2h0PSI5MDAiIGZpbGw9IiMyZjYzZmYiPmk8L3RleHQ+PC9zdmc+" alt="">เกี่ยวกับเรา</button>
   </nav>
   <button type="button" class="secondary" id="accountBtn">เข้าสู่ระบบ / สมัครสมาชิก</button>
-  <button type="button" class="wallet" id="walletBtn">Wallet<br><span id="walletBalance">฿0.00</span></button>
+  <button type="button" class="wallet" id="walletBtn">Wallet <span id="walletBalance">฿0.00</span></button>
   <button type="button" class="menuBtn" id="menuBtn" aria-label="เปิดเมนู">☰</button>
 </header>
 
@@ -393,6 +403,24 @@ function setAuthMode(mode){
  }
  msg('authMsg','','muted');
 }
+function updateHeaderAuthUI(){
+ const btn=document.getElementById('accountBtn');
+ if(!btn)return;
+ if(token && me){
+   btn.classList.remove('secondary','guestAccountBtn');
+   btn.classList.add('authWalletBtn');
+   btn.innerHTML='<span class="authWalletLabel">Wallet</span><span class="authWalletAmount" id="headerWalletBalance">฿'+Number(me.wallet_balance||0).toFixed(2)+'</span>';
+   btn.onclick=()=>openWallet();
+   btn.setAttribute('aria-label','เปิด Wallet');
+ }else{
+   btn.classList.remove('authWalletBtn');
+   btn.classList.add('secondary','guestAccountBtn');
+   btn.textContent='เข้าสู่ระบบ / สมัครสมาชิก';
+   btn.onclick=()=>openAccount();
+   btn.setAttribute('aria-label','เข้าสู่ระบบหรือสมัครสมาชิก');
+ }
+}
+
 function openAccount(mode='login'){document.getElementById('accountModal').classList.add('show');setAuthMode(mode);refreshAccountUI();}
 function openWallet(){document.getElementById('walletModal').classList.add('show');refreshWalletUI();}
 function closeModal(id){document.getElementById(id).classList.remove('show')}
@@ -402,7 +430,7 @@ function refreshWalletUI(){
  if(token){loadWalletHistory(); refreshBalance();}
 }
 async function refreshBalance(){
- try{const r=await api('/api/me');me=r.user||r;setBalance(me.wallet_balance||0);if(document.getElementById('userBalance'))document.getElementById('userBalance').textContent='฿'+Number(me.wallet_balance||0).toFixed(2);}catch(e){}
+ try{const r=await api('/api/me');me=r.user||r;setBalance(me.wallet_balance||0);if(document.getElementById('userBalance'))document.getElementById('userBalance').textContent='฿'+Number(me.wallet_balance||0).toFixed(2);updateHeaderAuthUI();}catch(e){}
 }
 function walletStatus(s){return ({awaiting_payment:'รอชำระเงิน',pending:'รอตรวจสอบ',success:'สำเร็จ',failed:'ไม่สำเร็จ',cancelled:'ยกเลิก'}[s]||s||'-')}
 async function loadWalletHistory(){
@@ -416,9 +444,27 @@ async function loadWalletHistory(){
  }catch(e){box.innerHTML='<div class="danger">โหลดประวัติไม่สำเร็จ: '+esc(e.message)+'</div>';}
 }
 async function refreshAccountUI(){
- if(token){try{const r=await api('/api/me');me=r.user||r;document.getElementById('accountGuest').classList.add('hidden');document.getElementById('accountUser').classList.remove('hidden');document.getElementById('userName').textContent=me.name||'สมาชิก';document.getElementById('userEmail').textContent=me.email||me.phone||'';setBalance(me.wallet_balance||0);document.getElementById('userBalance').textContent='฿'+Number(me.wallet_balance||0).toFixed(2);}catch(e){token='';me=null;localStorage.removeItem('saingam_token');}}
- if(!token){document.getElementById('accountGuest').classList.remove('hidden');document.getElementById('accountUser').classList.add('hidden');}
+ if(token){
+  try{
+   const r=await api('/api/me');
+   me=r.user||r;
+   document.getElementById('accountGuest').classList.add('hidden');
+   document.getElementById('accountUser').classList.remove('hidden');
+   document.getElementById('userName').textContent=me.name||'สมาชิก';
+   document.getElementById('userEmail').textContent=me.email||me.phone||'';
+   setBalance(me.wallet_balance||0);
+   document.getElementById('userBalance').textContent='฿'+Number(me.wallet_balance||0).toFixed(2);
+  }catch(e){
+   token='';me=null;localStorage.removeItem('saingam_token');
+  }
+ }
+ if(!token){
+  document.getElementById('accountGuest').classList.remove('hidden');
+  document.getElementById('accountUser').classList.add('hidden');
+ }
+ updateHeaderAuthUI();
 }
+
 function validateRegister(body){
  if(!body.password||(!body.email&&!body.phone)) return 'กรุณากรอกอีเมลหรือเบอร์โทร รหัสผ่าน และยืนยันรหัสผ่าน';
  if(body.password.length<8) return 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร';
@@ -436,7 +482,7 @@ async function register(){
 async function login(){
  try{const identifier=v('email').trim(),password=v('password');if(!identifier||!password){msg('authMsg','กรุณากรอกอีเมลหรือเบอร์โทร และรหัสผ่าน','danger');return}const r=await api('/api/auth/login',{method:'POST',body:JSON.stringify({identifier,password})});token=r.token;localStorage.setItem('saingam_token',token);msg('authMsg','เข้าสู่ระบบสำเร็จ','success');await refreshAccountUI();refreshWalletUI();}catch(e){msg('authMsg',e.message,'danger')}
 }
-function logout(){token='';me=null;localStorage.removeItem('saingam_token');refreshAccountUI();setBalance(0);document.getElementById('walletHistory').innerHTML='';}
+function logout(){token='';me=null;localStorage.removeItem('saingam_token');refreshAccountUI();setBalance(0);document.getElementById('walletHistory').innerHTML='';updateHeaderAuthUI();}
 async function showPromptPayPending(id,amount){
  const box=document.getElementById('promptpayBox');
  box.classList.remove('hidden');
