@@ -101,6 +101,22 @@ if (db.prepare("SELECT COUNT(*) AS c FROM products").get().c === 0) {
   tx();
 }
 
+const seedPackages = [
+  [1, "35 คูปอง", 10, "ROV-10"], [1, "70 คูปอง", 20, "ROV-20"], [1, "350 คูปอง", 100, "ROV-100"],
+  [2, "100 เพชร", 35, "FF-100"], [2, "310 เพชร", 99, "FF-310"], [2, "520 เพชร", 159, "FF-520"],
+  [3, "60 Genesis Crystals", 35, "GI-60"], [3, "330 Genesis Crystals", 179, "GI-330"], [3, "1090 Genesis Crystals", 549, "GI-1090"],
+  [4, "55 Shells", 50, "GS-55"], [4, "110 Shells", 100, "GS-110"],
+  [5, "100 บาท", 100, "ST-100"], [5, "300 บาท", 300, "ST-300"],
+  [6, "100 Gold", 100, "RZ-100"], [6, "300 Gold", 300, "RZ-300"],
+  [7, "100 บาท", 100, "AIS-100"], [7, "300 บาท", 300, "AIS-300"],
+  [8, "100 บาท", 100, "TRUE-100"], [8, "300 บาท", 300, "TRUE-300"]
+];
+if (db.prepare("SELECT COUNT(*) AS c FROM packages").get().c === 0) {
+  const insertPackage = db.prepare("INSERT INTO packages (product_id,name,price,provider_code) VALUES (?,?,?,?)");
+  const tx = db.transaction(() => seedPackages.forEach(p => insertPackage.run(...p)));
+  tx();
+}
+
 function makeOrderNo() {
   const now = new Date();
   const stamp = now.toISOString().replace(/\D/g, "").slice(0, 14);
@@ -215,23 +231,48 @@ app.get("/api/products/:id/packages", (req, res) => {
 });
 
 app.post("/api/orders", auth, (req, res) => {
-  const { product_id, package_id, target, amount } = req.body;
-  if (!product_id || !amount || Number(amount) <= 0) {
-    return res.status(400).json({ ok: false, message: "ข้อมูลคำสั่งซื้อไม่ครบ" });
+  const { product_id, package_id, target } = req.body;
+  if (!product_id || !package_id) {
+    return res.status(400).json({ ok: false, message: "กรุณาเลือกสินค้าและแพ็กเกจ" });
   }
 
   const product = db.prepare("SELECT * FROM products WHERE id=? AND active=1").get(product_id);
   if (!product) return res.status(404).json({ ok: false, message: "ไม่พบสินค้า" });
 
-  const orderNo = makeOrderNo();
-  const result = db.prepare(`
-    INSERT INTO orders
-    (order_no,user_id,product_id,package_id,target,amount,status)
-    VALUES (?,?,?,?,?,?,?)
-  `).run(orderNo, req.user.id, product_id, package_id || null, target || "", Number(amount), "pending");
+  const pack = db.prepare("SELECT * FROM packages WHERE id=? AND product_id=? AND active=1").get(package_id, product_id);
+  if (!pack) return res.status(404).json({ ok: false, message: "ไม่พบแพ็กเกจ" });
 
-  const order = db.prepare("SELECT * FROM orders WHERE id=?").get(result.lastInsertRowid);
-  res.status(201).json({ ok: true, order });
+  const user = db.prepare("SELECT id,wallet_balance,status FROM users WHERE id=?").get(req.user.id);
+  if (!user || user.status !== "active") return res.status(403).json({ ok: false, message: "บัญชีไม่พร้อมใช้งาน" });
+  if (Number(user.wallet_balance) < Number(pack.price)) {
+    return res.status(400).json({ ok: false, message: "ยอด Wallet ไม่เพียงพอ", balance: Number(user.wallet_balance), required: Number(pack.price) });
+  }
+
+  const orderNo = makeOrderNo();
+  const createOrder = db.transaction(() => {
+    db.prepare("UPDATE users SET wallet_balance = wallet_balance - ? WHERE id=? AND wallet_balance >= ?")
+      .run(Number(pack.price), req.user.id, Number(pack.price));
+
+    const result = db.prepare(`
+      INSERT INTO orders (order_no,user_id,product_id,package_id,target,amount,status)
+      VALUES (?,?,?,?,?,?,?)
+    `).run(orderNo, req.user.id, product_id, package_id, target || "", Number(pack.price), "pending");
+
+    db.prepare(`
+      INSERT INTO wallet_transactions (user_id,type,amount,status,reference,note)
+      VALUES (?,?,?,?,?,?)
+    `).run(req.user.id, "purchase", -Number(pack.price), "approved", orderNo, `ชำระค่าสินค้า ${product.name} / ${pack.name}`);
+
+    return db.prepare("SELECT * FROM orders WHERE id=?").get(result.lastInsertRowid);
+  });
+
+  try {
+    const order = createOrder();
+    const freshUser = db.prepare("SELECT wallet_balance FROM users WHERE id=?").get(req.user.id);
+    res.status(201).json({ ok: true, order, wallet_balance: Number(freshUser.wallet_balance) });
+  } catch (e) {
+    res.status(500).json({ ok: false, message: "ไม่สามารถสร้างคำสั่งซื้อได้" });
+  }
 });
 
 app.get("/api/orders/my", auth, (req, res) => {
@@ -259,12 +300,34 @@ app.patch("/api/admin/orders/:id", auth, adminOnly, (req, res) => {
   const allowed = ["pending", "processing", "success", "failed", "refunded"];
   if (!allowed.includes(status)) return res.status(400).json({ ok: false, message: "สถานะไม่ถูกต้อง" });
 
-  db.prepare(
-    "UPDATE orders SET status=?, note=COALESCE(?,note), updated_at=CURRENT_TIMESTAMP WHERE id=?"
-  ).run(status, note || null, req.params.id);
-
   const order = db.prepare("SELECT * FROM orders WHERE id=?").get(req.params.id);
-  res.json({ ok: true, order });
+  if (!order) return res.status(404).json({ ok: false, message: "ไม่พบคำสั่งซื้อ" });
+
+  const updateOrder = db.transaction(() => {
+    db.prepare("UPDATE orders SET status=?, note=COALESCE(?,note), updated_at=CURRENT_TIMESTAMP WHERE id=?")
+      .run(status, note || null, req.params.id);
+
+    if ((status === "failed" || status === "refunded") && order.user_id) {
+      const ref = `${order.order_no}:REFUND`;
+      const exists = db.prepare("SELECT id FROM wallet_transactions WHERE reference=? LIMIT 1").get(ref);
+      if (!exists) {
+        db.prepare("UPDATE users SET wallet_balance = wallet_balance + ? WHERE id=?")
+          .run(Number(order.amount), order.user_id);
+        db.prepare(`
+          INSERT INTO wallet_transactions (user_id,type,amount,status,reference,note)
+          VALUES (?,?,?,?,?,?)
+        `).run(order.user_id, "refund", Number(order.amount), "approved", ref, `คืนเงินจากออเดอร์ ${order.order_no}`);
+      }
+    }
+  });
+
+  try {
+    updateOrder();
+    const updated = db.prepare("SELECT * FROM orders WHERE id=?").get(req.params.id);
+    res.json({ ok: true, order: updated });
+  } catch (e) {
+    res.status(500).json({ ok: false, message: "ไม่สามารถอัปเดตคำสั่งซื้อได้" });
+  }
 });
 
 app.post("/api/wallet/topup", auth, (req, res) => {
