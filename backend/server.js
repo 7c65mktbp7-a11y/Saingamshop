@@ -5,10 +5,15 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Database = require("better-sqlite3");
+const QRCode = require("qrcode");
+const generatePromptPayPayload = require("promptpay-qr");
 
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
 const JWT_SECRET = process.env.JWT_SECRET || "saingam-shop-development-secret";
+const PROMPTPAY_ID = (process.env.PROMPTPAY_ID || "").trim();
+const PROMPTPAY_NAME = (process.env.PROMPTPAY_NAME || "SAINGAM SHOP").trim();
+const PAYMENT_WEBHOOK_SECRET = process.env.PAYMENT_WEBHOOK_SECRET || "";
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN || "*",
@@ -289,6 +294,134 @@ app.get("/api/wallet/history", auth, (req, res) => {
   res.json({ ok: true, transactions: rows });
 });
 
+function makePaymentRef() {
+  const now = Date.now().toString(36).toUpperCase();
+  const rand = Math.floor(1000 + Math.random() * 9000);
+  return `PP${now}${rand}`;
+}
+
+app.post("/api/wallet/payment/create", auth, async (req, res) => {
+  try {
+    const amount = Number(req.body.amount);
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return res.status(400).json({ ok: false, message: "จำนวนเงินไม่ถูกต้อง" });
+    }
+    if (!PROMPTPAY_ID) {
+      return res.status(503).json({
+        ok: false,
+        message: "ยังไม่ได้ตั้งค่า PROMPTPAY_ID ใน Render Environment"
+      });
+    }
+
+    const paymentRef = makePaymentRef();
+    const payload = generatePromptPayPayload(PROMPTPAY_ID, { amount });
+    const qrDataUrl = await QRCode.toDataURL(payload, {
+      width: 520,
+      margin: 2,
+      errorCorrectionLevel: "M"
+    });
+
+    const result = db.prepare(`
+      INSERT INTO wallet_transactions
+      (user_id,type,amount,status,reference,note,gateway,payment_ref,qr_payload)
+      VALUES (?,?,?,?,?,?,?,?,?)
+    `).run(
+      req.user.id,
+      "topup",
+      amount,
+      "pending",
+      paymentRef,
+      "PromptPay QR รอการตรวจสอบการชำระเงิน",
+      "promptpay",
+      paymentRef,
+      payload
+    );
+
+    const transaction = db.prepare(
+      "SELECT id,user_id,type,amount,status,reference,note,gateway,payment_ref,created_at,paid_at FROM wallet_transactions WHERE id=?"
+    ).get(result.lastInsertRowid);
+
+    res.status(201).json({
+      ok: true,
+      transaction,
+      payment: {
+        gateway: "promptpay",
+        amount,
+        promptpay_id: PROMPTPAY_ID,
+        merchant_name: PROMPTPAY_NAME,
+        payment_ref: paymentRef,
+        qr_data_url: qrDataUrl,
+        instructions: "สแกน QR นี้ด้วยแอปธนาคาร แล้วกลับมากดตรวจสอบสถานะ"
+      }
+    });
+  } catch (e) {
+    console.error("PromptPay create error:", e);
+    res.status(500).json({ ok: false, message: "สร้าง QR PromptPay ไม่สำเร็จ" });
+  }
+});
+
+app.get("/api/wallet/payment/:id", auth, (req, res) => {
+  const transaction = db.prepare(`
+    SELECT id,user_id,type,amount,status,reference,note,gateway,payment_ref,created_at,paid_at
+    FROM wallet_transactions
+    WHERE id=? AND user_id=?
+  `).get(req.params.id, req.user.id);
+
+  if (!transaction) return res.status(404).json({ ok: false, message: "ไม่พบรายการเติมเงิน" });
+  res.json({ ok: true, transaction });
+});
+
+// Manual approval is for testing/admin operation until a real payment gateway webhook is connected.
+app.patch("/api/admin/wallet/:id/approve", auth, adminOnly, (req, res) => {
+  const tx = db.prepare("SELECT * FROM wallet_transactions WHERE id=?").get(req.params.id);
+  if (!tx) return res.status(404).json({ ok: false, message: "ไม่พบรายการเติมเงิน" });
+  if (tx.status === "success") {
+    return res.json({ ok: true, message: "รายการนี้อนุมัติแล้ว", transaction: tx });
+  }
+  if (tx.status !== "pending") {
+    return res.status(400).json({ ok: false, message: "รายการนี้ไม่อยู่ในสถานะรอตรวจสอบ" });
+  }
+
+  const approve = db.transaction(() => {
+    db.prepare(`
+      UPDATE wallet_transactions
+      SET status='success', paid_at=CURRENT_TIMESTAMP, approved_by=?, note='PromptPay อนุมัติโดยแอดมิน'
+      WHERE id=?
+    `).run(req.user.id, tx.id);
+
+    db.prepare(`
+      UPDATE users
+      SET wallet_balance = wallet_balance + ?
+      WHERE id=?
+    `).run(Number(tx.amount), tx.user_id);
+  });
+  approve();
+
+  const transaction = db.prepare("SELECT * FROM wallet_transactions WHERE id=?").get(tx.id);
+  const user = db.prepare("SELECT id,name,email,phone,wallet_balance FROM users WHERE id=?").get(tx.user_id);
+  res.json({ ok: true, message: "อนุมัติเติมเงินแล้ว", transaction, user });
+});
+
+app.patch("/api/admin/wallet/:id/reject", auth, adminOnly, (req, res) => {
+  const tx = db.prepare("SELECT * FROM wallet_transactions WHERE id=?").get(req.params.id);
+  if (!tx) return res.status(404).json({ ok: false, message: "ไม่พบรายการเติมเงิน" });
+  if (tx.status !== "pending") {
+    return res.status(400).json({ ok: false, message: "รายการนี้ไม่อยู่ในสถานะรอตรวจสอบ" });
+  }
+
+  db.prepare(`
+    UPDATE wallet_transactions
+    SET status='failed', note='PromptPay รายการถูกปฏิเสธโดยแอดมิน'
+    WHERE id=?
+  `).run(tx.id);
+
+  res.json({
+    ok: true,
+    message: "ปฏิเสธรายการเติมเงินแล้ว",
+    transaction: db.prepare("SELECT * FROM wallet_transactions WHERE id=?").get(tx.id)
+  });
+});
+
 app.get("/api/admin/users", auth, adminOnly, (req, res) => {
   const users = db.prepare(
     "SELECT id,name,email,phone,role,wallet_balance,status,created_at FROM users ORDER BY id DESC"
@@ -331,6 +464,6 @@ app.use((req, res) => {
   res.status(404).json({ ok: false, message: "ไม่พบ API นี้" });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Saingam Shop API running on port ${PORT}`);
 });
