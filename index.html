@@ -208,14 +208,17 @@ async function showPromptPayPending(id,amount){
  }
 }
 async function confirmPromptPayPaid(id){
+ const box=document.getElementById('promptpayBox');
  try{
   const ref=window.lastTopupReference||'';
   const r=await api('/api/wallet/topup/'+id+'/paid',{method:'POST',body:JSON.stringify({reference:ref})});
   msg('topupMsg','แจ้งชำระเงินรายการ #'+id+' แล้ว — รอ Admin ตรวจสอบยอดเงินจริง','success');
-  const box=document.getElementById('promptpayBox');
   box.innerHTML='<div class="notice"><b>แจ้งชำระเงินแล้ว</b><br>รายการ #'+id+' อยู่ในสถานะ <b>รอตรวจสอบ</b><br>Admin จะตรวจสอบยอดเงินจริงก่อนอนุมัติ Wallet</div>';
   await loadWalletHistory();
- }catch(e){msg('topupMsg',e.message,'danger')}
+ }catch(e){
+  msg('topupMsg','แจ้งชำระเงินไม่สำเร็จ: '+e.message,'danger');
+  box.innerHTML='<div class="notice danger"><b>แจ้งชำระเงินไม่สำเร็จ</b><br>รายการ #'+id+' ยังไม่ถูกส่งให้ Admin<br><b>สาเหตุ:</b> '+esc(e.message)+'</div><button class="primary" style="width:100%;margin-bottom:8px" onclick="confirmPromptPayPaid('+id+')">ลองแจ้งชำระเงินอีกครั้ง</button><button class="secondary" style="width:100%" onclick="loadWalletHistory()">ตรวจสอบสถานะอีกครั้ง</button>';
+ }
 }
 async function createTopup(){
  const amount=Number(v('topupAmount'));
