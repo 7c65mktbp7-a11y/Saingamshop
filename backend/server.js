@@ -12,6 +12,31 @@ const JWT_SECRET = process.env.JWT_SECRET || "saingam-shop-development-secret";
 const PROVIDER_API_URL = process.env.PROVIDER_API_URL || "";
 const PROVIDER_API_KEY = process.env.PROVIDER_API_KEY || "";
 const PROVIDER_MODE = String(process.env.PROVIDER_MODE || "manual").toLowerCase();
+const PROMPTPAY_ID = String(process.env.PROMPTPAY_ID || "").replace(/[^0-9]/g, "");
+
+function crc16(str) {
+  let crc = 0xFFFF;
+  for (let i = 0; i < str.length; i++) {
+    crc ^= str.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) {
+      crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) & 0xFFFF : (crc << 1) & 0xFFFF;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, "0");
+}
+function tlv(id, value) {
+  return id + String(value.length).padStart(2, "0") + value;
+}
+function promptPayPayload(id, amount) {
+  if (!/^\d{10,13}$/.test(id)) throw new Error("PROMPTPAY_ID ไม่ถูกต้อง");
+  const normalized = id.length === 10 ? "0066" + id.slice(1) : id;
+  const accountTag = id.length === 13 ? "02" : "01";
+  const merchantAccount = tlv("00", "A000000677010111") + tlv(accountTag, normalized);
+  let payload = tlv("00", "01") + tlv("01", "12") + tlv("29", merchantAccount) + tlv("52", "0000") + tlv("53", "764");
+  if (Number(amount) > 0) payload += tlv("54", Number(amount).toFixed(2));
+  payload += tlv("58", "TH") + tlv("59", "SAINGAM SHOP") + tlv("60", "PHITSANULOK") + "6304";
+  return payload + crc16(payload);
+}
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN || "*",
@@ -383,6 +408,22 @@ app.patch("/api/admin/orders/:id", auth, adminOnly, async (req, res) => {
   } catch (e) {
     res.status(500).json({ ok: false, message: "ไม่สามารถอัปเดตคำสั่งซื้อได้" });
   }
+});
+
+app.get("/api/wallet/promptpay/qr", auth, (req, res) => {
+  const amount = Number(req.query.amount || 0);
+  if (!PROMPTPAY_ID) return res.status(503).json({ ok:false, configured:false, message:"ยังไม่ได้ตั้งค่า PROMPTPAY_ID ใน Render" });
+  if (!Number.isFinite(amount) || amount <= 0) return res.status(400).json({ ok:false, message:"จำนวนเงินไม่ถูกต้อง" });
+  try {
+    const payload = promptPayPayload(PROMPTPAY_ID, amount);
+    res.json({ ok:true, configured:true, amount:Number(amount.toFixed(2)), payload, currency:"THB", merchant:"SAINGAM SHOP" });
+  } catch (e) {
+    res.status(500).json({ ok:false, message:e.message });
+  }
+});
+
+app.get("/api/admin/payment/promptpay/status", auth, adminOnly, (req, res) => {
+  res.json({ ok:true, configured:Boolean(PROMPTPAY_ID), merchant:"SAINGAM SHOP", message: PROMPTPAY_ID ? "PromptPay QR พร้อมสร้างแล้ว (การตรวจชำระยังเป็นแบบ Manual จนกว่าจะเชื่อม Payment Gateway)" : "ยังไม่ได้ตั้งค่า PROMPTPAY_ID" });
 });
 
 app.post("/api/wallet/topup", auth, (req, res) => {
