@@ -1,1 +1,2 @@
-Saingam Shop Backend
+Set 5: เพิ่ม PROMPTPAY_ID ใน Render Environment ก่อนใช้งาน QR จริง
+ยังไม่ต้องลบฐานข้อมูลเดิม และไม่ต้องสร้าง Service ใหม่
