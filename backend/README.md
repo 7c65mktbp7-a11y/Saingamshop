@@ -1,22 +1,26 @@
-Saingam Shop Backend - ชุดที่ 3
+# Saingam Shop Set 5 — PromptPay QR
 
-แพลตฟอร์มที่แนะนำสำหรับเริ่มต้น:
-Render
+ชุดนี้เพิ่มระบบเตรียมชำระเงินผ่าน PromptPay QR
 
-ไฟล์:
-- server.js = ตัว Backend
-- package.json = รายการแพ็กเกจ
-- render.yaml = ค่าช่วยตั้งค่า Render
-- ENV-SETTINGS.txt = ค่าที่ต้องใส่ใน Environment
-- START-HERE.txt = วิธีเริ่มต้นแบบสั้น
+## สิ่งที่เพิ่ม
+- สร้างรายการเติมเงินพร้อม payment reference
+- สร้าง PromptPay QR แบบกำหนดจำนวนเงิน
+- ลูกค้าดูสถานะรายการเติมเงินได้
+- Admin สามารถอนุมัติ/ปฏิเสธรายการเพื่อทดสอบ flow ได้
+- ป้องกันการเพิ่มเงินซ้ำเมื่อรายการถูกอนุมัติแล้ว
+- รองรับการต่อ payment gateway/webhook จริงในขั้นถัดไป
 
-สำคัญ:
-GitHub Pages ใช้สำหรับ index.html และหน้าเว็บ static
-Backend Node.js ให้ Deploy แยกบน Render หรือเซิร์ฟเวอร์ Node.js
+## Environment Variables ที่ต้องเพิ่มใน Render
+- PROMPTPAY_ID = เบอร์มือถือหรือเลขบัตรประชาชนที่ผูก PromptPay ของร้าน
+- PROMPTPAY_NAME = ชื่อร้าน
+- PAYMENT_WEBHOOK_SECRET = รหัสลับสำหรับ webhook ในอนาคต
 
-หลัง Deploy ให้ทดสอบ:
-https://URL-BACKEND-ของคุณ.onrender.com/api/health
+## สำคัญ
+QR ในชุดนี้เป็น QR PromptPay จริงสำหรับการโอนเงิน แต่การตรวจสอบว่าเงินเข้าจริงแบบอัตโนมัติยังต้องเชื่อมผู้ให้บริการ Payment Gateway/Webhook ในขั้นถัดไป
+ห้ามถือว่าแค่ลูกค้ากดปุ่ม "ตรวจสอบ" คือจ่ายเงินสำเร็จ
 
-ควรได้ JSON ที่มี:
-ok: true
-status: online
+## Deploy
+Root Directory: backend
+Build Command: npm install
+Start Command: npm start
+Node Version: 22.22.0
