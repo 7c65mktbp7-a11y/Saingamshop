@@ -130,7 +130,7 @@ async function api(path,opt={}){
  if(!r.ok) throw new Error(d.message||'เกิดข้อผิดพลาด');
  return d;
 }
-function showModal(title,text){$('modalTitle').textContent=title;$('modalText').textContent=text;$('modal').classList.add('show');}
+function showModal(title,text,isHtml=false){$('modalTitle').textContent=title;if(isHtml){$('modalText').innerHTML=text;}else{$('modalText').textContent=text;}$('modal').classList.add('show');}
 function go(page){
  document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===page));
  document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===page));
@@ -175,12 +175,40 @@ function renderDashOrders(){
 function renderOrders(){
  const q=($('orderSearch').value||'').toLowerCase();
  const rows=orders.filter(o=>(String(o.id)+' '+String(o.customer_name||'')+' '+String(o.product_name||'')+' '+String(o.email||'')).toLowerCase().includes(q));
- $('ordersBody').innerHTML=rows.length?rows.map(o=>`<tr><td>#${esc(o.id)}</td><td>${esc(o.created_at||'-')}</td><td><b>${esc(o.customer_name||'-')}</b><br><small>${esc(o.email||o.phone||'')}</small></td><td>${esc(o.product_name||'-')}</td><td>${money(o.amount)}</td><td><span class="status ${statusClass(o.status)}">${esc(statusText(o.status))}</span></td><td><button class="btn btn-light" type="button" onclick="orderDetail(${Number(o.id)})">ดู</button></td></tr>`).join(''):'<tr><td colspan="7">ไม่พบออเดอร์</td></tr>';
+ $('ordersBody').innerHTML=rows.length?rows.map(o=>`<tr><td>#${esc(o.id)}</td><td>${esc(o.created_at||'-')}</td><td><b>${esc(o.customer_name||'-')}</b><br><small>${esc(o.email||o.phone||'')}</small></td><td>${esc(o.product_name||'-')}</td><td>${money(o.amount)}</td><td><span class="status ${statusClass(o.status)}">${esc(statusText(o.status))}</span></td><td><button class="btn btn-light" type="button" onclick="orderDetail(${Number(o.id)})">ดู/แก้สถานะ</button></td></tr>`).join(''):'<tr><td colspan="7">ไม่พบออเดอร์</td></tr>';
 }
-function orderDetail(id){const o=orders.find(x=>Number(x.id)===id);if(!o)return;showModal('รายละเอียดออเดอร์ #'+o.id,'ลูกค้า: '+(o.customer_name||'-')+'\\nบริการ: '+(o.product_name||'-')+'\\nจำนวน: '+money(o.amount)+'\\nสถานะ: '+statusText(o.status));}
-
-async function loadUsers(){
- try{const d=await api('/api/admin/users');users=d.users||[];renderUsers();}catch(e){$('usersBody').innerHTML='<tr><td colspan="6">'+esc(e.message)+'</td></tr>';}
+function orderDetail(id){
+ const o=orders.find(x=>Number(x.id)===id); if(!o)return;
+ const body=`<div style="line-height:1.8">
+ <div><b>ลูกค้า:</b> ${esc(o.customer_name||'-')}</div>
+ <div><b>บริการ:</b> ${esc(o.product_name||'-')}</div>
+ <div><b>ยอด:</b> ${money(o.amount)}</div>
+ <div><b>เป้าหมาย:</b> ${esc(o.target||'-')}</div>
+ <div><b>เลข Order:</b> ${esc(o.order_no||'-')}</div>
+ <div style="margin-top:12px"><b>เปลี่ยนสถานะ</b></div>
+ <select id="orderStatusSelect" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:10px;margin-top:6px">
+   <option value="pending" ${o.status==='pending'?'selected':''}>รอดำเนินการ</option>
+   <option value="processing" ${o.status==='processing'?'selected':''}>กำลังดำเนินการ</option>
+   <option value="success" ${o.status==='success'?'selected':''}>สำเร็จ</option>
+   <option value="failed" ${o.status==='failed'?'selected':''}>ไม่สำเร็จ / คืนเงิน</option>
+   <option value="refunded" ${o.status==='refunded'?'selected':''}>คืนเงินแล้ว</option>
+ </select>
+ <textarea id="orderNoteInput" placeholder="หมายเหตุ (ถ้ามี)" style="width:100%;min-height:70px;padding:10px;border:1px solid #ddd;border-radius:10px;margin-top:8px">${esc(o.note||'')}</textarea>
+ <button class="btn btn-primary" type="button" style="width:100%;margin-top:10px" onclick="updateOrderStatus(${Number(o.id)})">บันทึกสถานะ</button>
+ </div>`;
+ showModal('จัดการออเดอร์ #'+o.id,body,true);
+}
+async function updateOrderStatus(id){
+ const status=$('orderStatusSelect')?.value;
+ const note=$('orderNoteInput')?.value||'';
+ if(!status)return;
+ if(!confirm('ยืนยันเปลี่ยนสถานะออเดอร์ #'+id+' เป็น '+statusText(status)+' ?'))return;
+ try{
+   await api('/api/admin/orders/'+id,{method:'PATCH',body:JSON.stringify({status,note})});
+   $('modal').classList.remove('show');
+   await loadOrders(); await loadDashboard();
+   alert('บันทึกสถานะออเดอร์แล้ว');
+ }catch(e){alert(e.message);}
 }
 function renderUsers(){
  const q=($('userSearch').value||'').toLowerCase();
