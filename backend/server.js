@@ -9,6 +9,9 @@ const Database = require("better-sqlite3");
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
 const JWT_SECRET = process.env.JWT_SECRET || "saingam-shop-development-secret";
+const PROVIDER_API_URL = process.env.PROVIDER_API_URL || "";
+const PROVIDER_API_KEY = process.env.PROVIDER_API_KEY || "";
+const PROVIDER_MODE = String(process.env.PROVIDER_MODE || "manual").toLowerCase();
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN || "*",
@@ -149,6 +152,38 @@ function adminOnly(req, res, next) {
     return res.status(403).json({ ok: false, message: "ไม่มีสิทธิ์ใช้งานส่วนนี้" });
   }
   next();
+}
+
+async function sendToProvider(order) {
+  // Generic provider gateway. Real provider payload/headers may need adaptation
+  // to the provider's API documentation.
+  if (PROVIDER_MODE !== "http" || !PROVIDER_API_URL || !PROVIDER_API_KEY) {
+    return { sent: false, mode: "manual", message: "ยังไม่ได้ตั้งค่า Provider API จริง" };
+  }
+
+  const payload = {
+    order_no: order.order_no,
+    product_code: order.provider_code || "",
+    target: order.target || "",
+    amount: Number(order.amount)
+  };
+
+  const response = await fetch(PROVIDER_API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${PROVIDER_API_KEY}`
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const text = await response.text();
+  let data;
+  try { data = JSON.parse(text); } catch { data = { raw: text }; }
+  if (!response.ok) {
+    throw new Error(`Provider HTTP ${response.status}`);
+  }
+  return { sent: true, mode: "http", data };
 }
 
 app.get("/", (req, res) => {
@@ -295,36 +330,56 @@ app.get("/api/admin/orders", auth, adminOnly, (req, res) => {
   res.json({ ok: true, orders });
 });
 
-app.patch("/api/admin/orders/:id", auth, adminOnly, (req, res) => {
+app.patch("/api/admin/orders/:id", auth, adminOnly, async (req, res) => {
   const { status, note } = req.body;
   const allowed = ["pending", "processing", "success", "failed", "refunded"];
   if (!allowed.includes(status)) return res.status(400).json({ ok: false, message: "สถานะไม่ถูกต้อง" });
 
-  const order = db.prepare("SELECT * FROM orders WHERE id=?").get(req.params.id);
+  const order = db.prepare(`
+    SELECT o.*, p.name AS product_name, pa.name AS package_name, pa.provider_code
+    FROM orders o
+    LEFT JOIN products p ON p.id=o.product_id
+    LEFT JOIN packages pa ON pa.id=o.package_id
+    WHERE o.id=?
+  `).get(req.params.id);
   if (!order) return res.status(404).json({ ok: false, message: "ไม่พบคำสั่งซื้อ" });
 
-  const updateOrder = db.transaction(() => {
-    db.prepare("UPDATE orders SET status=?, note=COALESCE(?,note), updated_at=CURRENT_TIMESTAMP WHERE id=?")
-      .run(status, note || null, req.params.id);
-
-    if ((status === "failed" || status === "refunded") && order.user_id) {
-      const ref = `${order.order_no}:REFUND`;
-      const exists = db.prepare("SELECT id FROM wallet_transactions WHERE reference=? LIMIT 1").get(ref);
-      if (!exists) {
-        db.prepare("UPDATE users SET wallet_balance = wallet_balance + ? WHERE id=?")
-          .run(Number(order.amount), order.user_id);
-        db.prepare(`
-          INSERT INTO wallet_transactions (user_id,type,amount,status,reference,note)
-          VALUES (?,?,?,?,?,?)
-        `).run(order.user_id, "refund", Number(order.amount), "approved", ref, `คืนเงินจากออเดอร์ ${order.order_no}`);
+  try {
+    // When Admin moves an order to processing, optionally send it to a configured provider.
+    let providerResult = null;
+    if (status === "processing" && order.status !== "processing" && order.status !== "success") {
+      try {
+        providerResult = await sendToProvider(order);
+        db.prepare("UPDATE orders SET provider_status=?, note=COALESCE(?,note), updated_at=CURRENT_TIMESTAMP WHERE id=?")
+          .run(providerResult.sent ? "sent" : "manual", note || null, req.params.id);
+      } catch (providerError) {
+        db.prepare("UPDATE orders SET provider_status=?, note=?, updated_at=CURRENT_TIMESTAMP WHERE id=?")
+          .run("failed", `Provider error: ${providerError.message}`, req.params.id);
+        return res.status(502).json({ ok: false, message: "ส่งคำสั่งไป Provider ไม่สำเร็จ", provider_error: providerError.message });
       }
     }
-  });
 
-  try {
+    const updateOrder = db.transaction(() => {
+      db.prepare("UPDATE orders SET status=?, note=COALESCE(?,note), updated_at=CURRENT_TIMESTAMP WHERE id=?")
+        .run(status, note || null, req.params.id);
+
+      if ((status === "failed" || status === "refunded") && order.user_id) {
+        const ref = `${order.order_no}:REFUND`;
+        const exists = db.prepare("SELECT id FROM wallet_transactions WHERE reference=? LIMIT 1").get(ref);
+        if (!exists) {
+          db.prepare("UPDATE users SET wallet_balance = wallet_balance + ? WHERE id=?")
+            .run(Number(order.amount), order.user_id);
+          db.prepare(`
+            INSERT INTO wallet_transactions (user_id,type,amount,status,reference,note)
+            VALUES (?,?,?,?,?,?)
+          `).run(order.user_id, "refund", Number(order.amount), "approved", ref, `คืนเงินจากออเดอร์ ${order.order_no}`);
+        }
+      }
+    });
+
     updateOrder();
     const updated = db.prepare("SELECT * FROM orders WHERE id=?").get(req.params.id);
-    res.json({ ok: true, order: updated });
+    res.json({ ok: true, order: updated, provider: providerResult });
   } catch (e) {
     res.status(500).json({ ok: false, message: "ไม่สามารถอัปเดตคำสั่งซื้อได้" });
   }
@@ -431,6 +486,17 @@ async function ensureAdmin() {
 }
 
 ensureAdmin().catch(err => console.error("Admin initialization failed:", err));
+
+app.get("/api/admin/provider/status", auth, adminOnly, (req, res) => {
+  res.json({
+    ok: true,
+    mode: PROVIDER_MODE,
+    configured: Boolean(PROVIDER_API_URL && PROVIDER_API_KEY),
+    message: (PROVIDER_MODE === "http" && PROVIDER_API_URL && PROVIDER_API_KEY)
+      ? "Provider API ถูกตั้งค่าแล้ว"
+      : "ยังอยู่ในโหมด Manual — ยังไม่มีการส่งคำสั่งไปผู้ให้บริการจริง"
+  });
+});
 
 app.use((req, res) => {
   res.status(404).json({ ok: false, message: "ไม่พบ API นี้" });
