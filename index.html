@@ -243,6 +243,17 @@ async function createTopup(){
  }catch(e){msg('topupMsg',e.message,'danger')}
 }
 async function openOrders(){
+ if(!token){
+   openAccount();
+   msg('authMsg','กรุณาเข้าสู่ระบบก่อนดูประวัติการซื้อ','danger');
+   return;
+ }
+ const account=document.getElementById('accountModal');
+ if(account) account.classList.add('show');
+ const userBox=document.getElementById('accountUser');
+ const guestBox=document.getElementById('accountGuest');
+ if(userBox) userBox.classList.remove('hidden');
+ if(guestBox) guestBox.classList.add('hidden');
  const box=document.getElementById('orders');
  if(!box)return;
  box.innerHTML='<div class="loading">กำลังโหลดประวัติการซื้อ...</div>';
