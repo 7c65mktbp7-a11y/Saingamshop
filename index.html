@@ -169,7 +169,7 @@ function logout(){token='';me=null;localStorage.removeItem('saingam_token');refr
 function showPromptPayPending(id,amount){
  const box=document.getElementById('promptpayBox');
  box.classList.remove('hidden');
- box.innerHTML='<div class="notice"><b>PromptPay QR</b><br>รายการ #'+id+' จำนวน ฿'+Number(amount).toFixed(2)+' ถูกสร้างแล้ว<br><span class="muted">ขั้นนี้ยังไม่มี QR ของบัญชีรับเงินจริง จึงยังไม่ควรโอนเงิน ระบบจะเชื่อม QR จริงหลังตั้งค่า PromptPay ของร้าน</span></div><button class="secondary" style="width:100%" onclick="loadWalletHistory()">ตรวจสอบสถานะอีกครั้ง</button>';
+ box.innerHTML='<div class="notice"><b>PromptPay QR</b><br>รายการ #'+id+' จำนวน ฿'+Number(amount).toFixed(2)+' ถูกสร้างแล้ว<br><span class="muted">ขั้นนี้เชื่อม Wallet กับ Backend จริงแล้ว แต่ QR PromptPay ของร้านยังไม่ได้ตั้งค่า จึงยังไม่ควรโอนเงินจริง ยอดจะเข้า Wallet ก็ต่อเมื่อ Admin อนุมัติรายการ</span></div><button class="secondary" style="width:100%" onclick="loadWalletHistory()">ตรวจสอบสถานะอีกครั้ง</button>';
 }
 async function createTopup(){
  const amount=Number(v('topupAmount'));
@@ -177,7 +177,7 @@ async function createTopup(){
  if(amount>100000){msg('topupMsg','จำนวนเงินสูงสุดต่อรายการคือ 100,000 บาท','danger');return}
  try{
   const r=await api('/api/wallet/topup',{method:'POST',body:JSON.stringify({amount,reference:v('topupRef')})});
-  msg('topupMsg','สร้างรายการเติมเงิน #'+r.transaction.id+' แล้ว สถานะ: รอตรวจสอบ','success');
+  msg('topupMsg','สร้างรายการเติมเงิน #'+r.transaction.id+' สำเร็จแล้ว สถานะ: รอตรวจสอบ — ยอดจะเข้าหลัง Admin อนุมัติ','success');
   if(document.getElementById('paymentMethod').value==='promptpay') showPromptPayPending(r.transaction.id,amount);
   document.getElementById('topupAmount').value='';document.getElementById('topupRef').value='';
   await loadWalletHistory(); await refreshBalance();
