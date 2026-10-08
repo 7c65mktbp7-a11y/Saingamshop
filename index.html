@@ -28,6 +28,7 @@ button,input{font:inherit}button{cursor:pointer;border:0}.top{background:#0d1730
   <div class="search"><input id="search" placeholder="ค้นหาเกม หรือบริการ..."><button onclick="renderProducts()">ค้นหา</button></div>
 </section>
 
+<div class="card" style="margin:14px 0;background:#eef4ff;border-color:#c7d7fe"><div class="row"><div><b style="font-size:18px">🧾 ประวัติการซื้อ</b><div class="muted" style="margin-top:4px">ดูออเดอร์ทั้งหมดและสถานะล่าสุดของคุณ</div></div><button class="primary" type="button" onclick="openOrders()">ดูประวัติ</button></div></div>
 <div class="tabs">
 <button class="tab active" onclick="filterCat('all',this)">ทั้งหมด</button>
 <button class="tab" onclick="filterCat('game',this)">เกม</button>
@@ -242,10 +243,17 @@ async function createTopup(){
  }catch(e){msg('topupMsg',e.message,'danger')}
 }
 async function openOrders(){
- if(!token)return;
- try{const r=await api('/api/orders/my');document.getElementById('orders').innerHTML='<h3>ประวัติคำสั่งซื้อ</h3>'+(r.orders||[]).map(o=>`<div class="item">#${o.id} — ${esc(o.product_name||'รายการ')}<br><span class="muted">สถานะ: ${esc(o.status)} · ฿${Number(o.amount||0).toFixed(2)}</span></div>`).join('')||'<div class="muted">ยังไม่มีรายการ</div>';}
- catch(e){alert(e.message)}
+ const box=document.getElementById('orders');
+ if(!box)return;
+ box.innerHTML='<div class="loading">กำลังโหลดประวัติการซื้อ...</div>';
+ try{
+  const r=await api('/api/orders/my');
+  const rows=r.orders||[];
+  const st={pending:'รอดำเนินการ',processing:'กำลังดำเนินการ',success:'สำเร็จ',failed:'ไม่สำเร็จ',refunded:'คืนเงินแล้ว'};
+  box.innerHTML='<h3>ประวัติคำสั่งซื้อ</h3>'+(rows.length?rows.map(o=>`<div class="item"><div class="row"><b>#${esc(o.order_no||o.id)}</b><b>฿${Number(o.amount||0).toFixed(2)}</b></div><div style="margin-top:6px"><b>${esc(o.product_name||'รายการ')}</b></div><div class="muted" style="margin-top:4px">สถานะ: <b>${esc(st[o.status]||o.status||'-')}</b><br>ข้อมูลผู้รับ: ${esc(o.target||'-')}<br>${esc(o.created_at||'')}</div></div>`).join(''):'<div class="muted">ยังไม่มีประวัติการซื้อ</div>');
+ }catch(e){box.innerHTML='<div class="danger">โหลดประวัติไม่สำเร็จ: '+esc(e.message)+'</div>';}
 }
+
 function showSheet(title,body){let m=document.getElementById('genericModal');if(!m){m=document.createElement('div');m.id='genericModal';m.className='modal';document.body.appendChild(m)}m.innerHTML='<div class="sheet"><div class="row"><h2>'+title+'</h2><button class="close" onclick="closeModal(\'genericModal\')">×</button></div>'+body+'</div>';m.classList.add('show')}
 function v(id){return document.getElementById(id).value.trim()}
 function msg(id,t,c){const e=document.getElementById(id);e.textContent=t;e.className=c}
