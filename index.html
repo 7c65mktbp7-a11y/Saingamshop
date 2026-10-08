@@ -185,6 +185,35 @@ document.addEventListener('DOMContentLoaded',()=>{ updateHeaderAuthUI(); if(toke
 </script>
 <!-- Set 30: premium storefront redesign; backend/API behavior preserved -->
 <meta name="theme-color" content="#061224"><meta name="color-scheme" content="dark"><meta name="apple-mobile-web-app-capable" content="yes">
+
+<style id="set44-fixed-header">
+html,body{min-height:100%}
+body{padding-top:64px!important}
+.header{position:fixed!important;top:0!important;left:0!important;right:0!important;width:100%!important;height:64px!important;z-index:1000!important}
+#walletBtn{display:none!important}
+#accountBtn.authWalletBtn{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:9px!important;white-space:nowrap!important}
+#accountBtn.authWalletBtn .authWalletLabel,#accountBtn.authWalletBtn .authWalletAmount{display:inline!important;line-height:1!important;margin:0!important}
+.drawerClose{display:none!important}
+#menuBtn{display:grid!important;place-items:center!important;flex:0 0 42px!important;position:relative!important;z-index:1200!important}
+.drawer,.drawerBackdrop{z-index:1100!important}
+@media(max-width:900px){
+ body{padding-top:64px!important}
+ .header{height:64px!important;padding:0 10px!important;gap:8px!important}
+ .nav{display:none!important}
+ .brand{min-width:0!important;flex:1 1 auto!important;overflow:hidden!important}
+ #accountBtn{flex:0 1 auto!important;max-width:170px!important}
+}
+@media(max-width:480px){
+ .header{padding:0 8px!important;gap:6px!important}
+ .logoImg{width:40px!important;height:40px!important;flex:0 0 40px!important}
+ .brand{font-size:14px!important}
+ .brand small{font-size:6px!important}
+ #accountBtn{font-size:9px!important;padding:8px 9px!important;max-width:145px!important}
+ #accountBtn.authWalletBtn{gap:7px!important}
+ #menuBtn{width:40px!important;height:40px!important;flex-basis:40px!important}
+}
+</style>
+
 </head>
 <body>
 <div class="top"></div>
@@ -557,7 +586,12 @@ async function openOrders(){
 
 function closeMenu(){document.getElementById('drawer').classList.remove('show');document.getElementById('drawerBackdrop').classList.remove('show');document.getElementById('drawer').setAttribute('aria-hidden','true');document.body.classList.remove('drawer-open');var b=document.getElementById('menuBtn');if(b){b.textContent='☰';b.setAttribute('aria-label','เปิดเมนู')}}
 function openMenu(){document.getElementById('drawer').classList.add('show');document.getElementById('drawerBackdrop').classList.add('show');document.getElementById('drawer').setAttribute('aria-hidden','false');document.body.classList.add('drawer-open');var b=document.getElementById('menuBtn');if(b){b.textContent='☰';b.setAttribute('aria-label','ปิดเมนู')}}
-function toggleMenu(){var d=document.getElementById('drawer');if(d.classList.contains('show'))closeMenu();else openMenu()}
+function toggleMenu(){
+ var d=document.getElementById('drawer');
+ if(!d)return;
+ if(d.classList.contains('show')) closeMenu();
+ else openMenu();
+}
 function goPage(name){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));var nb=[...document.querySelectorAll('.nav button')].find(x=>x.getAttribute('onclick')?.includes("'"+name+"'"));if(nb)nb.classList.add('active');const el=document.getElementById('page-'+name);if(el)el.classList.add('active');closeMenu();window.scrollTo({top:0,behavior:'smooth'});if(name==='games')renderServiceGroups('game','gameProducts');if(name==='mobile')renderServiceGroups('mobile','mobileProducts');if(name==='addon')renderAddonGroups()}
 function serviceLogo(name){const n=String(name||'').toLowerCase(); if(/ais/.test(n)) return "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDk2IDk2Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjMGRkNmZmIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiMyZjYzZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3YTQyZmYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHJ4PSIyMiIgZmlsbD0iIzBiMmE0ZCIvPjxyZWN0IHg9IjQiIHk9IjQiIHdpZHRoPSI4OCIgaGVpZ2h0PSI4OCIgcng9IjIwIiBmaWxsPSJ1cmwoI2cpIiBvcGFjaXR5PSIuOTUiLz48cmVjdCB4PSIyOCIgeT0iMTQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2OCIgcng9IjkiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSIzMyIgeT0iMjIiIHdpZHRoPSIzMCIgaGVpZ2h0PSI1MCIgcng9IjQiIGZpbGw9IiMxMDJiNGMiLz48Y2lyY2xlIGN4PSI0OCIgY3k9Ijc3IiByPSIzIiBmaWxsPSIjZmZmIi8+PC9zdmc+"; if(/true/.test(n)) return "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDk2IDk2Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjMGRkNmZmIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiMyZjYzZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3YTQyZmYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHJ4PSIyMiIgZmlsbD0iIzBiMmE0ZCIvPjxyZWN0IHg9IjQiIHk9IjQiIHdpZHRoPSI4OCIgaGVpZ2h0PSI4OCIgcng9IjIwIiBmaWxsPSJ1cmwoI2cpIiBvcGFjaXR5PSIuOTUiLz48cmVjdCB4PSIyOCIgeT0iMTQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2OCIgcng9IjkiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSIzMyIgeT0iMjIiIHdpZHRoPSIzMCIgaGVpZ2h0PSI1MCIgcng9IjQiIGZpbGw9IiMxMDJiNGMiLz48Y2lyY2xlIGN4PSI0OCIgY3k9Ijc3IiByPSIzIiBmaWxsPSIjZmZmIi8+PC9zdmc+"; if(/dtac/.test(n)) return "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDk2IDk2Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjMGRkNmZmIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiMyZjYzZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3YTQyZmYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHJ4PSIyMiIgZmlsbD0iIzBiMmE0ZCIvPjxyZWN0IHg9IjQiIHk9IjQiIHdpZHRoPSI4OCIgaGVpZ2h0PSI4OCIgcng9IjIwIiBmaWxsPSJ1cmwoI2cpIiBvcGFjaXR5PSIuOTUiLz48cmVjdCB4PSIyOCIgeT0iMTQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2OCIgcng9IjkiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSIzMyIgeT0iMjIiIHdpZHRoPSIzMCIgaGVpZ2h0PSI1MCIgcng9IjQiIGZpbGw9IiMxMDJiNGMiLz48Y2lyY2xlIGN4PSI0OCIgY3k9Ijc3IiByPSIzIiBmaWxsPSIjZmZmIi8+PC9zdmc+"; if(/nt|my by/.test(n)) return "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDk2IDk2Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjMGRkNmZmIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiMyZjYzZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3YTQyZmYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHJ4PSIyMiIgZmlsbD0iIzBiMmE0ZCIvPjxyZWN0IHg9IjQiIHk9IjQiIHdpZHRoPSI4OCIgaGVpZ2h0PSI4OCIgcng9IjIwIiBmaWxsPSJ1cmwoI2cpIiBvcGFjaXR5PSIuOTUiLz48cmVjdCB4PSIyOCIgeT0iMTQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2OCIgcng9IjkiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSIzMyIgeT0iMjIiIHdpZHRoPSIzMCIgaGVpZ2h0PSI1MCIgcng9IjQiIGZpbGw9IiMxMDJiNGMiLz48Y2lyY2xlIGN4PSI0OCIgY3k9Ijc3IiByPSIzIiBmaWxsPSIjZmZmIi8+PC9zdmc+"; if(/rov|free fire|genshin|valorant|pubg|arena/.test(n)) return "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDk2IDk2Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjMGRkNmZmIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiMyZjYzZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3YTQyZmYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHJ4PSIyMiIgZmlsbD0iIzBiMmE0ZCIvPjxyZWN0IHg9IjQiIHk9IjQiIHdpZHRoPSI4OCIgaGVpZ2h0PSI4OCIgcng9IjIwIiBmaWxsPSJ1cmwoI2cpIiBvcGFjaXR5PSIuOTUiLz48cGF0aCBkPSJNMjQgMzljLTYgMC0xMCA2LTEyIDE3LTIgMTIgNyAxOCAxNCAxMmw5LThoMjZsOSA4YzcgNiAxNiAwIDE0LTEyLTItMTEtNi0xNy0xMi0xN0gyNHoiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNMzIgNDN2MTRNMjUgNTBoMTQiIHN0cm9rZT0iIzJmNjNmZiIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48Y2lyY2xlIGN4PSI2NSIgY3k9IjQ4IiByPSI0IiBmaWxsPSIjMmY2M2ZmIi8+PGNpcmNsZSBjeD0iNzMiIGN5PSI1NSIgcj0iNCIgZmlsbD0iIzdhNDJmZiIvPjwvc3ZnPjwvc3ZnPg=="; return "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDk2IDk2Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjMGRkNmZmIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiMyZjYzZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3YTQyZmYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHJ4PSIyMiIgZmlsbD0iIzBiMmE0ZCIvPjxyZWN0IHg9IjQiIHk9IjQiIHdpZHRoPSI4OCIgaGVpZ2h0PSI4OCIgcng9IjIwIiBmaWxsPSJ1cmwoI2cpIiBvcGFjaXR5PSIuOTUiLz48cGF0aCBkPSJNNDggMTh2MjJNMzcgMjhoMjJNMzEgMzljLTkgOS05IDI0IDAgMzNNNjUgMzljOSA5IDkgMjQgMCAzM00yMiAzMWMtMTQgMTQtMTQgMzYgMCA1ME03NCAzMWMxNCAxNCAxNCAzNiAwIDUwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGNpcmNsZSBjeD0iNDgiIGN5PSIxOCIgcj0iNiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==";}
 function renderServiceGroups(cat,targetId){const target=document.getElementById(targetId);if(!target)return;const list=products.filter(p=>p.category===cat);if(!list.length){target.innerHTML='<div class="card"><b>ยังไม่มีรายการเปิดบริการ</b><p class="muted">เมื่อเพิ่มสินค้าในระบบ รายการจะแสดงแยกตามบริการตรงนี้</p></div>';return}target.innerHTML=list.map(p=>`<div class="serviceGroup"><h3><img class="miImg" style="display:inline-block;vertical-align:middle;margin-right:6px" src="${serviceLogo(p.name)}" alt="">${esc(p.name)}</h3><div class="sub">${esc(p.description||'เลือกแพ็กเกจและเรทราคาของ '+p.name)}</div><div class="card"><div class="row"><div><b>${esc(p.name)}</b><div class="muted">กดเพื่อดูแพ็กเกจและราคา</div></div><button class="primary" onclick="viewProduct(${Number(p.id)})">ดูเรทราคา</button></div></div></div>`).join('')}
