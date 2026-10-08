@@ -433,7 +433,7 @@ app.post("/api/wallet/topup", auth, (req, res) => {
   const result = db.prepare(`
     INSERT INTO wallet_transactions (user_id,type,amount,status,reference,note)
     VALUES (?,?,?,?,?,?)
-  `).run(req.user.id, "topup", Number(amount), "pending", reference || "", "รอการตรวจสอบ/Payment Gateway");
+  `).run(req.user.id, "topup", Number(amount), "awaiting_payment", reference || "", "รอการชำระเงิน");
 
   res.status(201).json({
     ok: true,
