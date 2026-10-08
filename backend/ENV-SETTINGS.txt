@@ -1,9 +1,8 @@
-Saingam Shop Backend - Environment Settings
-
-ใส่ค่าเหล่านี้ในหน้า Environment ของแพลตฟอร์มที่ Deploy Backend
-
 PORT=3000
 JWT_SECRET=ตั้งรหัสลับยาวๆของระบบ
 ADMIN_EMAIL=อีเมลแอดมิน
 ADMIN_PASSWORD=รหัสผ่านแอดมิน
 CORS_ORIGIN=*
+PROMPTPAY_ID=เบอร์มือถือหรือเลขบัตรประชาชนที่ผูก PromptPay
+PROMPTPAY_NAME=SAINGAM SHOP
+PAYMENT_WEBHOOK_SECRET=ตั้งรหัสลับสำหรับ webhook ในอนาคต
