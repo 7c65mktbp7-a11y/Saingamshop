@@ -216,6 +216,18 @@ function renderUsers(){
  $('usersBody').innerHTML=rows.length?rows.map(u=>`<tr><td>#${esc(u.id)}</td><td><b>${esc(u.name||'-')}</b><br><small>${esc(u.created_at||'')}</small></td><td>${esc(u.email||'-')}<br>${esc(u.phone||'')}</td><td><b>${money(u.wallet_balance)}</b></td><td>${esc(u.role||'user')}</td><td><span class="status ${u.status==='active'?'success':'failed'}">${u.status==='active'?'ใช้งาน':'ระงับ'}</span></td></tr>`).join(''):'<tr><td colspan="6">ไม่พบสมาชิก</td></tr>';
 }
 
+async function loadUsers(){
+ try{
+  const d=await api('/api/admin/users');
+  users=Array.isArray(d)?d:(d.users||d.members||[]);
+  renderUsers();
+  if($('usersTotal') && users.length) $('usersTotal').textContent=users.length.toLocaleString('th-TH');
+ }catch(e){
+  $('usersBody').innerHTML='<tr><td colspan="6">'+esc(e.message)+'</td></tr>';
+  throw e;
+ }
+}
+
 async function loadOrders(){try{const d=await api('/api/admin/orders');orders=d.orders||[];renderOrders();renderDashOrders();}catch(e){$('ordersBody').innerHTML='<tr><td colspan="7">'+esc(e.message)+'</td></tr>';}}
 async function loadProducts(){try{const d=await api('/api/products');products=Array.isArray(d)?d:(d.products||[]);renderProducts();}catch(e){$('productsGrid').innerHTML='<div>'+esc(e.message)+'</div>';}}
 function renderProducts(){
@@ -234,9 +246,15 @@ async function decideTopup(id,status){
 async function checkHealth(){try{const d=await fetch(API+'/api/health').then(r=>r.json());$('apiStatus').textContent=d.status==='online'?'🟢 Online':'🟠 '+(d.status||'ไม่ทราบสถานะ');}catch(e){$('apiStatus').textContent='🔴 Offline';}}
 
 async function loadAll(){
- try{await loadDashboard();await loadUsers();await loadProducts();await loadTopups();checkHealth();}
- catch(e){showModal('เชื่อมต่อ Backend ไม่สำเร็จ',e.message);}
+ const errors=[];
+ try{await loadDashboard();}catch(e){errors.push('Dashboard: '+e.message);}
+ try{await loadUsers();}catch(e){errors.push('สมาชิก: '+e.message);}
+ try{await loadProducts();}catch(e){errors.push('สินค้า: '+e.message);}
+ try{await loadTopups();}catch(e){errors.push('Wallet: '+e.message);}
+ checkHealth();
+ if(errors.length) showModal('เชื่อมต่อ Backend บางส่วนไม่สำเร็จ',errors.join('\n'));
 }
+
 $('refreshDash').addEventListener('click',()=>loadDashboard().catch(e=>showModal('ผิดพลาด',e.message)));
 $('refreshOrders').addEventListener('click',loadOrders);$('refreshUsers').addEventListener('click',loadUsers);$('refreshProducts').addEventListener('click',loadProducts);$('refreshTopups').addEventListener('click',loadTopups);
 $('orderSearch').addEventListener('input',renderOrders);$('userSearch').addEventListener('input',renderUsers);
