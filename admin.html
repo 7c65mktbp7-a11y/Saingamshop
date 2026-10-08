@@ -167,7 +167,7 @@ async function adminApi(path,opt={}){
 async function adminLogin(){
  const id=document.getElementById('adminLoginId').value.trim(), pass=document.getElementById('adminLoginPass').value;
  if(!id||!pass){document.getElementById('loginMsg').textContent='กรุณากรอกข้อมูลให้ครบ';return;}
- try{ const d=await adminApi('/api/auth/login',{method:'POST',body:JSON.stringify({login:id,password:pass})}); adminToken=d.token; localStorage.setItem('saingam_admin_token',adminToken); document.getElementById('loginGate').style.display='none'; await loadPendingTopups(); }catch(e){document.getElementById('loginMsg').textContent=e.message;}
+ try{ const d=await adminApi('/api/auth/login',{method:'POST',body:JSON.stringify({identifier:id,password:pass})}); adminToken=d.token; localStorage.setItem('saingam_admin_token',adminToken); document.getElementById('loginGate').style.display='none'; await loadPendingTopups(); }catch(e){document.getElementById('loginMsg').textContent=e.message;}
 }
 async function loadPendingTopups(){
  if(!adminToken) return; const body=document.getElementById('topupsBody'); if(!body)return;
