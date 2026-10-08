@@ -161,7 +161,7 @@ function refreshWalletUI(){
 async function refreshBalance(){
  try{const r=await api('/api/me');me=r.user||r;setBalance(me.wallet_balance||0);if(document.getElementById('userBalance'))document.getElementById('userBalance').textContent='฿'+Number(me.wallet_balance||0).toFixed(2);}catch(e){}
 }
-function walletStatus(s){return ({pending:'รอตรวจสอบ',success:'สำเร็จ',failed:'ไม่สำเร็จ',cancelled:'ยกเลิก'}[s]||s||'-')}
+function walletStatus(s){return ({awaiting_payment:'รอชำระเงิน',pending:'รอตรวจสอบ',success:'สำเร็จ',failed:'ไม่สำเร็จ',cancelled:'ยกเลิก'}[s]||s||'-')}
 async function loadWalletHistory(){
  if(!token)return;
  const box=document.getElementById('walletHistory');
@@ -199,16 +199,23 @@ async function showPromptPayPending(id,amount){
  try{
   const q=await api('/api/wallet/promptpay/qr?amount='+encodeURIComponent(Number(amount).toFixed(2)));
   if(!q.configured || !q.payload) throw new Error(q.message||'ยังไม่ได้ตั้งค่า PromptPay');
-  box.innerHTML='<div class="notice"><b>PromptPay QR</b><br>รายการ #'+id+' จำนวน <b>฿'+Number(amount).toFixed(2)+'</b><br><span class="muted">สแกน QR เพื่อชำระเงิน แล้วเก็บสลิป/เลขอ้างอิงไว้ จากนั้นรอ Admin ตรวจสอบและอนุมัติ</span></div><div id="promptpayQr" style="display:flex;justify-content:center;align-items:center;background:#fff;padding:18px;border-radius:16px;margin:12px 0;border:1px solid #e2e8f0"></div><button class="secondary" style="width:100%" onclick="loadWalletHistory()">ตรวจสอบสถานะอีกครั้ง</button>';
+  box.innerHTML='<div class="notice"><b>PromptPay QR</b><br>รายการ #'+id+' จำนวน <b>฿'+Number(amount).toFixed(2)+'</b><br><span class="muted">สถานะตอนนี้: <b>รอชำระเงิน</b><br>Admin จะยังไม่สามารถอนุมัติรายการนี้ได้ จนกว่าคุณจะโอนเงินจริงและกด “แจ้งชำระเงินแล้ว”</span></div><div id="promptpayQr" style="display:flex;justify-content:center;align-items:center;background:#fff;padding:18px;border-radius:16px;margin:12px 0;border:1px solid #e2e8f0"></div><button class="primary" style="width:100%;margin-bottom:8px" onclick="confirmPromptPayPaid(${id})">แจ้งชำระเงินแล้ว</button><button class="secondary" style="width:100%" onclick="loadWalletHistory()">ตรวจสอบสถานะอีกครั้ง</button>';
   const qrBox=document.getElementById('promptpayQr');
-  if(window.QRCode){
-   new QRCode(qrBox,{text:q.payload,width:240,height:240,correctLevel:QRCode.CorrectLevel.M});
-  }else{
-   qrBox.innerHTML='<div class="danger">โหลดตัวสร้าง QR ไม่สำเร็จ กรุณารีเฟรชหน้าแล้วลองใหม่</div>';
-  }
+  if(window.QRCode) new QRCode(qrBox,{text:q.payload,width:240,height:240,correctLevel:QRCode.CorrectLevel.M});
+  else qrBox.innerHTML='<div class="danger">โหลดตัวสร้าง QR ไม่สำเร็จ กรุณารีเฟรชหน้าแล้วลองใหม่</div>';
  }catch(e){
   box.innerHTML='<div class="notice danger"><b>สร้าง PromptPay QR ไม่สำเร็จ</b><br>'+esc(e.message)+'</div><button class="secondary" style="width:100%" onclick="loadWalletHistory()">ตรวจสอบสถานะอีกครั้ง</button>';
  }
+}
+async function confirmPromptPayPaid(id){
+ try{
+  const ref=window.lastTopupReference||'';
+  const r=await api('/api/wallet/topup/'+id+'/paid',{method:'POST',body:JSON.stringify({reference:ref})});
+  msg('topupMsg','แจ้งชำระเงินรายการ #'+id+' แล้ว — รอ Admin ตรวจสอบยอดเงินจริง','success');
+  const box=document.getElementById('promptpayBox');
+  box.innerHTML='<div class="notice"><b>แจ้งชำระเงินแล้ว</b><br>รายการ #'+id+' อยู่ในสถานะ <b>รอตรวจสอบ</b><br>Admin จะตรวจสอบยอดเงินจริงก่อนอนุมัติ Wallet</div>';
+  await loadWalletHistory();
+ }catch(e){msg('topupMsg',e.message,'danger')}
 }
 async function createTopup(){
  const amount=Number(v('topupAmount'));
@@ -216,9 +223,9 @@ async function createTopup(){
  if(amount>100000){msg('topupMsg','จำนวนเงินสูงสุดต่อรายการคือ 100,000 บาท','danger');return}
  try{
   const r=await api('/api/wallet/topup',{method:'POST',body:JSON.stringify({amount,reference:v('topupRef')})});
-  msg('topupMsg','สร้างรายการเติมเงิน #'+r.transaction.id+' สำเร็จแล้ว สถานะ: รอตรวจสอบ — ยอดจะเข้าหลัง Admin อนุมัติ','success');
+  msg('topupMsg','สร้างรายการเติมเงิน #'+r.transaction.id+' แล้ว สถานะ: รอชำระเงิน — Admin จะยังไม่เห็นรายการจนกว่าคุณจะแจ้งชำระเงิน','success');
   if(document.getElementById('paymentMethod').value==='promptpay') showPromptPayPending(r.transaction.id,amount);
-  document.getElementById('topupAmount').value='';document.getElementById('topupRef').value='';
+  window.lastTopupReference=v('topupRef');document.getElementById('topupAmount').value='';
   await loadWalletHistory(); await refreshBalance();
  }catch(e){msg('topupMsg',e.message,'danger')}
 }
