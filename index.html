@@ -477,6 +477,15 @@ body{padding-top:64px!important}
 
 <script>
 const API='https://saingam-shop-api.onrender.com';
+// Backend SQLite CURRENT_TIMESTAMP is UTC without a suffix; format as Thailand time at display only.
+function thaiDate(value){
+  if(!value) return '-';
+  let raw=String(value).trim();
+  if(/^\d{4}-\d\d-\d\d \d\d:\d\d(:\d\d)?$/.test(raw)) raw=raw.replace(' ','T')+'Z';
+  const d=new Date(raw);
+  if(Number.isNaN(d.getTime())) return String(value);
+  return new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(d);
+}
 let token=localStorage.getItem('saingam_token')||'';
 let me=null, products=[], category='all';
 
@@ -529,9 +538,9 @@ async function submitOrder(productId,packageId,price){
   if(!token){alert('เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่');openAccount();return}
   const box=document.getElementById('orderMsg'); box.className='muted'; box.textContent='กำลังตรวจสอบยอด Wallet และสร้างคำสั่งซื้อ...';
   try{
-    const r=await api('/api/orders',{method:'POST',body:JSON.stringify({product_id:productId,package_id:packageId,target})});
-    setBalance(r.wallet_balance||0);
-    alert('สั่งซื้อสำเร็จ #'+(r.order?.id||r.order?.order_no||''));
+    const r=await api('/api/orders',{method:'POST',body:JSON.stringify({product_id:productId,package_id:packageId,target,amount:Number(price)||0})});
+    setBalance(r.wallet_balance ?? me?.wallet_balance ?? 0);
+    alert('รับคำสั่งซื้อแล้ว #'+(r.order?.order_no||r.order?.id||'')+' — หัก Wallet แล้ว รอการดำเนินการ');
     closeModal('genericModal');
     await refreshBalance();
     await openOrders();
@@ -599,7 +608,7 @@ async function loadWalletHistory(){
  try{
   const r=await api('/api/wallet/history');
   const rows=r.transactions||[];
-  box.innerHTML=rows.length?rows.map(x=>`<div class="item"><div class="row"><b>เติมเงิน #${x.id}</b><b>฿${Number(x.amount||0).toFixed(2)}</b></div><div class="muted">สถานะ: ${esc(walletStatus(x.status))}${x.reference?' · อ้างอิง: '+esc(x.reference):''}<br>${esc(x.created_at||'')}</div></div>`).join(''):'<div class="muted">ยังไม่มีประวัติการเติมเงิน</div>';
+  box.innerHTML=rows.length?rows.map(x=>`<div class="item"><div class="row"><b>เติมเงิน #${x.id}</b><b>฿${Number(x.amount||0).toFixed(2)}</b></div><div class="muted">สถานะ: ${esc(walletStatus(x.status))}${x.reference?' · อ้างอิง: '+esc(x.reference):''}<br>${esc(thaiDate(x.created_at))}</div></div>`).join(''):'<div class="muted">ยังไม่มีประวัติการเติมเงิน</div>';
  }catch(e){box.innerHTML='<div class="danger">โหลดประวัติไม่สำเร็จ: '+esc(e.message)+'</div>';}
 }
 async function refreshAccountUI(){
@@ -647,7 +656,7 @@ async function showPromptPayPending(id,amount){
  box.classList.remove('hidden');
  box.innerHTML='<div class="notice"><b>PromptPay QR</b><br>กำลังสร้าง QR สำหรับ ฿'+Number(amount).toFixed(2)+'...</div>';
  try{
-  const q=await api('/api/wallet/promptpay/qr?amount='+encodeURIComponent(Number(amount).toFixed(2)));
+  const q=await api('/api/wallet/promptpay/qr?amount='+encodeURIComponent(Number(amount).toFixed(2))+'&reference='+encodeURIComponent(String(window.lastTopupReference||'')));
   if(!q.configured || !q.payload) throw new Error(q.message||'ยังไม่ได้ตั้งค่า PromptPay');
   box.innerHTML='<div class="notice"><b>PromptPay QR</b><br>รายการ #'+id+' จำนวน <b>฿'+Number(amount).toFixed(2)+'</b><br><span class="muted">สถานะตอนนี้: <b>รอชำระเงิน</b><br>Admin จะยังไม่สามารถอนุมัติรายการนี้ได้ จนกว่าคุณจะโอนเงินจริงและกด “แจ้งชำระเงินแล้ว”</span></div><div id="promptpayQr" style="display:flex;justify-content:center;align-items:center;background:#fff;padding:18px;border-radius:16px;margin:12px 0;border:1px solid #e2e8f0"></div><button id="confirmPromptPayBtn" type="button" class="primary" style="width:100%;margin-bottom:8px">แจ้งชำระเงินแล้ว</button><button class="secondary" style="width:100%" onclick="loadWalletHistory()">ตรวจสอบสถานะอีกครั้ง</button>';
   const qrBox=document.getElementById('promptpayQr');
@@ -710,7 +719,7 @@ async function openOrders(){
   const r=await api('/api/orders/my');
   const rows=r.orders||[];
   const st={pending:'รอดำเนินการ',processing:'กำลังดำเนินการ',success:'สำเร็จ',failed:'ไม่สำเร็จ',refunded:'คืนเงินแล้ว'};
-  box.innerHTML='<h3>ประวัติคำสั่งซื้อ</h3>'+(rows.length?rows.map(o=>`<div class="item"><div class="row"><b>#${esc(o.order_no||o.id)}</b><b>฿${Number(o.amount||0).toFixed(2)}</b></div><div style="margin-top:6px"><b>${esc(o.product_name||'รายการ')}</b></div><div class="muted" style="margin-top:4px">สถานะ: <b>${esc(st[o.status]||o.status||'-')}</b><br>ข้อมูลผู้รับ: ${esc(o.target||'-')}<br>${esc(o.created_at||'')}</div></div>`).join(''):'<div class="muted">ยังไม่มีประวัติการซื้อ</div>');
+  box.innerHTML='<h3>ประวัติคำสั่งซื้อ</h3>'+(rows.length?rows.map(o=>`<div class="item"><div class="row"><b>#${esc(o.order_no||o.id)}</b><b>฿${Number(o.amount||0).toFixed(2)}</b></div><div style="margin-top:6px"><b>${esc(o.product_name||'รายการ')}</b></div><div class="muted" style="margin-top:4px">สถานะ: <b>${esc(st[o.status]||o.status||'-')}</b><br>ข้อมูลผู้รับ: ${esc(o.target||'-')}<br>${esc(thaiDate(o.created_at))}</div></div>`).join(''):'<div class="muted">ยังไม่มีประวัติการซื้อ</div>');
  }catch(e){box.innerHTML='<div class="danger">โหลดประวัติไม่สำเร็จ: '+esc(e.message)+'</div>';}
 }
 
