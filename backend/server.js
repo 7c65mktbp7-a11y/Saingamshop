@@ -9,6 +9,8 @@ const Database = require("better-sqlite3");
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
 const JWT_SECRET = process.env.JWT_SECRET || "saingam-shop-development-secret";
+const PROMPTPAY_ID = String(process.env.PROMPTPAY_ID || "").replace(/[^0-9]/g, "");
+const PROMPTPAY_NAME = String(process.env.PROMPTPAY_NAME || "SAINGAM SHOP").replace(/[^A-Za-z0-9 .&-]/g, " ").trim().slice(0,25) || "SAINGAM SHOP";
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN || "*",
@@ -145,8 +147,34 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/health", (req, res) => {
-  res.json({ ok: true, status: "online", time: new Date().toISOString() });
+  res.json({ ok: true, status: "online", time: new Date().toISOString(), timezone: "Asia/Bangkok" });
 });
+
+function tlv(id, value) {
+  const v = String(value);
+  return id + String(v.length).padStart(2, "0") + v;
+}
+function crc16(payload) {
+  let crc = 0xFFFF;
+  for (let i = 0; i < payload.length; i++) {
+    crc ^= payload.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) : (crc << 1);
+    crc &= 0xFFFF;
+  }
+  return crc.toString(16).toUpperCase().padStart(4, "0");
+}
+function makePromptPayPayload(amount, reference) {
+  if (!PROMPTPAY_ID) throw new Error("ยังไม่ได้ตั้งค่า PROMPTPAY_ID ใน Environment");
+  let target;
+  if (/^0[0-9]{9}$/.test(PROMPTPAY_ID)) target = tlv("01", "0066" + PROMPTPAY_ID.slice(1));
+  else if (/^[0-9]{13}$/.test(PROMPTPAY_ID)) target = tlv("02", PROMPTPAY_ID);
+  else if (/^[0-9]{15}$/.test(PROMPTPAY_ID)) target = tlv("03", PROMPTPAY_ID);
+  else throw new Error("PROMPTPAY_ID ต้องเป็นเบอร์มือถือไทย 10 หลัก, เลขประจำตัวผู้เสียภาษี 13 หลัก หรือ e-Wallet ID 15 หลัก");
+  const merchant = tlv("00", "A000000677010111") + target;
+  const additional = reference ? tlv("05", String(reference).replace(/[^A-Za-z0-9]/g, "").slice(0,25)) : "";
+  let payload = tlv("00", "01") + tlv("01", "12") + tlv("29", merchant) + tlv("53", "764") + tlv("54", Number(amount).toFixed(2)) + tlv("58", "TH") + tlv("59", PROMPTPAY_NAME || "SAINGAM SHOP") + tlv("60", "THAILAND") + (additional ? tlv("62", additional) : "") + "6304";
+  return payload + crc16(payload);
+}
 
 app.post("/api/auth/register", async (req, res) => {
   try {
@@ -317,6 +345,58 @@ app.post("/api/wallet/topup", auth, (req, res) => {
     ok: true,
     transaction: db.prepare("SELECT * FROM wallet_transactions WHERE id=?").get(result.lastInsertRowid)
   });
+});
+
+app.get("/api/wallet/promptpay/qr", auth, (req, res) => {
+  try {
+    const amount = Number(req.query.amount);
+    if (!Number.isFinite(amount) || amount < 1 || amount > 100000) return res.status(400).json({ ok: false, configured: false, message: "จำนวนเงินต้องอยู่ระหว่าง 1 ถึง 100,000 บาท" });
+    const reference = String(req.query.reference || "").slice(0, 25);
+    const payload = makePromptPayPayload(amount, reference);
+    res.json({ ok: true, configured: true, payload, amount, currency: "THB", reference });
+  } catch (e) {
+    res.status(400).json({ ok: false, configured: false, message: e.message || "สร้าง PromptPay QR ไม่สำเร็จ" });
+  }
+});
+
+app.post("/api/wallet/topup/:id/paid", auth, (req, res) => {
+  const id = Number(req.params.id);
+  const tx = db.prepare("SELECT * FROM wallet_transactions WHERE id=? AND user_id=? AND type='topup'").get(id, req.user.id);
+  if (!tx) return res.status(404).json({ ok: false, message: "ไม่พบรายการเติมเงินนี้" });
+  if (tx.status !== "pending") return res.status(400).json({ ok: false, message: "รายการนี้ไม่ได้อยู่ในสถานะรอตรวจสอบ" });
+  const reference = String(req.body.reference || tx.reference || "").trim().slice(0, 120);
+  db.prepare("UPDATE wallet_transactions SET reference=?, note=? WHERE id=? AND status='pending'")
+    .run(reference, "ลูกค้าแจ้งชำระเงินแล้ว; รอ Admin ตรวจสอบยอดเงินจริง", id);
+  res.json({ ok: true, transaction: db.prepare("SELECT * FROM wallet_transactions WHERE id=?").get(id), message: "ส่งรายการให้ Admin ตรวจสอบแล้ว" });
+});
+
+app.get("/api/admin/wallet/pending", auth, adminOnly, (req, res) => {
+  const transactions = db.prepare(`SELECT wt.*, u.name, u.email, u.phone FROM wallet_transactions wt JOIN users u ON u.id=wt.user_id WHERE wt.type='topup' AND wt.status='pending' ORDER BY wt.id DESC`).all();
+  res.json({ ok: true, transactions });
+});
+
+app.patch("/api/admin/wallet/:id", auth, adminOnly, (req, res) => {
+  const id = Number(req.params.id);
+  const status = String(req.body.status || "");
+  if (!["success", "failed"].includes(status)) return res.status(400).json({ ok: false, message: "สถานะไม่ถูกต้อง" });
+  try {
+    const decide = db.transaction(() => {
+      const tx = db.prepare("SELECT * FROM wallet_transactions WHERE id=? AND type='topup'").get(id);
+      if (!tx) throw new Error("NOT_FOUND");
+      if (tx.status !== "pending") throw new Error("ALREADY_DECIDED");
+      if (status === "success") db.prepare("UPDATE users SET wallet_balance=wallet_balance+? WHERE id=?").run(tx.amount, tx.user_id);
+      db.prepare("UPDATE wallet_transactions SET status=?, note=? WHERE id=? AND status='pending'")
+        .run(status, status === "success" ? "Admin อนุมัติและเพิ่มยอดเข้า Wallet แล้ว" : "Admin ปฏิเสธรายการเติมเงิน", id);
+      return db.prepare("SELECT * FROM wallet_transactions WHERE id=?").get(id);
+    });
+    const transaction = decide();
+    res.json({ ok: true, transaction, message: status === "success" ? "อนุมัติและเพิ่มเงินเข้า Wallet แล้ว" : "ปฏิเสธรายการแล้ว" });
+  } catch (e) {
+    if (e.message === "NOT_FOUND") return res.status(404).json({ ok: false, message: "ไม่พบรายการเติมเงิน" });
+    if (e.message === "ALREADY_DECIDED") return res.status(409).json({ ok: false, message: "รายการนี้ถูกตัดสินไปแล้ว ป้องกันการเพิ่มเงินซ้ำ" });
+    console.error("Decide topup failed:", e);
+    res.status(500).json({ ok: false, message: "จัดการรายการเติมเงินไม่สำเร็จ" });
+  }
 });
 
 app.get("/api/wallet/history", auth, (req, res) => {
