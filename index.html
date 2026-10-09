@@ -802,5 +802,45 @@ window.addEventListener('error',function(e){
 .drawerMenu,.drawerUser{box-sizing:border-box!important;width:100%!important;}
 .drawerMenu button{box-sizing:border-box!important;width:100%!important;}
 </style>
+
+<style id="drawer-header-align-with-close-hamburger-final">
+/* Keep the drawer brand on the same top row as the close hamburger. */
+.drawerHead{
+  padding-top:0!important;
+  margin-top:-10px!important;
+  min-height:40px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  padding-bottom:8px!important;
+  padding-right:48px!important;
+  box-sizing:border-box!important;
+}
+.drawerHead .drawerLogoImg{flex:0 0 40px!important;width:40px!important;height:40px!important;object-fit:contain!important;}
+.drawerHead .drawerTitle{min-width:0!important;line-height:1.2!important;}
+.drawer.show .drawerClose{top:0!important;right:12px!important;width:40px!important;height:40px!important;min-width:40px!important;transform:none!important;}
+</style>
+
+
+<style id="drawer-content-group-align-with-close-button-final-v2">
+/* Move the entire drawer content stack up together so brand, links and account/Wallet align as one group with the close hamburger row. */
+.drawerHead, .drawerMenu, .drawerUser {
+  position: relative !important;
+  top: -46px !important;
+}
+/* Keep the close hamburger fixed at the top-right, independent of the content shift. */
+.drawer.show .drawerClose {
+  position: fixed !important;
+  top: 10px !important;
+  right: 12px !important;
+  width: 40px !important; height: 40px !important; min-width: 40px !important;
+  padding: 0 !important; margin: 0 !important;
+  border: 0 !important; outline: 0 !important; border-radius: 0 !important;
+  background: transparent !important; box-shadow: none !important;
+  display: grid !important; place-items: center !important;
+  z-index: 100001 !important;
+}
+.drawerHead { padding-top: 0 !important; margin-top: 0 !important; }
+</style>
 </body>
 </html>
