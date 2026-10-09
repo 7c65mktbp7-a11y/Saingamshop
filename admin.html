@@ -114,6 +114,13 @@ main{flex:1;min-width:0;padding:15px 15px 82px}.page{display:none}.page.active{d
 
 <script>
 const API='https://saingam-shop-api.onrender.com';
+function thaiDate(value){
+ if(!value)return '-'; let raw=String(value).trim();
+ if(/^\d{4}-\d\d-\d\d \d\d:\d\d(:\d\d)?$/.test(raw))raw=raw.replace(' ','T')+'Z';
+ const d=new Date(raw); if(Number.isNaN(d.getTime()))return String(value);
+ return new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(d);
+}
+
 let token=localStorage.getItem('saingam_admin_token')||'';
 let users=[],orders=[],products=[];
 
@@ -175,7 +182,7 @@ function renderDashOrders(){
 function renderOrders(){
  const q=($('orderSearch').value||'').toLowerCase();
  const rows=orders.filter(o=>(String(o.id)+' '+String(o.customer_name||'')+' '+String(o.product_name||'')+' '+String(o.email||'')).toLowerCase().includes(q));
- $('ordersBody').innerHTML=rows.length?rows.map(o=>`<tr><td>#${esc(o.id)}</td><td>${esc(o.created_at||'-')}</td><td><b>${esc(o.customer_name||'-')}</b><br><small>${esc(o.email||o.phone||'')}</small></td><td>${esc(o.product_name||'-')}</td><td>${money(o.amount)}</td><td><span class="status ${statusClass(o.status)}">${esc(statusText(o.status))}</span></td><td><button class="btn btn-light" type="button" onclick="orderDetail(${Number(o.id)})">ดู/แก้สถานะ</button></td></tr>`).join(''):'<tr><td colspan="7">ไม่พบออเดอร์</td></tr>';
+ $('ordersBody').innerHTML=rows.length?rows.map(o=>`<tr><td>#${esc(o.id)}</td><td>${esc(thaiDate(o.created_at))}</td><td><b>${esc(o.customer_name||'-')}</b><br><small>${esc(o.email||o.phone||'')}</small></td><td>${esc(o.product_name||'-')}</td><td>${money(o.amount)}</td><td><span class="status ${statusClass(o.status)}">${esc(statusText(o.status))}</span></td><td><button class="btn btn-light" type="button" onclick="orderDetail(${Number(o.id)})">ดู/แก้สถานะ</button></td></tr>`).join(''):'<tr><td colspan="7">ไม่พบออเดอร์</td></tr>';
 }
 function orderDetail(id){
  const o=orders.find(x=>Number(x.id)===id); if(!o)return;
@@ -222,7 +229,7 @@ async function loadUsers(){
 function renderUsers(){
  const q=($('userSearch').value||'').toLowerCase();
  const rows=users.filter(u=>(String(u.name||'')+' '+String(u.email||'')+' '+String(u.phone||'')).toLowerCase().includes(q));
- $('usersBody').innerHTML=rows.length?rows.map(u=>`<tr><td>#${esc(u.id)}</td><td><b>${esc(u.name||'-')}</b><br><small>${esc(u.created_at||'')}</small></td><td>${esc(u.email||'-')}<br>${esc(u.phone||'')}</td><td><b>${money(u.wallet_balance)}</b></td><td>${esc(u.role||'user')}</td><td><span class="status ${u.status==='active'?'success':'failed'}">${u.status==='active'?'ใช้งาน':'ระงับ'}</span></td></tr>`).join(''):'<tr><td colspan="6">ไม่พบสมาชิก</td></tr>';
+ $('usersBody').innerHTML=rows.length?rows.map(u=>`<tr><td>#${esc(u.id)}</td><td><b>${esc(u.name||'-')}</b><br><small>${esc(thaiDate(u.created_at))}</small></td><td>${esc(u.email||'-')}<br>${esc(u.phone||'')}</td><td><b>${money(u.wallet_balance)}</b></td><td>${esc(u.role||'user')}</td><td><span class="status ${u.status==='active'?'success':'failed'}">${u.status==='active'?'ใช้งาน':'ระงับ'}</span></td></tr>`).join(''):'<tr><td colspan="6">ไม่พบสมาชิก</td></tr>';
 }
 
 async function loadOrders(){try{const d=await api('/api/admin/orders');orders=d.orders||[];renderOrders();renderDashOrders();}catch(e){$('ordersBody').innerHTML='<tr><td colspan="7">'+esc(e.message)+'</td></tr>';}}
